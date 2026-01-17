@@ -14,15 +14,15 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Interactable
+  - Vine
+  - Enemy
+  - Player
+  - InspectObject
+  - PostProcessing
+  - bg
+  - bg2
+  - bg3
   - 
   - 
   - 
