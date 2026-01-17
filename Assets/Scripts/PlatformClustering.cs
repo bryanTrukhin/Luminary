@@ -9,8 +9,11 @@ public class PlatformClustering : MonoBehaviour
     public List<Vector3Int[]> clusters;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        clusters = FindAllClusters(tilemap);
+        Debug.Log("PlatformClustering clusters: " + clusters.Count);
+
         clusters = FindAllClusters(tilemap);
     }
 
