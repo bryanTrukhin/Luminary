@@ -53,7 +53,11 @@ public class PlatformClustering : MonoBehaviour
                 // Check the 4 possible neighbors
                 Vector3Int[] neighbors = {
                     current + Vector3Int.up, current + Vector3Int.down,
-                    current + Vector3Int.left, current + Vector3Int.right
+                    current + Vector3Int.left, current + Vector3Int.right,
+                    current + Vector3Int.right + Vector3Int.up,
+                    current + Vector3Int.left + Vector3Int.up,
+                    current + Vector3Int.right + Vector3Int.down,
+                    current + Vector3Int.left + Vector3Int.down
                 };
 
                 foreach (Vector3Int n in neighbors)
