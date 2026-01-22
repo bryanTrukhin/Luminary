@@ -1,0 +1,61 @@
+using UnityEngine;
+
+namespace SupanthaPaul
+{
+    [RequireComponent(typeof(Collider2D))]
+    public class VineBurnable : MonoBehaviour, IBurnable
+    {
+        [Header("Health")]
+        [SerializeField] private float maxHealth = 3f;
+        private float _health;
+
+        [Header("FX")]
+        [SerializeField] private GameObject burnVfxPrefab;   // optional
+        [SerializeField] private AudioClip burnSfx;          // optional
+        [SerializeField] private float burnSfxVolume = 0.7f;
+
+        private bool _dead;
+
+        void Awake()
+        {
+            _health = maxHealth;
+
+            // Make sure collider is trigger so it doesn't block the player (optional)
+            var col = GetComponent<Collider2D>();
+            col.isTrigger = false;
+        }
+
+        public void ApplyHeat(float amount)
+        {
+            if (_dead) return;
+
+            _health -= amount;
+            // You could also do a small "shake" or tint here for feedback
+
+            if (_health <= 0f)
+            {
+                Die();
+            }
+        }
+
+        void Die()
+        {
+            _dead = true;
+
+            // Optional: spawn VFX via PoolManager if you want
+            if (burnVfxPrefab != null && PoolManager.instance != null)
+            {
+                PoolManager.instance.ReuseObject(burnVfxPrefab, transform.position, Quaternion.identity);
+            }
+
+            // Optional: play SFX
+            if (burnSfx != null)
+            {
+                AudioSource.PlayClipAtPoint(burnSfx, transform.position, burnSfxVolume);
+            }
+
+            // For now, just disable the vine (or Destroy(gameObject);)
+            gameObject.SetActive(false);
+        }
+    }
+}
