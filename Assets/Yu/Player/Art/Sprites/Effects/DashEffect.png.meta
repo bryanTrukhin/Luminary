@@ -51,7 +51,7 @@ TextureImporter:
       213: 21300030
     second: DashEffect_15
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -68,11 +68,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -111,6 +112,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 1
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -123,6 +125,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -135,6 +138,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -147,6 +151,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -159,6 +164,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -171,6 +177,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
@@ -524,31 +531,23 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       DashEffect_0: 21300000
-      DashEffect_15: 21300030
-      DashEffect_5: 21300010
-      DashEffect_9: 21300018
-      DashEffect_8: 21300016
-      DashEffect_6: 21300012
-      DashEffect_14: 21300028
       DashEffect_1: 21300002
-      DashEffect_2: 21300004
-      DashEffect_7: 21300014
       DashEffect_10: 21300020
-      DashEffect_12: 21300024
       DashEffect_11: 21300022
-      DashEffect_4: 21300008
-      DashEffect_3: 21300006
+      DashEffect_12: 21300024
       DashEffect_13: 21300026
-  spritePackingTag: 
+      DashEffect_14: 21300028
+      DashEffect_15: 21300030
+      DashEffect_2: 21300004
+      DashEffect_3: 21300006
+      DashEffect_4: 21300008
+      DashEffect_5: 21300010
+      DashEffect_6: 21300012
+      DashEffect_7: 21300014
+      DashEffect_8: 21300016
+      DashEffect_9: 21300018
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 245475
-  packageName: 2D Platformer Controller (with animated character)
-  packageVersion: 1.0.0
-  assetPath: Assets/SupanthaPaul/2D Platformer Controller/Art/Sprites/Effects/DashEffect.png
-  uploadId: 558839

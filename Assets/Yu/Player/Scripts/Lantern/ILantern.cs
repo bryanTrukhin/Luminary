@@ -1,0 +1,14 @@
+using UnityEngine;
+
+public interface ILantern
+{
+    // Energy / Mana System
+    bool TryConsumeEnergy(float amount);
+
+    // Abilities
+    void TriggerFlash();
+    void SetVisible(bool state);
+    
+    // Effects (Added so GhostTrainEvent and cutscenes can use it)
+    void Flicker(float amplitude, float speed, float duration);
+}

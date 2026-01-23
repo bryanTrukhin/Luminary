@@ -183,7 +183,7 @@ TextureImporter:
       213: 21300118
     second: House_Indoor_Props_59
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -200,11 +200,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -243,6 +244,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 1
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -255,6 +257,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -267,6 +270,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -279,6 +283,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -291,6 +296,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -303,6 +309,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
@@ -1584,76 +1591,68 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      House_Indoor_Props_6: 21300012
-      House_Indoor_Props_10: 21300020
-      House_Indoor_Props_59: 21300118
-      House_Indoor_Props_18: 21300036
-      House_Indoor_Props_23: 21300046
-      House_Indoor_Props_47: 21300094
-      House_Indoor_Props_37: 21300074
-      House_Indoor_Props_43: 21300086
-      House_Indoor_Props_17: 21300034
       House_Indoor_Props_0: 21300000
-      House_Indoor_Props_4: 21300008
-      House_Indoor_Props_7: 21300014
-      House_Indoor_Props_12: 21300024
-      House_Indoor_Props_15: 21300030
-      House_Indoor_Props_48: 21300096
-      House_Indoor_Props_58: 21300116
-      House_Indoor_Props_11: 21300022
-      House_Indoor_Props_22: 21300044
-      House_Indoor_Props_36: 21300072
-      House_Indoor_Props_57: 21300114
-      House_Indoor_Props_2: 21300004
-      House_Indoor_Props_56: 21300112
-      House_Indoor_Props_40: 21300080
-      House_Indoor_Props_50: 21300100
-      House_Indoor_Props_19: 21300038
-      House_Indoor_Props_24: 21300048
-      House_Indoor_Props_31: 21300062
-      House_Indoor_Props_29: 21300058
-      House_Indoor_Props_13: 21300026
-      House_Indoor_Props_5: 21300010
-      House_Indoor_Props_44: 21300088
-      House_Indoor_Props_14: 21300028
-      House_Indoor_Props_8: 21300016
-      House_Indoor_Props_28: 21300056
-      House_Indoor_Props_34: 21300068
-      House_Indoor_Props_53: 21300106
-      House_Indoor_Props_52: 21300104
-      House_Indoor_Props_41: 21300082
-      House_Indoor_Props_9: 21300018
-      House_Indoor_Props_33: 21300066
-      House_Indoor_Props_25: 21300050
-      House_Indoor_Props_32: 21300064
-      House_Indoor_Props_16: 21300032
-      House_Indoor_Props_30: 21300060
-      House_Indoor_Props_27: 21300054
-      House_Indoor_Props_20: 21300040
-      House_Indoor_Props_38: 21300076
-      House_Indoor_Props_42: 21300084
-      House_Indoor_Props_3: 21300006
-      House_Indoor_Props_49: 21300098
-      House_Indoor_Props_26: 21300052
-      House_Indoor_Props_54: 21300108
-      House_Indoor_Props_21: 21300042
-      House_Indoor_Props_35: 21300070
-      House_Indoor_Props_39: 21300078
-      House_Indoor_Props_45: 21300090
       House_Indoor_Props_1: 21300002
-      House_Indoor_Props_51: 21300102
-      House_Indoor_Props_55: 21300110
+      House_Indoor_Props_10: 21300020
+      House_Indoor_Props_11: 21300022
+      House_Indoor_Props_12: 21300024
+      House_Indoor_Props_13: 21300026
+      House_Indoor_Props_14: 21300028
+      House_Indoor_Props_15: 21300030
+      House_Indoor_Props_16: 21300032
+      House_Indoor_Props_17: 21300034
+      House_Indoor_Props_18: 21300036
+      House_Indoor_Props_19: 21300038
+      House_Indoor_Props_2: 21300004
+      House_Indoor_Props_20: 21300040
+      House_Indoor_Props_21: 21300042
+      House_Indoor_Props_22: 21300044
+      House_Indoor_Props_23: 21300046
+      House_Indoor_Props_24: 21300048
+      House_Indoor_Props_25: 21300050
+      House_Indoor_Props_26: 21300052
+      House_Indoor_Props_27: 21300054
+      House_Indoor_Props_28: 21300056
+      House_Indoor_Props_29: 21300058
+      House_Indoor_Props_3: 21300006
+      House_Indoor_Props_30: 21300060
+      House_Indoor_Props_31: 21300062
+      House_Indoor_Props_32: 21300064
+      House_Indoor_Props_33: 21300066
+      House_Indoor_Props_34: 21300068
+      House_Indoor_Props_35: 21300070
+      House_Indoor_Props_36: 21300072
+      House_Indoor_Props_37: 21300074
+      House_Indoor_Props_38: 21300076
+      House_Indoor_Props_39: 21300078
+      House_Indoor_Props_4: 21300008
+      House_Indoor_Props_40: 21300080
+      House_Indoor_Props_41: 21300082
+      House_Indoor_Props_42: 21300084
+      House_Indoor_Props_43: 21300086
+      House_Indoor_Props_44: 21300088
+      House_Indoor_Props_45: 21300090
       House_Indoor_Props_46: 21300092
-  spritePackingTag: 
+      House_Indoor_Props_47: 21300094
+      House_Indoor_Props_48: 21300096
+      House_Indoor_Props_49: 21300098
+      House_Indoor_Props_5: 21300010
+      House_Indoor_Props_50: 21300100
+      House_Indoor_Props_51: 21300102
+      House_Indoor_Props_52: 21300104
+      House_Indoor_Props_53: 21300106
+      House_Indoor_Props_54: 21300108
+      House_Indoor_Props_55: 21300110
+      House_Indoor_Props_56: 21300112
+      House_Indoor_Props_57: 21300114
+      House_Indoor_Props_58: 21300116
+      House_Indoor_Props_59: 21300118
+      House_Indoor_Props_6: 21300012
+      House_Indoor_Props_7: 21300014
+      House_Indoor_Props_8: 21300016
+      House_Indoor_Props_9: 21300018
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 245475
-  packageName: 2D Platformer Controller (with animated character)
-  packageVersion: 1.0.0
-  assetPath: Assets/SupanthaPaul/2D Platformer Controller/Art/Sprites/Tilemaps/Spritesheets/House_Indoor_Props.png
-  uploadId: 558839

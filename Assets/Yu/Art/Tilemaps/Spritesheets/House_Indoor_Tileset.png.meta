@@ -72,7 +72,7 @@ TextureImporter:
       213: 21300044
     second: House_Indoor_Tileset_22
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -89,11 +89,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -132,6 +133,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 1
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -144,6 +146,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -156,6 +159,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -168,6 +172,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -180,6 +185,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -192,6 +198,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
@@ -691,39 +698,31 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      House_Indoor_Tileset_3: 21300006
-      House_Indoor_Tileset_10: 21300020
       House_Indoor_Tileset_0: 21300000
-      House_Indoor_Tileset_19: 21300038
-      House_Indoor_Tileset_9: 21300018
-      House_Indoor_Tileset_20: 21300040
-      House_Indoor_Tileset_22: 21300044
-      House_Indoor_Tileset_18: 21300036
-      House_Indoor_Tileset_12: 21300024
-      House_Indoor_Tileset_6: 21300012
       House_Indoor_Tileset_1: 21300002
-      House_Indoor_Tileset_8: 21300016
-      House_Indoor_Tileset_17: 21300034
-      House_Indoor_Tileset_16: 21300032
-      House_Indoor_Tileset_15: 21300030
-      House_Indoor_Tileset_21: 21300042
-      House_Indoor_Tileset_5: 21300010
+      House_Indoor_Tileset_10: 21300020
       House_Indoor_Tileset_11: 21300022
-      House_Indoor_Tileset_4: 21300008
-      House_Indoor_Tileset_7: 21300014
-      House_Indoor_Tileset_2: 21300004
-      House_Indoor_Tileset_14: 21300028
+      House_Indoor_Tileset_12: 21300024
       House_Indoor_Tileset_13: 21300026
-  spritePackingTag: 
+      House_Indoor_Tileset_14: 21300028
+      House_Indoor_Tileset_15: 21300030
+      House_Indoor_Tileset_16: 21300032
+      House_Indoor_Tileset_17: 21300034
+      House_Indoor_Tileset_18: 21300036
+      House_Indoor_Tileset_19: 21300038
+      House_Indoor_Tileset_2: 21300004
+      House_Indoor_Tileset_20: 21300040
+      House_Indoor_Tileset_21: 21300042
+      House_Indoor_Tileset_22: 21300044
+      House_Indoor_Tileset_3: 21300006
+      House_Indoor_Tileset_4: 21300008
+      House_Indoor_Tileset_5: 21300010
+      House_Indoor_Tileset_6: 21300012
+      House_Indoor_Tileset_7: 21300014
+      House_Indoor_Tileset_8: 21300016
+      House_Indoor_Tileset_9: 21300018
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 245475
-  packageName: 2D Platformer Controller (with animated character)
-  packageVersion: 1.0.0
-  assetPath: Assets/SupanthaPaul/2D Platformer Controller/Art/Sprites/Tilemaps/Spritesheets/House_Indoor_Tileset.png
-  uploadId: 558839

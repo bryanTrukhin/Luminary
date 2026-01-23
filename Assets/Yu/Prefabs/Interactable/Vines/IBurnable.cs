@@ -1,10 +1,7 @@
-// IBurnable.cs
 using UnityEngine;
 
-namespace SupanthaPaul
+
+public interface IBurnable
 {
-    public interface IBurnable
-    {
-        void ApplyHeat(float amount);
-    }
+    void ApplyHeat(float amount);
 }

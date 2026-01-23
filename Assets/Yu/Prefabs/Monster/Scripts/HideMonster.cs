@@ -91,7 +91,7 @@ namespace SupanthaPaul
             else
             {
                 // fallback – just freeze player
-                p.SetPlayable(false);
+                p.SetMoveable(false);
             }
 
             // After killing, the monster can despawn or keep going, your choice:

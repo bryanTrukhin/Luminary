@@ -1,12 +1,10 @@
 using UnityEngine;
 
-namespace SupanthaPaul
-{
-	public class PoolObject : MonoBehaviour {
 
-		public virtual void OnObjectReuse()
-		{
+public class PoolObject : MonoBehaviour {
 
-		}
+	public virtual void OnObjectReuse()
+	{
+
 	}
 }
