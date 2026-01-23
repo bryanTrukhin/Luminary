@@ -12,45 +12,26 @@ public class GameController : MonoBehaviour
     public static GameController I;           // tiny singleton
     public PlayState State { get; private set; }
 
-    public event System.Action OnLockerEntered;
-    public event System.Action OnLockerExited;
-
     [SerializeField] private JumpscareUI jumpscareUI;
     [SerializeField] private bool reloadSceneAfterDeath = false;
 
-
+    public event System.Action<bool> OnHidingChanged; 
 
     void Awake() 
     {
-        if(I != null && I != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if(I != null && I != this) { Destroy(gameObject); return; }
         I = this;
     }
 
-    /* --------- PUBLIC API ---------- */
-    public void EnterLocker(PlayerController p)
+    // SIMPLIFIED API
+    public void SetHidingState(bool isHiding)
     {
-        OnLockerEntered?.Invoke();
-        State = PlayState.Hiding;
-
-        p.transform.SetParent(transform, true);
-        p.SetMoveable(false);     
-        p.SetVisible(false);          // <- hide all sprites
-        p.Lantern.SetVisible(false);       // turn off light
-    }
-
-    public void ExitLocker(PlayerController p)
-    {
-        OnLockerExited?.Invoke();
-        State = PlayState.Exploring;
-
-        p.transform.SetParent(null, true);
-        p.SetMoveable(true);
-        p.SetVisible(true);           // <- show sprites again
-        p.Lantern.SetVisible(true);        // turn light back on
+        State = isHiding ? PlayState.Hiding : PlayState.Exploring;
+        
+        // Notify anyone listening (like AI or Music)
+        OnHidingChanged?.Invoke(isHiding);
+        
+        Debug.Log($"Game State Changed: {State}");
     }
 
     public void KillPlayer(PlayerController p)

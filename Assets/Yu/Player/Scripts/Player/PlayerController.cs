@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IHidable
 {
     #if UNITY_EDITOR
     private Color _groundGizmoColor = Color.red;
@@ -293,10 +293,47 @@ public class PlayerController : MonoBehaviour
         return !Physics2D.BoxCast(origin, standColliderSize, 0f, Vector2.up, (standColliderSize.y - crouchColliderSize.y) + 0.05f, whatIsGround);
     }
 
-    public void SetMoveable(bool on)
+
+    public void EnterHiding(Vector3 hidePos)
     {
-        m_rb.bodyType = on ? RigidbodyType2D.Dynamic : RigidbodyType2D.Kinematic;
-        if (!on) m_rb.velocity = Vector2.zero;
+        // 1. Stop Movement
+        SetMoveable(false);
+        m_rb.simulated = false; // Completely disable physics (collisions/gravity)
+
+        // 2. Move to position
+        transform.position = hidePos;
+
+        // 3. Visuals (Hide Sprite + Lantern)
+        SetVisible(false);
+    }
+
+    public void ExitHiding(Vector3 exitPos)
+    {
+        // 1. Reset Position
+        transform.position = exitPos;
+
+        // 2. Re-enable Physics/Movement
+        m_rb.simulated = true;
+        SetMoveable(true);
+
+        // 3. Visuals
+        SetVisible(true);
+    }
+
+    public void SetMoveable(bool canMove)
+    {
+        
+        if (!canMove)
+        {
+            m_rb.velocity = Vector2.zero;
+            m_rb.bodyType = RigidbodyType2D.Kinematic; 
+            this.canMove = false; // Assuming you use this bool in Update()
+        }
+        else
+        {
+            m_rb.bodyType = RigidbodyType2D.Dynamic;
+            this.canMove = true;
+        }
     }
 
     public void SetVisible(bool visible)
@@ -304,6 +341,7 @@ public class PlayerController : MonoBehaviour
         if (_spriteRenderers != null)
             foreach (var sr in _spriteRenderers) sr.enabled = visible;
         
+        // Use the interface accessor for the lantern
         _lantern?.SetVisible(visible);
     }
 

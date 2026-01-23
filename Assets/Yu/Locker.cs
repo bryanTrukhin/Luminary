@@ -1,89 +1,78 @@
 using UnityEngine;
 
-
 public class Locker : MonoBehaviour
 {
-    [SerializeField] private Transform hidePoint;   // where player snaps to
-    bool occupied;
-    bool playerInRange;
-    PlayerController occupant;
-    Vector3 returnPosition; // where to put them when exiting
+    [SerializeField] private Transform hidePoint;   // Where they snap to inside
+    [SerializeField] private Transform exitPoint;   // Where they appear when leaving (Optional, defaults to locker pos)
 
-    void OnTriggerEnter2D(Collider2D collision)
+    private IHidable _occupant;     // Who is inside? (Could be Player, could be NPC)
+    private IHidable _targetInRange; // Who is standing in front of the door?
+    private bool _isOccupied;
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log($"Locker trigger enter with {collision.name}, tag={collision.tag}, layer={collision.gameObject.layer}");
-
-        if (!collision.CompareTag("Player")) return;
-
-        // cache player controller from this object or parents
-        occupant = collision.GetComponentInParent<PlayerController>();
-        if (occupant == null)
+        // Check if the object is "Hidable"
+        if (collision.TryGetComponent<IHidable>(out var hidable))
         {
-            Debug.LogWarning($"Locker: Player collider {collision.name} had no PlayerController in parents", collision);
-            return;
+            _targetInRange = hidable;
         }
-
-        playerInRange = true;
     }
 
-    void OnTriggerExit2D(Collider2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (!collision.CompareTag("Player")) return;
-
-        // if we’re not currently occupying the locker, clear range
-        if (!occupied)
+        if (collision.TryGetComponent<IHidable>(out var hidable) && hidable == _targetInRange)
         {
-            playerInRange = false;
-            occupant = null;
+            _targetInRange = null;
         }
     }
 
     void Update()
     {
-        // unified interact handling here
-        if (!InputSystem.Interact()) return;
-
-        // Try to enter
-        if (!occupied && playerInRange && occupant != null)
+        // 1. Check Input
+        if (InputSystem.Interact())
         {
-            if (hidePoint == null)
+            if (_isOccupied)
             {
-                Debug.LogError("Locker: hidePoint is NOT assigned in inspector!", this);
-                return;
+                ExitLocker();
             }
-            if (GameController.I == null)
+            else if (_targetInRange != null)
             {
-                Debug.LogError("Locker: GameController.I is null — is there a GameController in the scene?", this);
-                return;
+                EnterLocker();
             }
-
-            // remember where we were standing
-            returnPosition = occupant.transform.position;
-
-            // move into locker
-            occupant.transform.position = hidePoint.position;
-            GameController.I.EnterLocker(occupant);
-            occupied = true;
-            return;
         }
+    }
 
-        // Try to exit
-        if (occupied && occupant != null)
-        {
-            if (GameController.I == null)
-            {
-                Debug.LogError("Locker: GameController.I is null on exit!", this);
-                occupied = false;
-                return;
-            }
+    void EnterLocker()
+    {
+        if (_targetInRange == null) return;
 
-            // pop back out to where we entered
-            occupant.transform.position = returnPosition;
+        _occupant = _targetInRange;
+        
+        // 1. Tell the Object to Hide (Visuals/Physics handled by the object)
+        _occupant.EnterHiding(hidePoint.position);
 
-            GameController.I.ExitLocker(occupant);
-            occupied = false;
-            // don't null occupant here so we can re-enter without leaving trigger;
-            // it will be cleared on trigger exit if needed
-        }
+        // 2. Update Global Game State (So enemies know to stop chasing)
+        if (GameController.I != null) 
+            GameController.I.SetHidingState(true);
+
+        _isOccupied = true;
+    }
+
+    void ExitLocker()
+    {
+        if (_occupant == null) return;
+
+        // Determine exit position (use transform.position if no exitPoint set)
+        Vector3 spawnPos = exitPoint != null ? exitPoint.position : transform.position;
+
+        // 1. Tell Object to Unhide
+        _occupant.ExitHiding(spawnPos);
+
+        // 2. Update Global Game State
+        if (GameController.I != null) 
+            GameController.I.SetHidingState(false);
+
+        _occupant = null;
+        _isOccupied = false;
     }
 }
