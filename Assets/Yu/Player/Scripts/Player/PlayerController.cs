@@ -251,7 +251,7 @@ public class PlayerController : MonoBehaviour, IHidable
             m_rb.velocity = new Vector2((m_facingRight ? 1f : -1f) * crouch_slideSpeed, 0f);
         }
 
-        if (!isSliding)
+        if (!isSliding || InputSystem.CrouchHeld())
         {
             isCrouching = InputSystem.CrouchHeld();
             if (!isCrouching && HeadClear()) ResizeColliderHeight(standColliderSize.y);
