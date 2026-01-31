@@ -6,13 +6,17 @@ using UnityEngine.Rendering.Universal;
 [DisallowMultipleComponent]
 public class LanternController : MonoBehaviour, ILantern
 {
-    [Header("Firefly Currency")]
+    [Header("Firefly")]
     [SerializeField] private float fireflyCapacity = 100f;
     [SerializeField] private float fireflyRegenRate = 5f;
     private float _currentFireflies;
 
-    [Header("Lantern Flash Ability")]
-    [SerializeField] private float flashFireflyCost = 20f;
+    [Header("Movement Abilities")]
+    [SerializeField] private float dashCost = 20f;
+    [SerializeField] private float doubleJumpCost = 15f;
+
+    [Header("Abilities")]
+    [SerializeField] private float flashLanternCost = 20f;
     [SerializeField] private float flashBonusIntensity = 2.5f;
     [SerializeField] private float flashDuration = 0.25f;
     [SerializeField] private float flashCooldown = 0.5f;
@@ -65,21 +69,7 @@ public class LanternController : MonoBehaviour, ILantern
             _currentFireflies = Mathf.Min(_currentFireflies, fireflyCapacity);
         }
     }
-
-    void LateUpdate()
-    {
-        // Handle Swing Logic
-        bool facingRight = playerRoot.localScale.x >= 0f;
-        Vector3 targetOffset = facingRight ? rightRest : leftRest;
-        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetOffset, ref _swingVelocity, smoothTime);
-    }
-
-    // ================= INTERFACE IMPLEMENTATION ================= //
-
-    /// <summary>
-    /// Attempts to consume fireflies for an action.
-    /// </summary>
-    public bool TryConsumeEnergy(float amount) // Kept method name from Interface for compatibility
+    public bool TryConsumeEnergy(float amount)
     {
         if (_currentFireflies >= amount)
         {
@@ -90,15 +80,38 @@ public class LanternController : MonoBehaviour, ILantern
         Debug.Log("Not enough Fireflies!"); 
         return false;
     }
+    // ================= Lantern Abilities ================= //
 
     public void TriggerFlash()
     {
         // Check Cooldown AND Firefly count
-        if (_flashCooldownTimer <= 0f && TryConsumeEnergy(flashFireflyCost))
+        if (_flashCooldownTimer <= 0f && TryConsumeEnergy(flashLanternCost))
         {
             Flash(flashBonusIntensity, flashDuration);
             _flashCooldownTimer = flashCooldown;
         }
+    }
+
+    public bool TryUseDash()
+    {
+        return TryConsumeEnergy(dashCost);
+    }
+
+    public bool TryUseDoubleJump()
+    {
+        return TryConsumeEnergy(doubleJumpCost);
+    }
+
+
+
+
+    // ================= Lantern Visuals and COROUTINES ================= //
+    void LateUpdate()
+    {
+        // Handle Swing Logic
+        bool facingRight = playerRoot.localScale.x >= 0f;
+        Vector3 targetOffset = facingRight ? rightRest : leftRest;
+        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetOffset, ref _swingVelocity, smoothTime);
     }
 
     public void SetVisible(bool on)
@@ -108,14 +121,11 @@ public class LanternController : MonoBehaviour, ILantern
         var sr = GetComponent<SpriteRenderer>();
         if(sr) sr.enabled = on;
     }
-
     public void Flicker(float amplitude, float speed, float duration)
     {
         if (_flickerCo != null) StopCoroutine(_flickerCo);
         _flickerCo = StartCoroutine(FlickerRoutine(amplitude, speed, duration));
     }
-
-    // ================= INTERNAL LOGIC & COROUTINES ================= //
 
     private void Flash(float bonusIntensity, float duration)
     {
@@ -186,12 +196,4 @@ public class LanternController : MonoBehaviour, ILantern
             if (burnable != null) burnable.ApplyHeat(burnDamagePerTick);
         }
     }
-
-    #if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = new Color(1f, 0.5f, 0f, 0.35f);
-        Gizmos.DrawWireSphere(transform.position, burnRadius);
-    }
-    #endif
 }

@@ -6,10 +6,6 @@ public class PlayerController : MonoBehaviour, IHidable
     private Color _groundGizmoColor = Color.red;
     #endif
 
-    [Header("Ability Energy Costs")]
-    [SerializeField] private float dashEnergyCost = 20f;
-    [SerializeField] private float doubleJumpEnergyCost = 15f;
-
     [Header("Movement Settings")]
     [SerializeField] public float speed = 8f;
     [SerializeField] public float sprintSpeed = 12f;
@@ -203,7 +199,7 @@ public class PlayerController : MonoBehaviour, IHidable
         // Dash Input
         if (InputSystem.Dash() && !isDashing && !m_hasDashedInAir && m_dashCooldown <= 0f)
         {
-            if (_lantern == null || _lantern.TryConsumeEnergy(dashEnergyCost))
+            if (_lantern == null || _lantern.TryUseDash())
             {
                 isDashing = true;
                 m_dashCooldown = dashCooldown;
@@ -223,7 +219,7 @@ public class PlayerController : MonoBehaviour, IHidable
             }
             else if (m_extraJumps > 0 && !m_wallGrabbing) // Double Jump
             {
-                if (_lantern == null || _lantern.TryConsumeEnergy(doubleJumpEnergyCost))
+                if (_lantern == null || _lantern.TryUseDoubleJump())
                 {
                     m_rb.velocity = new Vector2(m_rb.velocity.x, jumpForce * 0.8f);
                     m_extraJumps--;

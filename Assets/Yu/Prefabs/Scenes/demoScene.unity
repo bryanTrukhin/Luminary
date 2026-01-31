@@ -49963,7 +49963,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireflyCapacity: 100
   fireflyRegenRate: 5
-  flashFireflyCost: 20
+  dashCost: 20
+  doubleJumpCost: 15
+  flashLanternCost: 20
   flashBonusIntensity: 2.5
   flashDuration: 0.25
   flashCooldown: 0.5
@@ -55310,7 +55312,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1865938915375051438, guid: 3c02ac99ebd71b24cb0f7c53261c4241, type: 3}
       propertyPath: extraJumpCount
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1865938915375051438, guid: 3c02ac99ebd71b24cb0f7c53261c4241, type: 3}
       propertyPath: crouch_slideSpeed
