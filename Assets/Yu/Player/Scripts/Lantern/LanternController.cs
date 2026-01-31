@@ -8,8 +8,8 @@ using TMPro;
 public class LanternController : MonoBehaviour, ILantern
 {
     [Header("Firefly Currency")]
-    [SerializeField] private float fireflyCapacity = 100f;
-    [SerializeField] private float fireflyRegenRate = 5f;
+    [SerializeField] private float fireflyCapacity = 50f;
+    [SerializeField] private float fireflyRegenRate = 2f;
     private float _currentFireflies;
     public TMP_Text currentFireFlyCountUI;
 
@@ -58,7 +58,7 @@ public class LanternController : MonoBehaviour, ILantern
     void Update()
     {
         //new: display num of fireflies
-        currentFireFlyCountUI.text = "Fireflies: " + _currentFireflies.ToString("0.0");
+        currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/50";
         
         // 1. Handle Cooldowns internally
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;
