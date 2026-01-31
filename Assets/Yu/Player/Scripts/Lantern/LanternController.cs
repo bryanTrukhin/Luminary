@@ -8,16 +8,16 @@ using TMPro;
 public class LanternController : MonoBehaviour, ILantern
 {
     [Header("Firefly Currency")]
-    [SerializeField] private float fireflyCapacity = 50f;
-    [SerializeField] private float fireflyRegenRate = 2f;
-    private float _currentFireflies;
+    [SerializeField] private float fireflyCapacity;
+    [SerializeField] private float fireflyRegenRate;
+    public float _currentFireflies;
     public TMP_Text currentFireFlyCountUI;
 
     [Header("Lantern Flash Ability")]
-    [SerializeField] private float flashFireflyCost = 20f;
-    [SerializeField] private float flashBonusIntensity = 2.5f;
-    [SerializeField] private float flashDuration = 0.25f;
-    [SerializeField] private float flashCooldown = 0.5f;
+    [SerializeField] private float flashFireflyCost;
+    [SerializeField] private float flashBonusIntensity;
+    [SerializeField] private float flashDuration;
+    [SerializeField] private float flashCooldown;
     private float _flashCooldownTimer;
 
     [Header("Burning Mechanics")]
