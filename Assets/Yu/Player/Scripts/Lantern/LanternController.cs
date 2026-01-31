@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using TMPro;
 
 [DisallowMultipleComponent]
 public class LanternController : MonoBehaviour, ILantern
@@ -10,6 +11,7 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private float fireflyCapacity = 100f;
     [SerializeField] private float fireflyRegenRate = 5f;
     private float _currentFireflies;
+    public TMP_Text currentFireFlyCountUI;
 
     [Header("Movement Abilities")]
     [SerializeField] private float dashCost = 20f;
@@ -59,6 +61,9 @@ public class LanternController : MonoBehaviour, ILantern
 
     void Update()
     {
+        //new: display num of fireflies
+        currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/50";
+        
         // 1. Handle Cooldowns internally
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;
 
