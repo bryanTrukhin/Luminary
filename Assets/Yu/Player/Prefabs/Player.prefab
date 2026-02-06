@@ -241,7 +241,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4af389105722f64d8db36af0a4eb949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCurrentlyPlayable: 0
   speed: 6
   sprintSpeed: 8
   sprintEnabled: 1
@@ -275,13 +274,8 @@ MonoBehaviour:
   isDashing: 0
   isCrouching: 0
   isSliding: 0
-  m_col: {fileID: 0}
   standColliderSize: {x: 0.5, y: 1.25}
   crouchColliderSize: {x: 0.5, y: 0.75}
-  lantern: {fileID: 0}
-  flashBonusIntensity: 2.5
-  flashDuration: 0.25
-  flashCooldown: 0.5
 --- !u!114 &1173712999407116002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,7 +295,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1865938915375051437}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -336,7 +330,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1865938915375051437}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:

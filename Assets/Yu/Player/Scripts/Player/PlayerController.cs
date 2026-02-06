@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour, IHidable
 
     // Internal References
     private Rigidbody2D m_rb;
-    private CapsuleCollider2D m_col;
+    private BoxCollider2D m_col;
     private SpriteRenderer[] _spriteRenderers;
     private ParticleSystem m_dustParticle;
     private ILantern _lantern;
@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour, IHidable
     void Awake()
     {
         m_rb = GetComponent<Rigidbody2D>();
-        m_col = GetComponent<CapsuleCollider2D>();
+        m_col = GetComponent<BoxCollider2D>();
         _spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
         m_dustParticle = GetComponentInChildren<ParticleSystem>();
         _lantern = GetComponentInChildren<ILantern>();
@@ -247,11 +247,20 @@ public class PlayerController : MonoBehaviour, IHidable
             m_rb.velocity = new Vector2((m_facingRight ? 1f : -1f) * crouch_slideSpeed, 0f);
         }
 
-        if (!isSliding || InputSystem.CrouchHeld())
+        if (!isSliding)
         {
-            isCrouching = InputSystem.CrouchHeld();
-            if (!isCrouching && HeadClear()) ResizeColliderHeight(standColliderSize.y);
-            else if (isCrouching) ResizeColliderHeight(crouchColliderSize.y);
+            bool wantsToCrouch = InputSystem.CrouchHeld();
+
+            if (!wantsToCrouch && HeadClear())
+            {
+                isCrouching = false;
+                ResizeColliderHeight(standColliderSize.y);
+            }
+            else
+            {
+                isCrouching = true;
+                ResizeColliderHeight(crouchColliderSize.y);
+            }
         }
 
         // Lantern Flash
