@@ -2,24 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using TMPro;
 
 [DisallowMultipleComponent]
 public class LanternController : MonoBehaviour, ILantern
 {
     [Header("Firefly")]
-    [SerializeField] private float fireflyCapacity = 100f;
-    [SerializeField] private float fireflyRegenRate = 5f;
+    [SerializeField] private float fireflyCapacity;
+    [SerializeField] private float fireflyRegenRate;
     private float _currentFireflies;
+    public TMP_Text currentFireFlyCountUI;
 
     [Header("Movement Abilities")]
-    [SerializeField] private float dashCost = 20f;
-    [SerializeField] private float doubleJumpCost = 15f;
+    [SerializeField] private float dashCost;
+    [SerializeField] private float doubleJumpCost;
 
     [Header("Abilities")]
-    [SerializeField] private float flashLanternCost = 20f;
-    [SerializeField] private float flashBonusIntensity = 2.5f;
-    [SerializeField] private float flashDuration = 0.25f;
-    [SerializeField] private float flashCooldown = 0.5f;
+    [SerializeField] private float flashLanternCost;
+    [SerializeField] private float flashBonusIntensity;
+    [SerializeField] private float flashDuration;
+    [SerializeField] private float flashCooldown;
     private float _flashCooldownTimer;
 
     [Header("Burning Mechanics")]
@@ -41,10 +43,14 @@ public class LanternController : MonoBehaviour, ILantern
     private Vector3 _swingVelocity;
     private Coroutine _flickerCo;
 
-    void Awake()
+
+    void Start()
     {
         _currentFireflies = fireflyCapacity;
+    }
 
+    void Awake()
+    {
         // Auto-setup lights and root
         if (bulbs.Count == 0) bulbs.AddRange(GetComponentsInChildren<Light2D>(includeInactive: true));
         if (playerRoot == null) playerRoot = transform.parent;
@@ -59,6 +65,9 @@ public class LanternController : MonoBehaviour, ILantern
 
     void Update()
     {
+        //new: display num of fireflies
+        currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/50";
+        
         // 1. Handle Cooldowns internally
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;
 

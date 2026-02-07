@@ -10,6 +10,8 @@ TagManager:
   - Stunner
   - Launcher
   - lantern
+  - levelStart
+  - levelEnd
   layers:
   - Default
   - TransparentFX
