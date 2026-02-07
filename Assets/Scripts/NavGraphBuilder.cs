@@ -10,6 +10,9 @@ public class NavGraphBuilder : MonoBehaviour
 
     public List<NavNode> nodes = new List<NavNode>();
 
+    public Transform enemy;
+    public Transform target;
+
     void Start()
     {
         Debug.Log("NavGB Start");
@@ -46,28 +49,40 @@ public class NavGraphBuilder : MonoBehaviour
         Debug.Log($"Built {nodes.Count} NavNodes");
     }
 
-    Bounds CalculateBounds(Vector3Int[] cluster)
+    Bounds CalculateBounds(PlatformCluster cluster)
     {
-        Vector3 min = tilemap.CellToWorld(cluster[0]);
-        Vector3 max = min;
+        bool first = true;
+        Vector3 min = Vector3.zero;
+        Vector3 max = Vector3.zero;
 
-        foreach (var cell in cluster)
+        foreach (Vector3Int cell in cluster.tiles)
         {
             Vector3 world = tilemap.CellToWorld(cell);
-            min = Vector3.Min(min, world);
-            max = Vector3.Max(max, world);
+
+            if (first)
+            {
+                min = world;
+                max = world + tilemap.cellSize;
+                first = false;
+            }
+            else
+            {
+                min = Vector3.Min(min, world);
+                max = Vector3.Max(max, world + tilemap.cellSize);
+            }
         }
 
         Bounds b = new Bounds();
-        b.SetMinMax(min, max + tilemap.cellSize);
+        b.SetMinMax(min, max);
         return b;
     }
+
 
     void BuildConnections()
     {
         // for test, change to enemy info in real game
-        float maxHorizontal = 4.5f;
-        float maxVertical = 4.5f;
+        float maxHorizontal = 6f;
+        float maxVertical = 6f;
 
         foreach (var a in nodes)
         {
@@ -94,26 +109,146 @@ public class NavGraphBuilder : MonoBehaviour
         Debug.Log("Connections built");
     }
 
-
-    void OnDrawGizmos()
-{
-    if (nodes == null) return;
-
-    Gizmos.color = Color.cyan;
-    foreach (var n in nodes)
+    NavNode GetClosestNode(Vector3 pos)
     {
-        Gizmos.DrawSphere(n.center, 0.15f);
+        NavNode best = null;
+        float bestDist = float.MaxValue;
 
-        if (n.neighbors == null) continue;
-
-        Gizmos.color = Color.yellow;
-        foreach (var nei in n.neighbors)
+        foreach (var n in nodes)
         {
-            Gizmos.DrawLine(n.center, nei.center);
+            float d = Vector2.Distance(pos, n.center);
+            if (d < bestDist)
+            {
+                bestDist = d;
+                best = n;
+            }
+        }
+        return best;
+    }
+
+    List<NavNode> FindPath(NavNode start, NavNode goal)
+    {
+        var open = new List<NavNode>();
+        var closed = new HashSet<NavNode>();
+
+        foreach (var n in nodes)
+        {
+            n.gCost = float.MaxValue;
+            n.parent = null;
         }
 
-        Gizmos.color = Color.cyan;
+        start.gCost = 0;
+        start.hCost = Vector2.Distance(start.center, goal.center);
+        open.Add(start);
+
+        while (open.Count > 0)
+        {
+            NavNode current = open[0];
+            foreach (var n in open)
+            {
+                if (n.fCost < current.fCost)
+                    current = n;
+            }
+
+            if (current == goal)
+                return ReconstructPath(goal);
+
+            open.Remove(current);
+            closed.Add(current);
+
+            foreach (var nei in current.neighbors)
+            {
+                if (closed.Contains(nei))
+                    continue;
+
+                float tentativeG =
+                    current.gCost + Vector2.Distance(current.center, nei.center);
+
+                if (tentativeG < nei.gCost)
+                {
+                    nei.parent = current;
+                    nei.gCost = tentativeG;
+                    nei.hCost = Vector2.Distance(nei.center, goal.center);
+
+                    if (!open.Contains(nei))
+                        open.Add(nei);
+                }
+            }
+        }
+
+        return null;
     }
-}
+
+    List<NavNode> ReconstructPath(NavNode end)
+    {
+        var path = new List<NavNode>();
+        NavNode cur = end;
+
+        while (cur != null)
+        {
+            path.Add(cur);
+            cur = cur.parent;
+        }
+
+        path.Reverse();
+        return path;
+    }
+
+    List<NavNode> debugPath;
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            NavNode start = GetClosestNode(enemy.position);
+            NavNode goal = GetClosestNode(target.position);
+
+            if (start == null || goal == null)
+            {
+                Debug.Log("Start or goal node missing");
+                return;
+            }
+
+            debugPath = FindPath(start, goal);
+
+            Debug.Log(debugPath == null
+                ? "No path found"
+                : $"Path length: {debugPath.Count}");
+        }
+    }
+
+
+    void OnDrawGizmos()
+    {
+        if (nodes == null) return;
+
+        Gizmos.color = Color.cyan;
+        foreach (var n in nodes)
+        {
+            Gizmos.DrawSphere(n.center, 0.15f);
+            {
+                if (n.neighbors == null) continue;
+            }
+            Gizmos.color = Color.yellow;
+            foreach (var nei in n.neighbors)
+            {
+                Gizmos.DrawLine(n.center, nei.center);
+            }
+
+            Gizmos.color = Color.cyan;
+        }
+        if (debugPath != null)
+        {
+            Gizmos.color = Color.red;
+            for (int i = 0; i < debugPath.Count - 1; i++)
+            {
+                Gizmos.DrawLine(
+                    debugPath[i].center,
+                    debugPath[i + 1].center
+                );
+            }
+        }
+
+    }
 
 }
