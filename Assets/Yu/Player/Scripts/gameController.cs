@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 // Add the namespace where PlayerController is defined, or ensure PlayerController.cs exists
 // If PlayerController is in a namespace, add: using YourNamespace;
 
@@ -16,6 +17,8 @@ public class GameController : MonoBehaviour
     [SerializeField] private bool reloadSceneAfterDeath = false;
 
     public event System.Action<bool> OnHidingChanged; 
+
+    public TMP_Text messageUI;
 
     void Awake() 
     {
@@ -64,4 +67,9 @@ public class GameController : MonoBehaviour
     }
 
     public bool PlayerSafeFromMonster() => State == PlayState.Hiding;
+
+    public void writeMessage(string s)
+    {
+        messageUI.text = s;
+    }
 }
