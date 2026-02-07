@@ -15,7 +15,6 @@ public class LevelGenerator : MonoBehaviour
 {
     [Header("Generation Settings")]
     [SerializeField] private int totalRooms = 5;
-    [SerializeField] private float roomWidth = 20f; // Distance between room centers
 
     [Header("Room Blueprints")]
     [SerializeField] private GameObject startRoom;
@@ -33,14 +32,16 @@ public class LevelGenerator : MonoBehaviour
 
         // 1. start Room
         SpawnRoom(startRoom, currentPos);
-        currentPos.x += roomWidth;
+        currentPos.x += getRoomWidth(startRoom);
 
         // 2. random middle room
-        for (int i = 0; i < totalRooms; i++)
-        {
-            GameObject randomRoom = randomRooms[Random.Range(0, randomRooms.Count)];
-            SpawnRoom(randomRoom, currentPos);
-            currentPos.x += roomWidth;
+        if(randomRooms != null && randomRooms.Count > 0){
+            for (int i = 0; i < totalRooms; i++)
+            {
+                GameObject randomRoom = randomRooms[Random.Range(0, randomRooms.Count)];
+                SpawnRoom(randomRoom, currentPos);
+                currentPos.x += getRoomWidth(randomRoom);
+            }
         }
 
         // 3. end room
@@ -50,5 +51,14 @@ public class LevelGenerator : MonoBehaviour
     void SpawnRoom(GameObject roomPrefab, Vector3 position)
     {
         Instantiate(roomPrefab, position, Quaternion.identity, transform);
+    }
+
+    float getRoomWidth(GameObject level)
+    {
+        Transform markers = level.transform.Find("Markers");
+        Transform entrance = markers.Find("Entrance");
+        Transform exit = markers.Find("Exit");
+        
+        return Mathf.Abs(entrance.position.x - exit.position.x);
     }
 }
