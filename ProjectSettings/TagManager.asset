@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ground
+  - Interactable
+  - wall
+  - Stunner
+  - Launcher
+  - lantern
   layers:
   - Default
   - TransparentFX
@@ -11,16 +17,16 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Ground
+  - Interactable
+  - Vine
+  - Enemy
+  - Player
+  - InspectObject
+  - PostProcessing
+  - bg
+  - bg2
+  - bg3
   - 
   - 
   - 
