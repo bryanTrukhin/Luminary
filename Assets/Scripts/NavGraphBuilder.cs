@@ -13,6 +13,9 @@ public class NavGraphBuilder : MonoBehaviour
     public Transform enemy;
     public Transform target;
 
+    List<TileNode> debugTilePath;
+
+
     void Start()
     {
         Debug.Log("NavGB Start");
@@ -198,23 +201,100 @@ public class NavGraphBuilder : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            NavNode start = GetClosestNode(enemy.position);
-            NavNode goal = GetClosestNode(target.position);
+            var enemyCluster = GetClusterOfPosition(enemy.position);
+            var targetCluster = GetClusterOfPosition(target.position);
 
-            if (start == null || goal == null)
+            if (enemyCluster == null || targetCluster == null)
             {
-                Debug.Log("Start or goal node missing");
+                Debug.Log("Cluster missing");
                 return;
             }
 
-            debugPath = FindPath(start, goal);
+            if (enemyCluster == targetCluster)
+            {
+                Debug.Log("Same Cluster ¡ú Tile A*");
 
-            Debug.Log(debugPath == null
-                ? "No path found"
-                : $"Path length: {debugPath.Count}");
+                TileNode startTile = GetClosestTile(enemy.position, enemyCluster);
+                TileNode goalTile = GetClosestTile(target.position, targetCluster);
+
+                debugTilePath = TileAStar.FindPath(
+                    startTile,
+                    goalTile,
+                    enemyCluster.tileNodes
+                );
+
+                Debug.Log(debugTilePath == null
+                    ? "No tile path"
+                    : $"Tile path length: {debugTilePath.Count}");
+            }
+            else
+            {
+                Debug.Log("Different Cluster ¡ú Nav A* (later)");
+            }
         }
+    }
+
+    TileNode GetClosestTile(Vector3 worldPos, PlatformCluster cluster)
+    {
+        TileNode best = null;
+        float bestDist = float.MaxValue;
+
+        foreach (var node in cluster.tileNodes)
+        {
+            if (node.neighbors.Count == 0)
+                continue;
+
+            float d = Vector2.Distance(worldPos, node.worldPos);
+
+            if (d < bestDist)
+            {
+                bestDist = d;
+                best = node;
+            }
+        }
+        return best;
+    }
+
+    PlatformCluster GetClusterOfPosition(Vector3 worldPos)
+    {
+        Vector3 probePos = worldPos + Vector3.down * 1.1f;
+        Vector3Int cell = tilemap.WorldToCell(probePos);
+
+        Debug.Log($"[ClusterCheck] world={worldPos} probe={probePos} cell={cell} hasTile={tilemap.HasTile(cell)}");
+
+        foreach (var cluster in clustering.clusters)
+        {
+            if (cluster.tiles.Contains(cell))
+            {
+                Debug.Log($"Found cluster {cluster.id}");
+                return cluster;
+            }
+        }
+
+        Debug.Log("Cluster missing");
+        return null;
+    }
+
+    PlatformCluster GetClusterByClosestTile(Vector3 worldPos)
+    {
+        float bestDist = float.MaxValue;
+        PlatformCluster best = null;
+
+        foreach (var cluster in clustering.clusters)
+        {
+            foreach (var node in cluster.tileNodes)
+            {
+                float d = Vector2.Distance(worldPos, node.worldPos);
+                if (d < bestDist)
+                {
+                    bestDist = d;
+                    best = cluster;
+                }
+            }
+        }
+        return best;
     }
 
 
@@ -245,6 +325,17 @@ public class NavGraphBuilder : MonoBehaviour
                 Gizmos.DrawLine(
                     debugPath[i].center,
                     debugPath[i + 1].center
+                );
+            }
+        }
+        if (debugTilePath != null)
+        {
+            Gizmos.color = Color.magenta;
+            for (int i = 0; i < debugTilePath.Count - 1; i++)
+            {
+                Gizmos.DrawLine(
+                    debugTilePath[i].worldPos,
+                    debugTilePath[i + 1].worldPos
                 );
             }
         }

@@ -4,22 +4,23 @@ using UnityEngine;
 
 public static class TileAStar
 {
-    public static List<TileNode> FindPath(
-        TileNode start,
-        TileNode goal)
+    public static List<TileNode> FindPath(TileNode start,TileNode goal,List<TileNode> allNodes)
     {
         if (start == null || goal == null)
             return null;
 
+        foreach (var n in allNodes)
+        {
+            n.gCost = float.MaxValue;
+            n.hCost = 0;
+            n.parent = null;
+        }
+
         var open = new List<TileNode>();
         var closed = new HashSet<TileNode>();
 
-        ResetNodes(start, goal);
-
         start.gCost = 0;
         start.hCost = Vector2.Distance(start.worldPos, goal.worldPos);
-        start.parent = null;
-
         open.Add(start);
 
         while (open.Count > 0)
@@ -59,17 +60,6 @@ public static class TileAStar
         }
 
         return null;
-    }
-
-    static void ResetNodes(TileNode start, TileNode goal)
-    {
-        start.gCost = float.MaxValue;
-        start.hCost = 0;
-        start.parent = null;
-
-        goal.gCost = float.MaxValue;
-        goal.hCost = 0;
-        goal.parent = null;
     }
 
     static List<TileNode> ReconstructPath(TileNode end)
