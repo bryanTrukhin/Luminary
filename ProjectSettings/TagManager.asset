@@ -6,6 +6,12 @@ TagManager:
   tags:
   - Ground
   - Interactable
+  - wall
+  - Stunner
+  - Launcher
+  - lantern
+  - levelStart
+  - levelEnd
   layers:
   - Default
   - TransparentFX
