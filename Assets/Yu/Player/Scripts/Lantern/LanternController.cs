@@ -10,7 +10,7 @@ public class LanternController : MonoBehaviour, ILantern
     [Header("Firefly")]
     [SerializeField] private float fireflyCapacity;
     [SerializeField] private float fireflyRegenRate;
-    private float _currentFireflies;
+    public float _currentFireflies;
     public TMP_Text currentFireFlyCountUI;
 
     [Header("Movement Abilities")]
