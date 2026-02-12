@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+
 public class PlatformClustering : MonoBehaviour
 {
     [SerializeField]
@@ -93,10 +94,10 @@ public class PlatformClustering : MonoBehaviour
         }
         return allClusters;
     }
-
     void BuildTileNodes(PlatformCluster cluster)
     {
         cluster.tileNodes.Clear();
+        cluster.tileNodeMap.Clear();
 
         foreach (Vector3Int cell in cluster.tiles)
         {
@@ -105,14 +106,53 @@ public class PlatformClustering : MonoBehaviour
             {
                 TileNode node = new TileNode();
                 node.cellPos = cell;
-                node.worldPos = tilemap.CellToWorld(cell) + tilemap.cellSize / 2f;
+                node.worldPos =
+                    tilemap.CellToWorld(cell) + tilemap.cellSize / 2f;
 
                 cluster.tileNodes.Add(node);
+                cluster.tileNodeMap[cell] = node;
             }
         }
 
+        BuildTileNeighbors(cluster);
+
         Debug.Log($"Cluster {cluster.id} surface nodes: {cluster.tileNodes.Count}");
     }
+
+    void BuildTileNeighbors(PlatformCluster cluster)
+    {
+        foreach (var node in cluster.tileNodes)
+        {
+            Vector3Int c = node.cellPos;
+
+            Vector3Int[] candidates =
+            {
+            Vector3Int.left,
+            Vector3Int.right,
+
+            Vector3Int.left + Vector3Int.up,
+            Vector3Int.right + Vector3Int.up,
+
+            Vector3Int.left + Vector3Int.down,
+            Vector3Int.right + Vector3Int.down
+        };
+
+            foreach (var offset in candidates)
+            {
+                Vector3Int target = c + offset;
+
+                if (cluster.tileNodeMap.TryGetValue(target, out TileNode neighbor))
+                {
+                    int heightDiff = Mathf.Abs(target.y - c.y);
+                    if (heightDiff <= 1)
+                    {
+                        node.neighbors.Add(neighbor);
+                    }
+                }
+            }
+        }
+    }
+
 
 
     //Drawing the clusters for visualization
@@ -166,6 +206,15 @@ public class PlatformClustering : MonoBehaviour
             foreach (var node in cluster.tileNodes)
             {
                 Gizmos.DrawSphere(node.worldPos, 0.08f);
+            }
+            // tile-level connections
+            Gizmos.color = Color.cyan;
+            foreach (var node in cluster.tileNodes)
+            {
+                foreach (var nei in node.neighbors)
+                {
+                    Gizmos.DrawLine(node.worldPos, nei.worldPos);
+                }
             }
 
         }

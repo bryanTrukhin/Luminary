@@ -16,4 +16,8 @@ public class PlatformCluster
 
     // jump exits (later)
     public List<TileNode> exits = new List<TileNode>();
+
+    public Dictionary<Vector3Int, TileNode> tileNodeMap = new Dictionary<Vector3Int, TileNode>();
+
+
 }
