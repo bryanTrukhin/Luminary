@@ -258,7 +258,7 @@ public class NavGraphBuilder : MonoBehaviour
         Vector3 probePos = worldPos + Vector3.down * 1.1f;
         Vector3Int cell = tilemap.WorldToCell(probePos);
 
-        Debug.Log($"[ClusterCheck] world={worldPos} probe={probePos} cell={cell} hasTile={tilemap.HasTile(cell)}");
+        //Debug.Log($"[ClusterCheck] world={worldPos} probe={probePos} cell={cell} hasTile={tilemap.HasTile(cell)}");
 
         foreach (var cluster in clustering.clusters)
         {

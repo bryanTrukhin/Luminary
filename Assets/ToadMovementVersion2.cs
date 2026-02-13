@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Tilemaps;
 using UnityEngine;
+using System.Linq;
 
 public class ToadMovementVersion2 : MonoBehaviour
 {
@@ -16,7 +18,11 @@ public class ToadMovementVersion2 : MonoBehaviour
 
     [Header("Jumping")]
     [SerializeField] public float jumpHeightConstant;
+    [SerializeField] public Tilemap tilemap;
+    [SerializeField] public LayerMask platformLayerMask;
+    public float tileOffset;
     public bool canJump;
+    public bool isJumping;
 
     // Gizmo variable to track the actual point we are aiming for
     private Vector3 debugLandingPos;
@@ -27,8 +33,11 @@ public class ToadMovementVersion2 : MonoBehaviour
         if (gameManager != null)
         {
             nav = gameManager.GetComponent<NavGraphBuilder>();
+            Grid grid = tilemap.layoutGrid;
+            tileOffset= grid.cellSize.y / 2f;
         }
         canJump = false;
+        isJumping = false;
     }
 
     void Update()
@@ -43,71 +52,74 @@ public class ToadMovementVersion2 : MonoBehaviour
             }
         }
 
-        if (path != null && pathIndex < path.Count - 1 && canJump)
+        if (path != null && pathIndex < path.Count - 1 && canJump && !isJumping)
         {
-            ConductJump();
+            StartCoroutine(JumpSequence());
         }
     }
 
-    void ConductJump()
+    Vector2 targetPos;
+    IEnumerator JumpSequence()
     {
         canJump = false;
+        isJumping = true;
 
-        int step = (pathIndex + 2 < path.Count) ? 2 : 1;
+        int step = 1;
+        targetPos = path[pathIndex + step].worldPos;
+        Vector2 homeTilePos = path[pathIndex].worldPos;
+
+        //Re-adjusting
+        float distToTarget = Mathf.Abs(transform.position.x - targetPos.x);
+        if (distToTarget < tileOffset * 2f)
+        {
+            rb.velocity = CalculateLaunchVelocity(transform.position, homeTilePos, jumpHeightConstant * 0.5f);
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        //Main jump
         pathIndex += step;
+        debugLandingPos = new Vector3(targetPos.x, targetPos.y + tileOffset, 0);
+        Debug.Log($"Leaping {step} tiles!");
 
-        Vector2 targetPos = path[pathIndex].worldPos;
-
-        // We set the debug position here so it updates every jump
-        debugLandingPos = new Vector3(targetPos.x, targetPos.y + 0.5f, 0);
-
-        float height = (step == 2) ? jumpHeightConstant * 1.5f : jumpHeightConstant;
-        rb.velocity = CalculateLaunchVelocity(currentPos, targetPos, height);
-
-        Debug.Log($"Jumped {step} tiles! Now at path index: {pathIndex}");
+        rb.velocity = CalculateLaunchVelocity(transform.position, targetPos, jumpHeightConstant);
+        yield return new WaitUntil(() => canJump);
+        isJumping = false;
     }
 
     public Vector2 CalculateLaunchVelocity(Vector3 start, Vector3 target, float jumpHeight)
     {
-        float g = Mathf.Abs(Physics2D.gravity.y * rb.gravityScale);
+        float gravity = Mathf.Abs(Physics2D.gravity.y * rb.gravityScale);
+        float displacementY = (target.y + tileOffset) - start.y;
+        float displacementX = target.x - start.x;
 
-        // Adjust for the surface of the tile
-        float targetSurfaceY = target.y + 0.5f;
+        float heightFromStart = Mathf.Max(0, displacementY) + jumpHeight;
+        float timeUp = Mathf.Sqrt((2 * heightFromStart) / gravity);
+        float heightFromPeakToTarget = heightFromStart - displacementY;
+        float timeDown = Mathf.Sqrt((2 * Mathf.Abs(heightFromPeakToTarget)) / gravity);
+        float totalJumpTime = timeUp + timeDown;
 
-        float dispX = (target.x - start.x);
-        float dispY = targetSurfaceY - start.y;
+        float velocityY = Mathf.Sqrt(2 * gravity * heightFromStart);
+        float velocityX = displacementX / totalJumpTime;
 
-        // 2. DEFINE PEAK (Fixed for flat ground/downward jumps)
-        // Using Mathf.Max ensures the peak is always higher than both start and target
-        float worldPeak = Mathf.Max(start.y, targetSurfaceY) + jumpHeight;
-
-        // Use Abs to prevent NaN (Square root of negative) from floating point errors
-        float h1 = Mathf.Abs(worldPeak - start.y);
-        float h2 = Mathf.Abs(worldPeak - targetSurfaceY);
-
-        // 3. TIME
-        float timeUp = Mathf.Sqrt(2 * h1 / g);
-        float timeDown = Mathf.Sqrt(2 * h2 / g);
-        float totalTime = timeUp + timeDown;
-
-        // Prevent Velocity Explosion on flat ground
-        if (totalTime < 0.01f) totalTime = 0.1f;
-
-        // 4. VELOCITIES
-        float vX = dispX / totalTime;
-        float vY = Mathf.Sqrt(2 * g * h1);
-
-        return new Vector2(vX, vY);
+        return new Vector2(velocityX, velocityY);
     }
 
+    /*
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        //RaycastHit2D downCheck = Physics2D.Raycast(currentPos, Vector2.down, tileOffset, platformLayerMask);
         if (collision.gameObject.CompareTag("Platform"))
         {
-            if (rb.velocity.y <= 0.1f)
-            {
-                canJump = true;
-            }
+            canJump = true;
+        }
+    }
+    */
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Platform"))
+        {
+            canJump = true;
         }
     }
 
