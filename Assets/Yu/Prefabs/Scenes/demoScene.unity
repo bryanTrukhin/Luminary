@@ -5579,7 +5579,7 @@ MonoBehaviour:
     poolIDToUse: 1
   - stepName: RandomRooms
     type: 1
-    repetitions: 5
+    repetitions: 2
     specificRoom: {fileID: 5510525077582085511, guid: d4aa4f03b12bcea4d891ac5cef0f3494, type: 3}
     poolIDToUse: 1
   - stepName: Ending
@@ -14057,6 +14057,14 @@ PrefabInstance:
     - target: {fileID: 1865938915375051437, guid: 3c02ac99ebd71b24cb0f7c53261c4241, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 1865938915375051438, guid: 3c02ac99ebd71b24cb0f7c53261c4241, type: 3}
+      propertyPath: sprintEnabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1865938915375051438, guid: 3c02ac99ebd71b24cb0f7c53261c4241, type: 3}
+      propertyPath: slopeStickForce
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7260621439849994520, guid: 3c02ac99ebd71b24cb0f7c53261c4241, type: 3}
       propertyPath: currentFireFlyCountUI
