@@ -2,8 +2,13 @@
 
 public class PlayerController : MonoBehaviour, IHidable
 {
-    [Header("Health & Bounds")]
-    [SerializeField] private float fallKillHeight = -20f;
+    #if UNITY_EDITOR
+    private Color _groundGizmoColor = Color.red;
+    #endif
+
+    [Header("Ability Energy Costs")]
+    [SerializeField] private float dashEnergyCost = 20f;
+    [SerializeField] private float doubleJumpEnergyCost = 15f;
 
     [Header("Movement Settings")]
     [SerializeField] public float speed = 8f;
@@ -13,8 +18,6 @@ public class PlayerController : MonoBehaviour, IHidable
     [Header("Jumping")]
     [SerializeField] private float jumpForce = 12f;
     [SerializeField] private float fallMultiplier = 2.5f;
-    [SerializeField] private float groundGrav = 9f;
-    [SerializeField] private float airGrav = 2.5f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private LayerMask whatIsGround;
@@ -35,24 +38,13 @@ public class PlayerController : MonoBehaviour, IHidable
     [SerializeField] private float dashCooldown = 0.2f;
     [SerializeField] private GameObject dashEffect;
 
-    [Header("Slope / Ground Stick")]
-    [SerializeField] private float groundRayDistance = 1.5f;
-    [SerializeField] private float slopeStickForce = 40f;
-    [SerializeField] private float maxSlopeAngle = 55f;
-
     [Header("Crouch / Slide")]
     [SerializeField] float crouchSpeed = 2f;
     [SerializeField] float crouch_slideSpeed = 9f;
     [SerializeField] float slideDuration = 0.4f;
-
-    [Header("Audio")]
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip walkSound;
-
-    
     
     // Logic States
-    public bool isGrounded;
+    [HideInInspector] public bool isGrounded;
     [HideInInspector] public float moveInput;
     [HideInInspector] public bool canMove = true;
     [HideInInspector] public bool actuallyWallGrabbing = false;
@@ -84,12 +76,6 @@ public class PlayerController : MonoBehaviour, IHidable
     private int m_onWallSide = 0;
     private int m_playerSide = 1;
 
-    // Slope internals
-    private Vector2 m_groundNormal = Vector2.up;
-    private float m_slopeAngle;
-    private bool m_onSlope;
-    private bool m_isJumping;
-
     [SerializeField] Vector2 standColliderSize = new(.5f, 1.5f);
     [SerializeField] Vector2 crouchColliderSize = new(.5f, .75f);
 
@@ -110,8 +96,6 @@ public class PlayerController : MonoBehaviour, IHidable
         m_extraJumps = extraJumpCount;
         m_dashTime = startDashTime;
         m_dashCooldown = dashCooldown;
-
-        audioSource.clip = walkSound;
     }
 
     private void FixedUpdate()
@@ -126,12 +110,8 @@ public class PlayerController : MonoBehaviour, IHidable
         m_onWall = m_onRightWall || m_onLeftWall;
 
         CalculateSides();
-        DetectGroundNormal();
 
         if ((m_wallGrabbing || isGrounded) && m_wallJumping) m_wallJumping = false;
-
-        // Clear jump flag once the player has landed (grounded and no longer rising)
-        if (isGrounded && m_rb.velocity.y <= 0.1f) m_isJumping = false;
 
         // 2. State Guard
         bool shouldProcess = GameController.I == null || GameController.I.State == PlayState.Exploring;
@@ -148,36 +128,15 @@ public class PlayerController : MonoBehaviour, IHidable
         }
         else
         {
-            
             if (canMove && !m_wallGrabbing && !isSliding)
-            {
                 m_rb.velocity = new Vector2(moveInput * run, m_rb.velocity.y);
-            }
             else if (!canMove)
-            {
                 m_rb.velocity = new Vector2(0f, m_rb.velocity.y);
-            }
         }
 
         // 4. Gravity Modifiers
         if (m_rb.velocity.y < 0f)
             m_rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
-
-        // Slope Stick — push player into the slope surface when grounded
-        if (isGrounded && m_onSlope && !m_wallGrabbing && !isDashing && !m_isJumping && Mathf.Abs(moveInput) > 0.01f)
-        {
-            m_rb.AddForce(-m_groundNormal * slopeStickForce, ForceMode2D.Force);
-            Vector2 slopeTangent = Vector2.Perpendicular(m_groundNormal); // tangent along the slope
-            // Perpendicular gives a vector rotated 90 CCW ensure it points
-            // in the player's movement direction.
-            if (slopeTangent.x * moveInput < 0f) slopeTangent = -slopeTangent;
-
-            float currentSpeed = isSprinting ? sprintSpeed : speed;
-            if (isCrouching) currentSpeed = crouchSpeed;
-            if (isSliding) currentSpeed = crouch_slideSpeed;
-
-            m_rb.velocity = slopeTangent * (Mathf.Abs(moveInput) * currentSpeed);
-        }
 
         // 5. Dashing Logic
         if (isDashing)
@@ -219,23 +178,7 @@ public class PlayerController : MonoBehaviour, IHidable
                 ResizeColliderHeight(isCrouching ? crouchColliderSize.y : standColliderSize.y);
             }
         }
-        bool isWalking =
-        canMove &&
-        isGrounded &&
-        !m_wallGrabbing &&
-        !isSliding &&
-        Mathf.Abs(moveInput) > 0.1f;
 
-        if (isWalking)
-        {
-        if (!audioSource.isPlaying)
-        audioSource.Play();
-        }
-        else
-        {
-        if (audioSource.isPlaying)
-        audioSource.Stop();
-        }
         // 8. Visuals
         HandleVisuals();
     }
@@ -246,14 +189,9 @@ public class PlayerController : MonoBehaviour, IHidable
         
         if (isGrounded)
         {
-            fallMultiplier = groundGrav;
             m_extraJumps = extraJumpCount;
             m_hasDashedInAir = false;
             m_groundedRemember = m_groundedRememberTime;
-        }
-        else
-        {
-            fallMultiplier = airGrav;
         }
         m_groundedRemember -= Time.deltaTime;
 
@@ -265,7 +203,7 @@ public class PlayerController : MonoBehaviour, IHidable
         // Dash Input
         if (InputSystem.Dash() && !isDashing && !m_hasDashedInAir && m_dashCooldown <= 0f)
         {
-            if (_lantern == null || _lantern.TryUseDash())
+            if (_lantern == null || _lantern.TryConsumeEnergy(dashEnergyCost))
             {
                 isDashing = true;
                 m_dashCooldown = dashCooldown;
@@ -280,15 +218,13 @@ public class PlayerController : MonoBehaviour, IHidable
         {
             if (isGrounded || m_groundedRemember > 0f) // Normal Jump
             {
-                m_isJumping = true;
                 m_rb.velocity = new Vector2(m_rb.velocity.x, jumpForce);
                 PoolManager.instance.ReuseObject(jumpEffect, groundCheck.position, Quaternion.identity);
             }
             else if (m_extraJumps > 0 && !m_wallGrabbing) // Double Jump
             {
-                if (_lantern == null || _lantern.TryUseDoubleJump())
+                if (_lantern == null || _lantern.TryConsumeEnergy(doubleJumpEnergyCost))
                 {
-                    m_isJumping = true;
                     m_rb.velocity = new Vector2(m_rb.velocity.x, jumpForce * 0.8f);
                     m_extraJumps--;
                     PoolManager.instance.ReuseObject(jumpEffect, groundCheck.position, Quaternion.identity);
@@ -296,7 +232,6 @@ public class PlayerController : MonoBehaviour, IHidable
             }
             else if (m_wallGrabbing) // Wall Jumps
             {
-                m_isJumping = true;
                 m_wallGrabbing = false;
                 m_wallJumping = true;
                 if (m_playerSide == m_onWallSide) Flip();
@@ -318,18 +253,9 @@ public class PlayerController : MonoBehaviour, IHidable
 
         if (!isSliding)
         {
-            bool wantsToCrouch = InputSystem.CrouchHeld();
-
-            if (!wantsToCrouch && HeadClear())
-            {
-                isCrouching = false;
-                ResizeColliderHeight(standColliderSize.y);
-            }
-            else if(wantsToCrouch)
-            {
-                isCrouching = true;
-                ResizeColliderHeight(crouchColliderSize.y);
-            }
+            isCrouching = InputSystem.CrouchHeld();
+            if (!isCrouching && HeadClear()) ResizeColliderHeight(standColliderSize.y);
+            else if (isCrouching) ResizeColliderHeight(crouchColliderSize.y);
         }
 
         // Lantern Flash
@@ -340,24 +266,6 @@ public class PlayerController : MonoBehaviour, IHidable
 
         // Flip Logic
         if ((!m_facingRight && moveInput > 0f) || (m_facingRight && moveInput < 0f)) Flip();
-
-        // Out of bounds check
-        if (transform.position.y < fallKillHeight)
-        {
-            // Instantly kill by dealing massive damage
-            if (_lantern != null) _lantern.TakeDamage(9999);
-        }
-
-        // DEBUG DAMAGE TEST
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            if (_lantern != null)
-            {
-                _lantern.TakeDamage(10f);
-                Debug.Log("Debug Damage Applied! Current Fireflies: " + Lantern);
-            }
-        }
-
     }
 
     void HandleVisuals()
@@ -378,82 +286,38 @@ public class PlayerController : MonoBehaviour, IHidable
         m_onWallSide = m_onRightWall ? 1 : (m_onLeftWall ? -1 : 0);
         m_playerSide = m_facingRight ? 1 : -1;
     }
-    void DetectGroundNormal()
-    {
-        /// Raycasts downward from the ground-check point to read the surface
-        /// normal. Sets m_groundNormal, m_slopeAngle, and m_onSlope.
-        RaycastHit2D hit = Physics2D.Raycast(
-            groundCheck.position,
-            Vector2.down,
-            groundRayDistance,
-            whatIsGround
-        );
-
-        if (hit.collider != null)
-        {
-            m_groundNormal = hit.normal;
-            m_slopeAngle = Vector2.Angle(m_groundNormal, Vector2.up);
-            m_onSlope = m_slopeAngle > 0.5f && m_slopeAngle <= maxSlopeAngle;
-        }
-        else
-        {
-            m_groundNormal = Vector2.up;
-            m_slopeAngle = 0f;
-            m_onSlope = false;
-        }
-    }
 
     bool HeadClear()
     {
-        float crouchTop = m_col.bounds.max.y;
-        float distanceToCheck = (standColliderSize.y - crouchColliderSize.y) + 0.1f;
-
-        // Cast a box that is the width of the player, but very thin vertically, 
-        // starting from the top of the head and moving upwards.
-        RaycastHit2D hit = Physics2D.BoxCast(
-            new Vector2(transform.position.x, crouchTop), 
-            new Vector2(standColliderSize.x * 0.9f, 0.1f), // Slightly thinner width to avoid snagging walls
-            0f, 
-            Vector2.up, 
-            distanceToCheck, 
-            whatIsGround
-        );
-
-        return hit.collider == null;
+        Vector2 origin = (Vector2)transform.position + Vector2.up * crouchColliderSize.y * .5f;
+        return !Physics2D.BoxCast(origin, standColliderSize, 0f, Vector2.up, (standColliderSize.y - crouchColliderSize.y) + 0.05f, whatIsGround);
     }
 
 
     public void EnterHiding(Vector3 hidePos)
     {
+        // 1. Stop Movement
         SetMoveable(false);
-        m_rb.simulated = false; 
+        m_rb.simulated = false; // Completely disable physics (collisions/gravity)
+
+        // 2. Move to position
         transform.position = hidePos;
+
+        // 3. Visuals (Hide Sprite + Lantern)
         SetVisible(false);
     }
 
     public void ExitHiding(Vector3 exitPos)
     {
+        // 1. Reset Position
         transform.position = exitPos;
+
+        // 2. Re-enable Physics/Movement
         m_rb.simulated = true;
         SetMoveable(true);
+
+        // 3. Visuals
         SetVisible(true);
-    }
-
-    public void RespawnReset()
-    {
-        SetMoveable(true); 
-        SetVisible(true);
-        m_rb.velocity = Vector2.zero;
-        m_rb.angularVelocity = 0f;
-
-        // Reset Logic Flags
-        isDashing = false;
-        isSliding = false;
-        isCrouching = false;
-        m_wallGrabbing = false;
-        m_extraJumps = extraJumpCount; // Give them their jumps back
-
-        _lantern?.ResetHealth();
     }
 
     public void SetMoveable(bool canMove)
@@ -463,7 +327,7 @@ public class PlayerController : MonoBehaviour, IHidable
         {
             m_rb.velocity = Vector2.zero;
             m_rb.bodyType = RigidbodyType2D.Kinematic; 
-            this.canMove = false;
+            this.canMove = false; // Assuming you use this bool in Update()
         }
         else
         {

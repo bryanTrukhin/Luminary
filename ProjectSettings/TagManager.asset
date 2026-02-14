@@ -19,16 +19,16 @@ TagManager:
   - 
   - Water
   - UI
-  - Ground
-  - Interactable
-  - Vine
   - Enemy
+  - Firefly
   - Player
-  - InspectObject
-  - PostProcessing
-  - bg
-  - bg2
-  - bg3
+  - Obstacle
+  - Platform
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

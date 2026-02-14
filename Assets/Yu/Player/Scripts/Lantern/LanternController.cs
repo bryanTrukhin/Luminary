@@ -2,34 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using TMPro;
 
 [DisallowMultipleComponent]
 public class LanternController : MonoBehaviour, ILantern
 {
+    [Header("Firefly Currency")]
+    [SerializeField] private float fireflyCapacity = 100f;
+    [SerializeField] private float fireflyRegenRate = 5f;
+    private float _currentFireflies;
 
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip flashSound;
-    [SerializeField] private AudioClip dashSound;
-    [Header("Firefly")]
-    [SerializeField] private float fireflyCapacity;
-    [SerializeField] private float fireflyRegenRate;
-    public float _currentFireflies;
-    public TMP_Text currentFireFlyCountUI;
-
-    [Header("Damage Settings")]
-    [SerializeField] private float damageCooldown = 1.0f; // I-Frames
-    private float _damageTimer;
-
-    [Header("Movement Abilities")]
-    [SerializeField] private float dashCost;
-    [SerializeField] private float doubleJumpCost;
-
-    [Header("Abilities")]
-    [SerializeField] private float flashLanternCost;
-    [SerializeField] private float flashBonusIntensity;
-    [SerializeField] private float flashDuration;
-    [SerializeField] private float flashCooldown;
+    [Header("Lantern Flash Ability")]
+    [SerializeField] private float flashFireflyCost = 20f;
+    [SerializeField] private float flashBonusIntensity = 2.5f;
+    [SerializeField] private float flashDuration = 0.25f;
+    [SerializeField] private float flashCooldown = 0.5f;
     private float _flashCooldownTimer;
 
     [Header("Burning Mechanics")]
@@ -45,21 +31,16 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private Vector3 leftRest = new Vector3(-0.55f, -0.20f, 0);
     [SerializeField] private float smoothTime = 0.08f;
 
-
     // Internal State
     struct BulbState { public float intensity; public float radius; }
     private readonly List<BulbState> _originals = new();
     private Vector3 _swingVelocity;
     private Coroutine _flickerCo;
 
-
-    void Start()
-    {
-        ResetHealth();
-    }
-
     void Awake()
     {
+        _currentFireflies = fireflyCapacity;
+
         // Auto-setup lights and root
         if (bulbs.Count == 0) bulbs.AddRange(GetComponentsInChildren<Light2D>(includeInactive: true));
         if (playerRoot == null) playerRoot = transform.parent;
@@ -74,9 +55,6 @@ public class LanternController : MonoBehaviour, ILantern
 
     void Update()
     {
-        //new: display num of fireflies
-        currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/" + fireflyCapacity;
-        
         // 1. Handle Cooldowns internally
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;
 
@@ -87,7 +65,21 @@ public class LanternController : MonoBehaviour, ILantern
             _currentFireflies = Mathf.Min(_currentFireflies, fireflyCapacity);
         }
     }
-    public bool TryConsumeEnergy(float amount)
+
+    void LateUpdate()
+    {
+        // Handle Swing Logic
+        bool facingRight = playerRoot.localScale.x >= 0f;
+        Vector3 targetOffset = facingRight ? rightRest : leftRest;
+        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetOffset, ref _swingVelocity, smoothTime);
+    }
+
+    // ================= INTERFACE IMPLEMENTATION ================= //
+
+    /// <summary>
+    /// Attempts to consume fireflies for an action.
+    /// </summary>
+    public bool TryConsumeEnergy(float amount) // Kept method name from Interface for compatibility
     {
         if (_currentFireflies >= amount)
         {
@@ -98,75 +90,15 @@ public class LanternController : MonoBehaviour, ILantern
         Debug.Log("Not enough Fireflies!"); 
         return false;
     }
-    public void TakeDamage(float amount)
-    {
-        //Check for I-Frames or God Mode
-        if (_damageTimer > 0 || GameController.I.State == PlayState.Dead) return;
-
-        _currentFireflies -= amount;
-        // Visual Feedback
-        Flicker(0.5f, 20f, 0.5f); 
-        _damageTimer = damageCooldown;
-
-        // Check Death
-        if (_currentFireflies <= 0)
-        {
-            _currentFireflies = 0;
-            PlayerController pc = playerRoot.GetComponent<PlayerController>();
-            GameController.I.KillPlayer(pc);
-        }
-    }
-    public void ResetHealth()
-    {
-        _currentFireflies = fireflyCapacity;
-        _damageTimer = 0;
-    }
-
-    // ================= Lantern Abilities ================= //
 
     public void TriggerFlash()
     {
         // Check Cooldown AND Firefly count
-        bool result = TryConsumeEnergy(flashLanternCost);
-        if (result && flashSound)
-        {
-            audioSource.clip = flashSound;
-            audioSource.Play();
-        }
-        if (_flashCooldownTimer <= 0f && TryConsumeEnergy(flashLanternCost))
+        if (_flashCooldownTimer <= 0f && TryConsumeEnergy(flashFireflyCost))
         {
             Flash(flashBonusIntensity, flashDuration);
             _flashCooldownTimer = flashCooldown;
         }
-    }
-
-    public bool TryUseDash()
-    {
-        bool result = TryConsumeEnergy(dashCost);
-        if (result && dashSound)
-        {
-            audioSource.clip = dashSound;
-            audioSource.Play();
-        }
-        return result;
-    }
-
-    public bool TryUseDoubleJump()
-    {
-        bool result = TryConsumeEnergy(doubleJumpCost);
-        return result;
-    }
-
-
-
-
-    // ================= Lantern Visuals and COROUTINES ================= //
-    void LateUpdate()
-    {
-        // Handle Swing Logic
-        bool facingRight = playerRoot.localScale.x >= 0f;
-        Vector3 targetOffset = facingRight ? rightRest : leftRest;
-        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetOffset, ref _swingVelocity, smoothTime);
     }
 
     public void SetVisible(bool on)
@@ -176,20 +108,18 @@ public class LanternController : MonoBehaviour, ILantern
         var sr = GetComponent<SpriteRenderer>();
         if(sr) sr.enabled = on;
     }
+
     public void Flicker(float amplitude, float speed, float duration)
     {
         if (_flickerCo != null) StopCoroutine(_flickerCo);
         _flickerCo = StartCoroutine(FlickerRoutine(amplitude, speed, duration));
     }
 
+    // ================= INTERNAL LOGIC & COROUTINES ================= //
+
     private void Flash(float bonusIntensity, float duration)
     {
         if (_flickerCo != null) StopCoroutine(_flickerCo);
-        if (flashSound)
-        {
-            audioSource.clip = flashSound;
-            audioSource.Play();
-        }
         _flickerCo = StartCoroutine(FlashRoutine(bonusIntensity, duration));
     }
 
@@ -256,4 +186,12 @@ public class LanternController : MonoBehaviour, ILantern
             if (burnable != null) burnable.ApplyHeat(burnDamagePerTick);
         }
     }
+
+    #if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1f, 0.5f, 0f, 0.35f);
+        Gizmos.DrawWireSphere(transform.position, burnRadius);
+    }
+    #endif
 }

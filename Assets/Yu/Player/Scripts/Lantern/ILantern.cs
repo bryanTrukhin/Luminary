@@ -11,10 +11,4 @@ public interface ILantern
     
     // Effects (Added so GhostTrainEvent and cutscenes can use it)
     void Flicker(float amplitude, float speed, float duration);
-
-    bool TryUseDash();
-    bool TryUseDoubleJump();
-
-    void TakeDamage(float amount);
-    void ResetHealth();
 }
