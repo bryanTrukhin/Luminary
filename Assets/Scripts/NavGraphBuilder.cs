@@ -205,30 +205,24 @@ public class NavGraphBuilder : MonoBehaviour
 
         if (enemyCluster == null || targetCluster == null)
         {
-            Debug.Log("Cluster missing");
+            //Debug.Log("Cluster missing");
             return;
         }
 
         if (enemyCluster == targetCluster)
         {
-            Debug.Log("Same Cluster ?? Tile A*");
+            //Debug.Log("Same Cluster ?? Tile A*");
 
             TileNode startTile = GetClosestTile(enemy.position, enemyCluster);
             TileNode goalTile = GetClosestTile(target.position, targetCluster);
 
-            debugTilePath = TileAStar.FindPath(
-                 startTile,
-                 goalTile,
-                 enemyCluster.tileNodes
-            );
+            debugTilePath = TileAStar.FindPath(startTile, goalTile,enemyCluster.tileNodes);
 
-            Debug.Log(debugTilePath == null
-                    ? "No tile path"
-                    : $"Tile path length: {debugTilePath.Count}");
+            //Debug.Log(debugTilePath == null? "No tile path": $"Tile path length: {debugTilePath.Count}");
         }
         else
         {
-            Debug.Log("Different Cluster ?? Nav A* (later)");
+            //Debug.Log("Different Cluster ?? Nav A* (later)");
         }
     }
 
@@ -264,12 +258,12 @@ public class NavGraphBuilder : MonoBehaviour
         {
             if (cluster.tiles.Contains(cell))
             {
-                Debug.Log($"Found cluster {cluster.id}");
+                //Debug.Log($"Found cluster {cluster.id}");
                 return cluster;
             }
         }
 
-        Debug.Log("Cluster missing");
+        //Debug.Log("Cluster missing");
         return null;
     }
 
