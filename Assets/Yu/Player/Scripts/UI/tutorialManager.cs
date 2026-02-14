@@ -20,7 +20,7 @@ public class TutorialManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W)) 
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)) 
         {
             SetTaskStatus(0, true);
         }

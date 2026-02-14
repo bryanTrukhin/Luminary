@@ -44,6 +44,12 @@ public class PlayerController : MonoBehaviour, IHidable
     [SerializeField] float crouchSpeed = 2f;
     [SerializeField] float crouch_slideSpeed = 9f;
     [SerializeField] float slideDuration = 0.4f;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip walkSound;
+
+    
     
     // Logic States
     public bool isGrounded;
@@ -104,6 +110,8 @@ public class PlayerController : MonoBehaviour, IHidable
         m_extraJumps = extraJumpCount;
         m_dashTime = startDashTime;
         m_dashCooldown = dashCooldown;
+
+        audioSource.clip = walkSound;
     }
 
     private void FixedUpdate()
@@ -140,10 +148,15 @@ public class PlayerController : MonoBehaviour, IHidable
         }
         else
         {
+            
             if (canMove && !m_wallGrabbing && !isSliding)
+            {
                 m_rb.velocity = new Vector2(moveInput * run, m_rb.velocity.y);
+            }
             else if (!canMove)
+            {
                 m_rb.velocity = new Vector2(0f, m_rb.velocity.y);
+            }
         }
 
         // 4. Gravity Modifiers
@@ -206,7 +219,23 @@ public class PlayerController : MonoBehaviour, IHidable
                 ResizeColliderHeight(isCrouching ? crouchColliderSize.y : standColliderSize.y);
             }
         }
+        bool isWalking =
+        canMove &&
+        isGrounded &&
+        !m_wallGrabbing &&
+        !isSliding &&
+        Mathf.Abs(moveInput) > 0.1f;
 
+        if (isWalking)
+        {
+        if (!audioSource.isPlaying)
+        audioSource.Play();
+        }
+        else
+        {
+        if (audioSource.isPlaying)
+        audioSource.Stop();
+        }
         // 8. Visuals
         HandleVisuals();
     }

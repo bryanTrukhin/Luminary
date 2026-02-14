@@ -15,7 +15,7 @@ public class LanternUIScript : MonoBehaviour
     public Sprite frame7;
 
     public LanternController lanternController;
-    public float max = 50f;
+    public float max;
     private float step;
 
     private Image img;

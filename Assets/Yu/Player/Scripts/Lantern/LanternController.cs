@@ -7,6 +7,10 @@ using TMPro;
 [DisallowMultipleComponent]
 public class LanternController : MonoBehaviour, ILantern
 {
+
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip flashSound;
+    [SerializeField] private AudioClip dashSound;
     [Header("Firefly")]
     [SerializeField] private float fireflyCapacity;
     [SerializeField] private float fireflyRegenRate;
@@ -41,6 +45,7 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private Vector3 leftRest = new Vector3(-0.55f, -0.20f, 0);
     [SerializeField] private float smoothTime = 0.08f;
 
+
     // Internal State
     struct BulbState { public float intensity; public float radius; }
     private readonly List<BulbState> _originals = new();
@@ -70,7 +75,7 @@ public class LanternController : MonoBehaviour, ILantern
     void Update()
     {
         //new: display num of fireflies
-        currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/50";
+        currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/" + fireflyCapacity;
         
         // 1. Handle Cooldowns internally
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;
@@ -122,6 +127,12 @@ public class LanternController : MonoBehaviour, ILantern
     public void TriggerFlash()
     {
         // Check Cooldown AND Firefly count
+        bool result = TryConsumeEnergy(flashLanternCost);
+        if (result && flashSound)
+        {
+            audioSource.clip = flashSound;
+            audioSource.Play();
+        }
         if (_flashCooldownTimer <= 0f && TryConsumeEnergy(flashLanternCost))
         {
             Flash(flashBonusIntensity, flashDuration);
@@ -131,12 +142,19 @@ public class LanternController : MonoBehaviour, ILantern
 
     public bool TryUseDash()
     {
-        return TryConsumeEnergy(dashCost);
+        bool result = TryConsumeEnergy(dashCost);
+        if (result && dashSound)
+        {
+            audioSource.clip = dashSound;
+            audioSource.Play();
+        }
+        return result;
     }
 
     public bool TryUseDoubleJump()
     {
-        return TryConsumeEnergy(doubleJumpCost);
+        bool result = TryConsumeEnergy(doubleJumpCost);
+        return result;
     }
 
 
@@ -167,6 +185,11 @@ public class LanternController : MonoBehaviour, ILantern
     private void Flash(float bonusIntensity, float duration)
     {
         if (_flickerCo != null) StopCoroutine(_flickerCo);
+        if (flashSound)
+        {
+            audioSource.clip = flashSound;
+            audioSource.Play();
+        }
         _flickerCo = StartCoroutine(FlashRoutine(bonusIntensity, duration));
     }
 
