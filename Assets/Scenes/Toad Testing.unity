@@ -180,6 +180,7 @@ DistanceJoint2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD:Assets/Scenes/Toad Testing.unity
   m_GameObject: {fileID: 441416448}
   m_Enabled: 1
   serializedVersion: 4
@@ -335,12 +336,153 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+=======
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1865938915375051426}
+  - component: {fileID: 1865938915375051439}
+  - component: {fileID: 1865938915375051438}
+  - component: {fileID: 1173712999407116002}
+  - component: {fileID: 2015160990866301745}
+  m_Layer: 10
+  m_Name: Player
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1865938915375051426
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865938915375051437}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1865938916397552048}
+  - {fileID: 5796272189899729260}
+  - {fileID: 1865938915023229146}
+  - {fileID: 1865938915660024764}
+  - {fileID: 2637998758906077695}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &1865938915375051439
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865938915375051437}
+  m_BodyType: 0
+  m_Simulated: 0
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 4
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
+--- !u!114 &1865938915375051438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865938915375051437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4af389105722f64d8db36af0a4eb949, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 6
+  sprintSpeed: 8
+  sprintEnabled: 1
+  jumpForce: 13
+  fallMultiplier: 1.2
+  groundGrav: 9
+  airGrav: 2.5
+  groundCheck: {fileID: 1865938915023229146}
+  groundCheckRadius: 0.2
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 320
+  extraJumpCount: 0
+  jumpEffect: {fileID: 1756864995990567119, guid: 84373b93397a4544b9f154581f7b7cf4, type: 3}
+  grabRightOffset: {x: 0.16, y: 0}
+  grabLeftOffset: {x: -0.16, y: 0}
+  grabCheckRadius: 0.24
+  slideSpeed: 1
+  wallJumpForce: {x: 10.5, y: 18}
+  wallClimbForce: {x: 4, y: 14}
+  dashSpeed: 25
+  startDashTime: 0.15
+  dashCooldown: 0.2
+  dashEffect: {fileID: 8212761198797595994, guid: aa9df449b161ff64a9fe962a6a3f05fb, type: 3}
+  groundRayDistance: 1.5
+  slopeStickForce: 40
+  maxSlopeAngle: 55
+  crouchSpeed: 2
+  crouch_slideSpeed: 20
+  slideDuration: 0.4
+  isGrounded: 0
+  moveInput: 0
+  canMove: 1
+  actuallyWallGrabbing: 0
+  isSprinting: 0
+  isDashing: 0
+  isCrouching: 0
+  isSliding: 0
+  standColliderSize: {x: 0.5, y: 2}
+  crouchColliderSize: {x: 0.5, y: 1}
+--- !u!114 &1173712999407116002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865938915375051437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c342bd39c8203da4bbd4336f799dc8d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!70 &2015160990866301745
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865938915375051437}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 8d3c650dc5afb0440b8e9ef959aeeb26, type: 2}
+>>>>>>> main/YuBranchV3:Assets/Yu/Player/Prefabs/Player.prefab
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+<<<<<<< HEAD:Assets/Scenes/Toad Testing.unity
+    m_Bits: 0
+=======
+    m_Bits: 57344
+>>>>>>> main/YuBranchV3:Assets/Yu/Player/Prefabs/Player.prefab
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -357,10 +499,17 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
+<<<<<<< HEAD:Assets/Scenes/Toad Testing.unity
   m_Offset: {x: 6.12, y: -7.0199995}
   serializedVersion: 2
   m_Radius: 0.2
 --- !u!1 &519420028
+=======
+  m_Offset: {x: -0.001245141, y: -0.41999996}
+  m_Size: {x: 0.5005605, y: 1.25}
+  m_Direction: 0
+--- !u!1 &1865938915660024763
+>>>>>>> main/YuBranchV3:Assets/Yu/Player/Prefabs/Player.prefab
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6060,8 +6209,73 @@ TilemapRenderer:
 --- !u!1839735485 &1307362302
 Tilemap:
   m_ObjectHideFlags: 0
+<<<<<<< HEAD:Assets/Scenes/Toad Testing.unity
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
+=======
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1865938915375051426}
+    m_Modifications:
+    - target: {fileID: 2477820052887749217, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 2477820052887749217, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2477820052887749217, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2477820052887749217, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2477820052887749217, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2477820052887749217, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2477820052887749217, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2477820052887749217, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2477820052887749217, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2477820052887749217, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3553707192605823625, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+      propertyPath: m_Name
+      value: Lantern
+      objectReference: {fileID: 0}
+    - target: {fileID: 7078560657677384326, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+      propertyPath: fireflyCapacity
+      value: 20
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+--- !u!4 &2637998758906077695 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2477820052887749217, guid: 72df8f7584fc64146aa4d79a4240ed16, type: 3}
+  m_PrefabInstance: {fileID: 504106089255691166}
+>>>>>>> main/YuBranchV3:Assets/Yu/Player/Prefabs/Player.prefab
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1307362297}
   m_Enabled: 1

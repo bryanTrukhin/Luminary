@@ -4,9 +4,20 @@
 TagManager:
   serializedVersion: 2
   tags:
+<<<<<<< HEAD
   - Platform
   - Enemy
   - Firefly
+=======
+  - Ground
+  - Interactable
+  - wall
+  - Stunner
+  - Launcher
+  - lantern
+  - levelStart
+  - levelEnd
+>>>>>>> main/YuBranchV3
   layers:
   - Default
   - TransparentFX
