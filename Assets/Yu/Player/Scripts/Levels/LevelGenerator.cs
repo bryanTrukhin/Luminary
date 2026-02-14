@@ -1,25 +1,41 @@
 using UnityEngine;
 using System.Collections.Generic;
-/*
-Create Prefabs: Make Room_A, Room_B, Room_Start.
 
-Add Markers: Open Room_A prefab. Add empty GameObjects. Attach SpawnMarker.
-
-Set one to Type: Monster (Color Red).
-
-Set one to Type: Loot (Color Green).
-
-Setup Generator: Create an empty GameObject in your scene named LevelGenerator. Attach the script. Drag your room prefabs into the lists.
-*/
 public class LevelGenerator : MonoBehaviour
 {
-    [Header("Generation Settings")]
-    [SerializeField] private int totalRooms = 5;
+    // --- PART 1: THE PALETTES (Define your pools here once) ---
+    [System.Serializable]
+    public class RoomPool
+    {
+        public string poolID; // Give it a name like "Forest", "Castle", "Boss"
+        public List<GameObject> rooms;
+    }
 
-    [Header("Room Blueprints")]
-    [SerializeField] private GameObject startRoom;
-    [SerializeField] private GameObject endRoom;
-    [SerializeField] private List<GameObject> randomRooms;
+    // --- PART 2: THE INSTRUCTIONS (The playlist) ---
+    [System.Serializable]
+    public class LevelStep
+    {
+        public string stepName = "Step"; 
+        public enum StepType { FixedRoom, FromPool }
+        public StepType type;
+
+        [Range(1, 20)]
+        public int repetitions = 1; // How many times to spawn this?
+
+        [Header("If Fixed")]
+        public GameObject specificRoom;
+
+        [Header("If From Pool")]
+        public string poolIDToUse; // Type "Forest" here to use the Forest pool
+    }
+
+    [Header("Level Collections")]
+    public List<RoomPool> roomPalettes; // <--- Drag your Forest/Cave/Loot lists here
+
+    [Header("Sequence")]
+    public List<LevelStep> generationSequence; // <--- Build your level flow here
+
+    private Transform currentExitPoint;
 
     void Start()
     {
@@ -28,37 +44,71 @@ public class LevelGenerator : MonoBehaviour
 
     void GenerateLevel()
     {
-        Vector3 currentPos = transform.position;
+        // Setup initial spawn point
+        GameObject startPointObj = new GameObject("GenerationStartPoint");
+        startPointObj.transform.position = transform.position;
+        currentExitPoint = startPointObj.transform;
 
-        // 1. start Room
-        SpawnRoom(startRoom, currentPos);
-        currentPos.x += getRoomWidth(startRoom);
-
-        // 2. random middle room
-        if(randomRooms != null && randomRooms.Count > 0){
-            for (int i = 0; i < totalRooms; i++)
+        foreach (LevelStep step in generationSequence)
+        {
+            for (int i = 0; i < step.repetitions; i++)
             {
-                GameObject randomRoom = randomRooms[Random.Range(0, randomRooms.Count)];
-                SpawnRoom(randomRoom, currentPos);
-                currentPos.x += getRoomWidth(randomRoom);
+                GameObject roomToSpawn = null;
+
+                if (step.type == LevelStep.StepType.FixedRoom)
+                {
+                    roomToSpawn = step.specificRoom;
+                }
+                else if (step.type == LevelStep.StepType.FromPool)
+                {
+                    // Find the matching pool
+                    roomToSpawn = GetRandomRoomFromPool(step.poolIDToUse);
+                }
+
+                if (roomToSpawn != null)
+                {
+                    SpawnAndConnect(roomToSpawn);
+                }
             }
         }
-
-        // 3. end room
-        SpawnRoom(endRoom, currentPos);
+        
+        Destroy(startPointObj);
     }
 
-    void SpawnRoom(GameObject roomPrefab, Vector3 position)
+    // Helper to find the right list and pick a random room
+    GameObject GetRandomRoomFromPool(string id)
     {
-        Instantiate(roomPrefab, position, Quaternion.identity, transform);
+        foreach (RoomPool pool in roomPalettes)
+        {
+            if (pool.poolID == id)
+            {
+                if (pool.rooms.Count > 0)
+                    return pool.rooms[Random.Range(0, pool.rooms.Count)];
+                else
+                    Debug.LogWarning("Pool '" + id + "' is empty!");
+            }
+        }
+        Debug.LogError("Could not find a Room Pool with ID: " + id);
+        return null;
     }
 
-    float getRoomWidth(GameObject level)
+    void SpawnAndConnect(GameObject roomPrefab)
     {
-        Transform markers = level.transform.Find("Markers");
+        // Instantiate
+        GameObject newRoom = Instantiate(roomPrefab, Vector3.zero, Quaternion.identity, transform);
+
+        // Find markers
+        Transform markers = newRoom.transform.Find("Markers");
+        if(markers == null) { Debug.LogError("Room missing Markers!"); return; }
+
         Transform entrance = markers.Find("Entrance");
         Transform exit = markers.Find("Exit");
-        
-        return Mathf.Abs(entrance.position.x - exit.position.x);
+
+        // Align
+        Vector3 displacement = currentExitPoint.position - entrance.position;
+        newRoom.transform.position += displacement;
+
+        // Advance
+        currentExitPoint = exit;
     }
 }
