@@ -13,6 +13,10 @@ public class LanternController : MonoBehaviour, ILantern
     public float _currentFireflies;
     public TMP_Text currentFireFlyCountUI;
 
+    [Header("Damage Settings")]
+    [SerializeField] private float damageCooldown = 1.0f; // I-Frames
+    private float _damageTimer;
+
     [Header("Movement Abilities")]
     [SerializeField] private float dashCost;
     [SerializeField] private float doubleJumpCost;
@@ -46,7 +50,7 @@ public class LanternController : MonoBehaviour, ILantern
 
     void Start()
     {
-        _currentFireflies = fireflyCapacity;
+        ResetHealth();
     }
 
     void Awake()
@@ -89,6 +93,30 @@ public class LanternController : MonoBehaviour, ILantern
         Debug.Log("Not enough Fireflies!"); 
         return false;
     }
+    public void TakeDamage(float amount)
+    {
+        //Check for I-Frames or God Mode
+        if (_damageTimer > 0 || GameController.I.State == PlayState.Dead) return;
+
+        _currentFireflies -= amount;
+        // Visual Feedback
+        Flicker(0.5f, 20f, 0.5f); 
+        _damageTimer = damageCooldown;
+
+        // Check Death
+        if (_currentFireflies <= 0)
+        {
+            _currentFireflies = 0;
+            PlayerController pc = playerRoot.GetComponent<PlayerController>();
+            GameController.I.KillPlayer(pc);
+        }
+    }
+    public void ResetHealth()
+    {
+        _currentFireflies = fireflyCapacity;
+        _damageTimer = 0;
+    }
+
     // ================= Lantern Abilities ================= //
 
     public void TriggerFlash()

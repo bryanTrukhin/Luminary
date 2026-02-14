@@ -58,4 +58,21 @@ public class JumpscareUI : MonoBehaviour
             yield return null;
         }
     }
+
+    public IEnumerator Unfade()
+    {
+        if (jumpscareImage != null)
+            jumpscareImage.enabled = false;
+        float t = 0f;
+        Color c = fadeImage.color;
+
+        while (t < fadeTime)
+        {
+            t += Time.deltaTime;
+            c.a = Mathf.Lerp(1f, 0f, t / fadeTime);
+            fadeImage.color = c;
+            yield return null;
+        }
+        _canvasGroup.alpha = 0f;
+    }
 }

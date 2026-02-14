@@ -2,6 +2,8 @@
 
 public class PlayerController : MonoBehaviour, IHidable
 {
+    [Header("Health & Bounds")]
+    [SerializeField] private float fallKillHeight = -20f;
 
     [Header("Movement Settings")]
     [SerializeField] public float speed = 8f;
@@ -309,6 +311,24 @@ public class PlayerController : MonoBehaviour, IHidable
 
         // Flip Logic
         if ((!m_facingRight && moveInput > 0f) || (m_facingRight && moveInput < 0f)) Flip();
+
+        // Out of bounds check
+        if (transform.position.y < fallKillHeight)
+        {
+            // Instantly kill by dealing massive damage
+            if (_lantern != null) _lantern.TakeDamage(9999);
+        }
+
+        // DEBUG DAMAGE TEST
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            if (_lantern != null)
+            {
+                _lantern.TakeDamage(10f);
+                Debug.Log("Debug Damage Applied! Current Fireflies: " + Lantern);
+            }
+        }
+
     }
 
     void HandleVisuals()
@@ -388,6 +408,23 @@ public class PlayerController : MonoBehaviour, IHidable
         m_rb.simulated = true;
         SetMoveable(true);
         SetVisible(true);
+    }
+
+    public void RespawnReset()
+    {
+        SetMoveable(true); 
+        SetVisible(true);
+        m_rb.velocity = Vector2.zero;
+        m_rb.angularVelocity = 0f;
+
+        // Reset Logic Flags
+        isDashing = false;
+        isSliding = false;
+        isCrouching = false;
+        m_wallGrabbing = false;
+        m_extraJumps = extraJumpCount; // Give them their jumps back
+
+        _lantern?.ResetHealth();
     }
 
     public void SetMoveable(bool canMove)

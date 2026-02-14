@@ -15,15 +15,19 @@ public class GameController : MonoBehaviour
 
     [SerializeField] private JumpscareUI jumpscareUI;
     [SerializeField] private bool reloadSceneAfterDeath = false;
+    
 
     public event System.Action<bool> OnHidingChanged; 
 
     public TMP_Text messageUI;
+    private Vector3 _currentRespawnPos;
 
     void Awake() 
     {
         if(I != null && I != this) { Destroy(gameObject); return; }
         I = this;
+        PlayerController p = FindObjectOfType<PlayerController>();
+        if (p != null) _currentRespawnPos = p.transform.position;
     }
 
     // SIMPLIFIED API
@@ -35,6 +39,11 @@ public class GameController : MonoBehaviour
         OnHidingChanged?.Invoke(isHiding);
         
         Debug.Log($"Game State Changed: {State}");
+    }
+    public void SetRespawnPoint(Vector3 newPos)
+    {
+        _currentRespawnPos = newPos;
+        writeMessage("Checkpoint Reached");
     }
 
     public void KillPlayer(PlayerController p)
@@ -56,14 +65,24 @@ public class GameController : MonoBehaviour
     {
         if (jumpscareUI != null)
             yield return jumpscareUI.PlayJumpscare();
-
-        // You can fade to black or simply reload scene here
-        if (reloadSceneAfterDeath)
+        
+        // if (reloadSceneAfterDeath)
+        // {
+        //     SceneManager.LoadScene(
+        //         SceneManager.GetActiveScene().buildIndex
+        //     );
+        // }
+        // else
+        // {
+            State = PlayState.Exploring; 
+            p.transform.position = _currentRespawnPos;
+            p.RespawnReset(); 
+            Debug.Log("Player Respawned at: " + _currentRespawnPos);
+            if(jumpscareUI != null)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(
-                UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
-            );
+            yield return jumpscareUI.Unfade();
         }
+        // }
     }
 
     public bool PlayerSafeFromMonster() => State == PlayState.Hiding;

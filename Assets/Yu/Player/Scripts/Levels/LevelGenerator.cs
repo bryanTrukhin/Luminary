@@ -3,15 +3,13 @@ using System.Collections.Generic;
 
 public class LevelGenerator : MonoBehaviour
 {
-    // --- PART 1: THE PALETTES (Define your pools here once) ---
     [System.Serializable]
     public class RoomPool
     {
-        public string poolID; // Give it a name like "Forest", "Castle", "Boss"
+        public string poolID; 
         public List<GameObject> rooms;
     }
 
-    // --- PART 2: THE INSTRUCTIONS (The playlist) ---
     [System.Serializable]
     public class LevelStep
     {
@@ -26,14 +24,14 @@ public class LevelGenerator : MonoBehaviour
         public GameObject specificRoom;
 
         [Header("If From Pool")]
-        public string poolIDToUse; // Type "Forest" here to use the Forest pool
+        public string poolIDToUse; 
     }
 
     [Header("Level Collections")]
-    public List<RoomPool> roomPalettes; // <--- Drag your Forest/Cave/Loot lists here
+    public List<RoomPool> roomPalettes; 
 
     [Header("Sequence")]
-    public List<LevelStep> generationSequence; // <--- Build your level flow here
+    public List<LevelStep> generationSequence;
 
     private Transform currentExitPoint;
 
