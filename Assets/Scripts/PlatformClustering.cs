@@ -6,7 +6,6 @@ using UnityEngine.Tilemaps;
 
 public class PlatformClustering : MonoBehaviour
 {
-    [SerializeField]
     public Tilemap tilemap;
     public List<PlatformCluster> clusters;
 

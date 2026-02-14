@@ -13,8 +13,7 @@ public class NavGraphBuilder : MonoBehaviour
     public Transform enemy;
     public Transform target;
 
-    List<TileNode> debugTilePath;
-
+    public List<TileNode> debugTilePath;
 
     void Start()
     {
@@ -201,38 +200,35 @@ public class NavGraphBuilder : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        var enemyCluster = GetClusterOfPosition(enemy.position);
+        var targetCluster = GetClusterOfPosition(target.position);
+
+        if (enemyCluster == null || targetCluster == null)
         {
-            var enemyCluster = GetClusterOfPosition(enemy.position);
-            var targetCluster = GetClusterOfPosition(target.position);
+            Debug.Log("Cluster missing");
+            return;
+        }
 
-            if (enemyCluster == null || targetCluster == null)
-            {
-                Debug.Log("Cluster missing");
-                return;
-            }
+        if (enemyCluster == targetCluster)
+        {
+            Debug.Log("Same Cluster ?? Tile A*");
 
-            if (enemyCluster == targetCluster)
-            {
-                Debug.Log("Same Cluster �� Tile A*");
+            TileNode startTile = GetClosestTile(enemy.position, enemyCluster);
+            TileNode goalTile = GetClosestTile(target.position, targetCluster);
 
-                TileNode startTile = GetClosestTile(enemy.position, enemyCluster);
-                TileNode goalTile = GetClosestTile(target.position, targetCluster);
+            debugTilePath = TileAStar.FindPath(
+                 startTile,
+                 goalTile,
+                 enemyCluster.tileNodes
+            );
 
-                debugTilePath = TileAStar.FindPath(
-                    startTile,
-                    goalTile,
-                    enemyCluster.tileNodes
-                );
-
-                Debug.Log(debugTilePath == null
+            Debug.Log(debugTilePath == null
                     ? "No tile path"
                     : $"Tile path length: {debugTilePath.Count}");
-            }
-            else
-            {
-                Debug.Log("Different Cluster �� Nav A* (later)");
-            }
+        }
+        else
+        {
+            Debug.Log("Different Cluster ?? Nav A* (later)");
         }
     }
 
@@ -262,7 +258,7 @@ public class NavGraphBuilder : MonoBehaviour
         Vector3 probePos = worldPos + Vector3.down * 1.1f;
         Vector3Int cell = tilemap.WorldToCell(probePos);
 
-        Debug.Log($"[ClusterCheck] world={worldPos} probe={probePos} cell={cell} hasTile={tilemap.HasTile(cell)}");
+        //Debug.Log($"[ClusterCheck] world={worldPos} probe={probePos} cell={cell} hasTile={tilemap.HasTile(cell)}");
 
         foreach (var cluster in clustering.clusters)
         {
