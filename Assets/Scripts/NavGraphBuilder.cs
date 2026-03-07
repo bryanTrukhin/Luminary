@@ -29,8 +29,13 @@ public class NavGraphBuilder : MonoBehaviour
         Debug.Log("clusters is " +
             (clustering.clusters == null ? "NULL" : clustering.clusters.Count.ToString()));
         target = GameObject.FindGameObjectWithTag("Player").transform;
+        enemy = this.gameObject.transform;
         BuildNodes();
         BuildConnections();
+    }
+    void Awake()
+    {
+        target = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
 

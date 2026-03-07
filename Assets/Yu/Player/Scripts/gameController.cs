@@ -5,7 +5,7 @@ using TMPro;
 // Add the namespace where PlayerController is defined, or ensure PlayerController.cs exists
 // If PlayerController is in a namespace, add: using YourNamespace;
 
-public enum PlayState { Exploring, Hiding, Puzzling, Dead, Paused }
+public enum PlayState { Exploring, Hiding, Dead, Paused }
 
 
 public class GameController : MonoBehaviour
@@ -15,12 +15,17 @@ public class GameController : MonoBehaviour
 
     [SerializeField] private JumpscareUI jumpscareUI;
     [SerializeField] private bool reloadSceneAfterDeath = false;
-    
 
     public event System.Action<bool> OnHidingChanged; 
 
     public TMP_Text messageUI;
     private Vector3 _currentRespawnPos;
+    [SerializeField] private GameObject normalLantern;
+    [SerializeField] private GameObject brokenLantern;
+
+    private ILantern _normalLantern;
+    private ILantern _brokenLantern;
+
 
     void Awake() 
     {
@@ -28,6 +33,9 @@ public class GameController : MonoBehaviour
         I = this;
         PlayerController p = FindObjectOfType<PlayerController>();
         if (p != null) _currentRespawnPos = p.transform.position;
+
+        _normalLantern = normalLantern.GetComponent<ILantern>();
+        _brokenLantern = brokenLantern.GetComponent<ILantern>();
     }
 
     // SIMPLIFIED API
@@ -56,7 +64,7 @@ public class GameController : MonoBehaviour
         p.SetVisible(true);
         p.Lantern.SetVisible(false);
 
-        Debug.Log("GameController: Player died, triggering jumpscare.");
+        Debug.Log("GameController: Player died.");
 
         StartCoroutine(DeathSequence(p));
     }

@@ -86,6 +86,11 @@ public class LanternController : MonoBehaviour, ILantern
             _currentFireflies += fireflyRegenRate * Time.deltaTime;
             _currentFireflies = Mathf.Min(_currentFireflies, fireflyCapacity);
         }
+        
+        if (InputSystem.FlashLantern())
+        {
+            TriggerFlash();
+        }
     }
     public bool TryConsumeEnergy(float amount)
     {

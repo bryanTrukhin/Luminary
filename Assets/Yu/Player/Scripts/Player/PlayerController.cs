@@ -29,6 +29,10 @@ public class PlayerController : MonoBehaviour, IHidable
     public Vector2 wallJumpForce = new Vector2(10.5f, 18f);
     public Vector2 wallClimbForce = new Vector2(4f, 14f);
 
+    [Header("Lanterns")]
+    [SerializeField] private GameObject normalLantern;
+    [SerializeField] private GameObject brokenLantern;
+
     [Header("Dashing")]
     [SerializeField] private float dashSpeed = 30f;
     [SerializeField] private float startDashTime = 0.1f;
@@ -68,6 +72,8 @@ public class PlayerController : MonoBehaviour, IHidable
     private ParticleSystem m_dustParticle;
     private ILantern _lantern;
     public ILantern Lantern => _lantern;
+    private ILantern _normalLantern;
+    private ILantern _brokenLantern;
 
     // Internal Calculations
     private bool _prevGrounded;
@@ -100,6 +106,8 @@ public class PlayerController : MonoBehaviour, IHidable
         _spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
         m_dustParticle = GetComponentInChildren<ParticleSystem>();
         _lantern = GetComponentInChildren<ILantern>();
+        _brokenLantern = brokenLantern.GetComponent<ILantern>();
+        _normalLantern = normalLantern.GetComponent<ILantern>();
     }
 
     void Start()
@@ -331,13 +339,6 @@ public class PlayerController : MonoBehaviour, IHidable
                 ResizeColliderHeight(crouchColliderSize.y);
             }
         }
-
-        // Lantern Flash
-        if (InputSystem.FlashLantern() && _lantern != null)
-        {
-            _lantern.TriggerFlash();
-        }
-
         // Flip Logic
         if ((!m_facingRight && moveInput > 0f) || (m_facingRight && moveInput < 0f)) Flip();
 
@@ -488,5 +489,14 @@ public class PlayerController : MonoBehaviour, IHidable
 
         m_col.size = new Vector2(m_col.size.x, newHeight);
         m_col.offset = new Vector2(m_col.offset.x, m_col.offset.y - (oldHeight - newHeight) * 0.5f);
+    }
+
+    public void SwapLantern(bool useBroken)
+    {
+        normalLantern.SetActive(!useBroken);
+        brokenLantern.SetActive(useBroken);
+        
+        _lantern = useBroken ? _brokenLantern : _normalLantern;
+        _lantern.ResetHealth();
     }
 }
