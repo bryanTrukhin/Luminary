@@ -15,6 +15,10 @@ public class NavGraphBuilder : MonoBehaviour
 
     public List<TileNode> debugTilePath;
 
+    Vector3 lastEnemyPos;
+Vector3 lastTargetPos;
+
+
     void Start()
     {
         Debug.Log("NavGB Start");
@@ -30,6 +34,17 @@ public class NavGraphBuilder : MonoBehaviour
 
         BuildNodes();
         BuildConnections();
+    }
+    void Update()
+    {
+        if (Vector2.Distance(enemy.position, lastEnemyPos) < 0.5f &&
+            Vector2.Distance(target.position, lastTargetPos) < 0.5f)
+            return;
+
+        lastEnemyPos = enemy.position;
+        lastTargetPos = target.position;
+
+        CalculatePath();
     }
 
 
@@ -82,34 +97,44 @@ public class NavGraphBuilder : MonoBehaviour
 
     void BuildConnections()
     {
-        // for test, change to enemy info in real game
-        float maxHorizontal = 6f;
-        float maxVertical = 6f;
+        float maxJumpDistance = 6f;
 
         foreach (var a in nodes)
         {
             a.neighbors.Clear();
 
+            var clusterA = clustering.clusters[a.clusterIndex];
+
             foreach (var b in nodes)
             {
                 if (a == b) continue;
 
-                Vector3 delta = b.center - a.center;
+                var clusterB = clustering.clusters[b.clusterIndex];
 
-                // horizontal distance
-                if (Mathf.Abs(delta.x) > maxHorizontal)
-                    continue;
+                bool canConnect = false;
 
-                // vertical distance
-                if (delta.y > maxVertical || delta.y < -maxVertical)
-                    continue;
+                foreach (var exit in clusterA.exits)
+                {
+                    foreach (var node in clusterB.tileNodes)
+                    {
+                        float dist = Vector2.Distance(exit.worldPos, node.worldPos);
 
-                a.neighbors.Add(b);
+                        if (dist < maxJumpDistance)
+                        {
+                            canConnect = true;
+                            break;
+                        }
+                    }
+
+                    if (canConnect) break;
+                }
+
+                if (canConnect)
+                    a.neighbors.Add(b);
             }
         }
-
-        Debug.Log("Connections built");
     }
+
 
     NavNode GetClosestNode(Vector3 pos)
     {
@@ -198,7 +223,7 @@ public class NavGraphBuilder : MonoBehaviour
 
     List<NavNode> debugPath;
 
-    void Update()
+    void CalculatePath()
     {
         var enemyCluster = GetClusterOfPosition(enemy.position);
         var targetCluster = GetClusterOfPosition(target.position);
@@ -223,6 +248,45 @@ public class NavGraphBuilder : MonoBehaviour
         else
         {
             //Debug.Log("Different Cluster ?? Nav A* (later)");
+            NavNode startNode = GetClosestNode(enemy.position);
+            NavNode goalNode = GetClosestNode(target.position);
+
+            debugPath = FindPath(startNode, goalNode);
+
+            if (debugPath == null || debugPath.Count < 2)
+                return;
+
+            NavNode nextClusterNode = debugPath[1];
+
+            PlatformCluster enemyClusterData =
+                clustering.clusters[startNode.clusterIndex];
+
+            PlatformCluster nextCluster =
+                clustering.clusters[nextClusterNode.clusterIndex];
+
+            TileNode startTile =
+                GetClosestTile(enemy.position, enemyClusterData);
+
+            TileNode exitTile = null;
+
+            float bestDist = float.MaxValue;
+
+            foreach (var exit in enemyClusterData.exits)
+            {
+                float d = Vector2.Distance(exit.worldPos, nextCluster.center);
+
+                if (d < bestDist)
+                {
+                    bestDist = d;
+                    exitTile = exit;
+                }
+            }
+
+            if (exitTile != null)
+            {
+                debugTilePath =
+                    TileAStar.FindPath(startTile, exitTile, enemyClusterData.tileNodes);
+            }
         }
     }
 
