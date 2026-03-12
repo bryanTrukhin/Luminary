@@ -29,8 +29,8 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private float flashLanternCost;
     [SerializeField] private float flashBonusIntensity;
     [SerializeField] private float flashDuration;
-    [SerializeField] private float flashCooldown;
-    private float _flashCooldownTimer;
+    [SerializeField] public float flashCooldown;
+    public float _flashCooldownTimer;
 
     [Header("Burning Mechanics")]
     [SerializeField] private LayerMask burnableMask;
