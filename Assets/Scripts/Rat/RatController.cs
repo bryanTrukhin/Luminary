@@ -132,7 +132,7 @@ public class RatController : RatBase
         while (timer < tailSweepTime)
         {
             float angle = Mathf.Lerp(startAngle, endAngle, timer / tailSweepTime);
-            tailPivot.localEulerAngles = new Vector3(0, 0, angle); // 旋转 pivot
+            tailPivot.localEulerAngles = new Vector3(0, 0, angle);
             timer += Time.deltaTime;
             yield return null;
         }
