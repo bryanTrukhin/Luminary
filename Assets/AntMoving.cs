@@ -14,16 +14,20 @@ public class AntMoving : MonoBehaviour
 
     [Header("Rotating")]
     [SerializeField] public LayerMask platform;
+    [SerializeField] public LayerMask enemy;
     public Vector3 lastValidLedge;
     public bool isTurning;
 
     [Header("Trail Creation")]
     [SerializeField] public GameObject iceSheet;
     [SerializeField] public GameObject icicle;
+    [SerializeField] public int spaceBetweenIcicles = 2;
     public float icicleSpawnTimer = 0;
     public bool canSpawnIceSheets;
-    public bool canSpawnIcicles;
-    public Vector2 lastKnownPos;
+    public Vector2 lastKnownCornerPos;
+    public Vector2 lastKnownIciclePos;
+    [SerializeField] public LayerMask icicleLayer;
+    public static List<GameObject> iciclePos = new List<GameObject>();
 
     void Start()
     {
@@ -31,7 +35,6 @@ public class AntMoving : MonoBehaviour
         rb.gravityScale = 0;
         isTurning = false;
         canSpawnIceSheets = false;
-        canSpawnIcicles = true;
     }
 
     void FixedUpdate()
@@ -54,7 +57,7 @@ public class AntMoving : MonoBehaviour
             StartCoroutine(RotateAroundPivot(lastValidLedge));
         }
 
-        WallCheck(moveDir);
+        FlippingCheck(moveDir);
         CreateTrail();
     }
 
@@ -87,12 +90,15 @@ public class AntMoving : MonoBehaviour
         }
         transform.rotation = targetRot;
         isTurning = false;
-        lastKnownPos = transform.position;
+        lastKnownCornerPos = transform.position;
     }
 
-    void WallCheck(Vector2 moveDir)
+    void FlippingCheck(Vector2 moveDir)
     {
-        float rayDist = Mathf.Abs(transform.localScale.x/1.5f);
+        Collider2D myCollider = GetComponent<Collider2D>();
+        float colliderWidth = myCollider.bounds.extents.x;
+        float rayDist = colliderWidth + 0.1f;
+
         RaycastHit2D wallHit = Physics2D.Raycast(transform.position, moveDir, rayDist, platform);
         Debug.DrawRay(transform.position, moveDir * rayDist, Color.red);
         if (wallHit.collider != null)
@@ -100,11 +106,26 @@ public class AntMoving : MonoBehaviour
             float dot = Vector2.Dot(wallHit.normal, moveDir);
             if (dot < 0f)
             {
-                Vector3 newScale = transform.localScale;
-                newScale.x *= -1;
-                transform.localScale = newScale;
+                FlipX();
             }
         }
+
+        RaycastHit2D[] allEnemyHits = Physics2D.RaycastAll(transform.position, moveDir, rayDist, enemy);
+        foreach (RaycastHit2D hit in allEnemyHits)
+        {
+            if (hit.collider != null && hit.collider.gameObject != gameObject)
+            {
+                FlipX();
+                break;
+            }
+        }
+    }
+
+    void FlipX()
+    {
+        Vector3 newScale = transform.localScale;
+        newScale.x *= -1;
+        transform.localScale = newScale;
     }
 
     void CreateTrail()
@@ -118,21 +139,36 @@ public class AntMoving : MonoBehaviour
 
         //Setting up constraints
         float currentZ = transform.eulerAngles.z;
-        float distance = Vector2.Distance(transform.position, lastKnownPos);
+        float distanceFromCorner = Vector2.Distance(transform.position, lastKnownCornerPos);
 
-        if (Mathf.Approximately(currentZ, 0f) && canSpawnIceSheets && distance >= 1f)
+        //ICE MANAGEMENT
+        if (Mathf.Approximately(currentZ, 0f) && canSpawnIceSheets && distanceFromCorner >= 1f)
         {
             ObjectPoolManager.SpawnObject(iceSheet, spawnLocation, Quaternion.identity, ObjectPoolManager.PoolType.Gameobject);
-            //lastKnownPos = transform.position;
         }
 
+        //ICICLE MANAGEMENT
         if (Mathf.Approximately(currentZ, 180f))
         {
-            icicleSpawnTimer += Time.deltaTime;
-            if (icicleSpawnTimer * speed >= 1f /*&& canSpawnIcicles*/) //we make it 1f b/c that is the length of 1 unity unit
+            float distanceFromLast = (iciclePos.Count > 0)
+                ? Vector2.Distance(spawnLocation, iciclePos[iciclePos.Count - 1].transform.position)
+                : float.MaxValue;
+
+            bool isStickingToOldTrail = false;
+            foreach (GameObject oldPos in iciclePos)
             {
-                ObjectPoolManager.SpawnObject(icicle, spawnLocation, Quaternion.identity, ObjectPoolManager.PoolType.Gameobject);
-                icicleSpawnTimer = 0;
+                if (Vector2.Distance(spawnLocation, oldPos.transform.position) < spaceBetweenIcicles)
+                {
+                    isStickingToOldTrail = true;
+                    break;
+                }
+            }
+
+            if (distanceFromCorner >= 1 && distanceFromLast >= spaceBetweenIcicles && !isStickingToOldTrail)
+            {
+                GameObject newIcicle = ObjectPoolManager.SpawnObject(icicle, spawnLocation, Quaternion.identity, ObjectPoolManager.PoolType.Gameobject);
+                newIcicle.GetComponent<IcicleScript>().antScript = this;
+                iciclePos.Add(newIcicle);
             }
         }
     }
@@ -145,8 +181,12 @@ public class AntMoving : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OnDestroy()
     {
-        canSpawnIcicles = collision.gameObject.CompareTag("Icicle") ? false : true;
+        //Clearing the static array memory on death
+        if (iciclePos != null)
+        {
+            iciclePos.Clear();
+        }
     }
 }
