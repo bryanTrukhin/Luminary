@@ -109,7 +109,7 @@ public class ToadMovementVersion2 : MonoBehaviour
         //Main jump
         pathIndex += step;
         debugLandingPos = new Vector3(targetPos.x, targetPos.y + tileOffset, 0);
-        Debug.Log($"Leaping {step} tiles!");
+        //Debug.Log($"Leaping {step} tiles!");
 
         rb.velocity = CalculateLaunchVelocity(transform.position, targetPos, jumpHeightConstant);
         yield return new WaitUntil(() => canJump);

@@ -19,6 +19,7 @@ public class LanternController : MonoBehaviour, ILantern
 
     [Header("Damage Settings")]
     [SerializeField] private float damageCooldown = 1.0f; // I-Frames
+    [SerializeField] private bool freezeFrame;
     private float _damageTimer;
 
     [Header("Movement Abilities")]
@@ -41,9 +42,21 @@ public class LanternController : MonoBehaviour, ILantern
     [Header("Visuals")]
     [SerializeField] private List<Light2D> bulbs = new();
     [SerializeField] private Transform playerRoot;
-    [SerializeField] private Vector3 rightRest = new Vector3(0.55f, -0.20f, 0);
-    [SerializeField] private Vector3 leftRest = new Vector3(-0.55f, -0.20f, 0);
+    [SerializeField] private Vector3 frontOffset = new Vector3(0.55f, -0.20f, 0);
     [SerializeField] private float smoothTime = 0.08f;
+
+    [Header("Visuals: Motion")]
+    [SerializeField] private float bobAmp = 0.05f;
+    [SerializeField] private float bobSpeed = 8f;
+    [SerializeField] private float groundSwayAngle = 12f;
+    [SerializeField] private float airSwayMaxAngle = 45f;
+    [SerializeField] private float basePivotSpeed = 120f;   // degrees/sec at rest
+    [SerializeField] private float fallPivotBoost = 80f;    // extra deg/sec per unit of downward speed
+    private float _bobTimer;
+    private Rigidbody2D _rb;
+    private PlayerController _pc;
+
+    [SerializeField] private Animator _animator;
 
 
     // Internal State
@@ -67,9 +80,12 @@ public class LanternController : MonoBehaviour, ILantern
         foreach (var b in bulbs)
             _originals.Add(new BulbState { intensity = b.intensity, radius = b.pointLightOuterRadius });
         
-        // Initial position
-        bool facingRight = playerRoot.localScale.x >= 0f;
-        transform.localPosition = facingRight ? rightRest : leftRest;
+        // Initial position (parent's scale flip mirrors children automatically)
+        transform.localPosition = frontOffset;
+        _rb = playerRoot.GetComponent<Rigidbody2D>();
+        _pc = playerRoot.GetComponent<PlayerController>();
+
+        freezeFrame = false;
     }
 
     void Update()
@@ -79,6 +95,7 @@ public class LanternController : MonoBehaviour, ILantern
         
         // 1. Handle Cooldowns internally
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;
+        if (_damageTimer > 0f) _damageTimer -= Time.deltaTime;
 
         // 2. Regenerate Fireflies
         if (_currentFireflies < fireflyCapacity && fireflyRegenRate > 0f)
@@ -110,6 +127,10 @@ public class LanternController : MonoBehaviour, ILantern
 
         _currentFireflies -= amount;
         // Visual Feedback
+        if(!freezeFrame){
+            freezeFrame = true;
+            StartCoroutine(FrameFreeze(2f));
+        }
         Flicker(0.5f, 20f, 0.5f); 
         _damageTimer = damageCooldown;
 
@@ -121,6 +142,19 @@ public class LanternController : MonoBehaviour, ILantern
             GameController.I.KillPlayer(pc);
         }
     }
+
+    public IEnumerator FrameFreeze(float duration)
+    {
+        Debug.Log("Frame Freeze Triggered!");
+        if (!freezeFrame) yield break;
+        float timeScale = Time.timeScale;
+
+        Time.timeScale = 0.01f;
+        yield return new WaitForSecondsRealtime(duration);
+        Time.timeScale = timeScale;
+        freezeFrame = false;
+    }
+
     public void ResetHealth()
     {
         _currentFireflies = fireflyCapacity;
@@ -133,14 +167,14 @@ public class LanternController : MonoBehaviour, ILantern
     {
         // Check Cooldown AND Firefly count
         bool result = TryConsumeEnergy(flashLanternCost);
-        if (result && flashSound)
-        {
-            audioSource.clip = flashSound;
-            audioSource.Play();
-        }
-        if (_flashCooldownTimer <= 0f && TryConsumeEnergy(flashLanternCost))
+        if (_flashCooldownTimer <= 0f && result)
         {
             Flash(flashBonusIntensity, flashDuration);
+            if (flashSound)
+            {
+                audioSource.clip = flashSound;
+                audioSource.Play();
+            }
             _flashCooldownTimer = flashCooldown;
         }
     }
@@ -162,16 +196,46 @@ public class LanternController : MonoBehaviour, ILantern
         return result;
     }
 
-
-
-
     // ================= Lantern Visuals and COROUTINES ================= //
     void LateUpdate()
     {
-        // Handle Swing Logic
-        bool facingRight = playerRoot.localScale.x >= 0f;
-        Vector3 targetOffset = facingRight ? rightRest : leftRest;
-        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetOffset, ref _swingVelocity, smoothTime);
+        float speed = Mathf.Abs(_rb.velocity.x);
+        if (speed > 0.1f) _bobTimer += Time.deltaTime * bobSpeed;
+        else                _bobTimer = 0f;
+
+        float bob = Mathf.Sin(_bobTimer) * bobAmp;
+
+        Vector3 targetPos = new Vector3(frontOffset.x, frontOffset.y + bob, frontOffset.z);
+        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetPos, ref _swingVelocity, smoothTime);
+
+        float tiltZ = 0f;
+        bool grounded = _pc != null && _pc.isGrounded;
+        // Parent's negative scale.x mirrors child rotations, so we compensate
+        float flipSign = Mathf.Sign(playerRoot.localScale.x);
+
+        if (grounded)
+        {
+            float moveX = _rb.velocity.x;
+            if (Mathf.Abs(moveX) > 0.1f)
+                tiltZ = -Mathf.Sign(moveX) * flipSign * groundSwayAngle;
+        }
+        else
+        {
+            float inputX = InputSystem.HorizontalRaw();
+            if (Mathf.Abs(inputX) > 0.01f)
+            {
+                float velY = Mathf.Max(_rb.velocity.y, 0f); // clamp downward component
+                float angle = Mathf.Atan2(inputX, Mathf.Max(velY, 0.01f)) * Mathf.Rad2Deg;
+                tiltZ = -Mathf.Clamp(angle, -airSwayMaxAngle, airSwayMaxAngle) * flipSign;
+            }
+        }
+        float downSpeed = Mathf.Max(-_rb.velocity.y, 0f); 
+        float pivotDegPerSec = basePivotSpeed + downSpeed * fallPivotBoost;
+
+        Quaternion targetRot = Quaternion.Euler(0f, 0f, tiltZ);
+        transform.localRotation = Quaternion.RotateTowards(
+            transform.localRotation, targetRot, pivotDegPerSec * Time.deltaTime
+        );
     }
 
     public void SetVisible(bool on)
@@ -202,7 +266,7 @@ public class LanternController : MonoBehaviour, ILantern
     {
         float endTime = Time.time + dur;
         float nextTickTime = Time.time; 
-        
+        if(_animator) _animator.SetTrigger("isFlashing");
         while (Time.time < endTime)
         {
             if (Time.time >= nextTickTime)
@@ -219,6 +283,7 @@ public class LanternController : MonoBehaviour, ILantern
 
             yield return null;
         }
+        if(_animator) _animator.SetTrigger("isFlashing");
         RestoreOriginals();
     }
 

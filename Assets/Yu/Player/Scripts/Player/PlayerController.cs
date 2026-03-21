@@ -2,6 +2,7 @@
 
 public class PlayerController : MonoBehaviour, IHidable
 {
+    // Bounce back when hittng collider with enemy tag  
     [Header("Health & Bounds")]
     [SerializeField] private float fallKillHeight = -20f;
 
@@ -52,9 +53,6 @@ public class PlayerController : MonoBehaviour, IHidable
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip walkSound;
-
-    
-    
     // Logic States
     public bool isGrounded;
     [HideInInspector] public float moveInput;
@@ -106,8 +104,12 @@ public class PlayerController : MonoBehaviour, IHidable
         _spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
         m_dustParticle = GetComponentInChildren<ParticleSystem>();
         _lantern = GetComponentInChildren<ILantern>();
-        _brokenLantern = brokenLantern.GetComponent<ILantern>();
-        _normalLantern = normalLantern.GetComponent<ILantern>();
+
+        // Cache lantern interfaces from the serialized GameObjects
+        if (normalLantern != null)
+            _normalLantern = normalLantern.GetComponent<ILantern>();
+        if (brokenLantern != null)
+            _brokenLantern = brokenLantern.GetComponent<ILantern>();
     }
 
     void Start()
@@ -120,6 +122,25 @@ public class PlayerController : MonoBehaviour, IHidable
         m_dashCooldown = dashCooldown;
 
         audioSource.clip = walkSound;
+
+        // Subscribe here (after all Awake() calls) so GameController.I is guaranteed to be set
+        if (GameController.I != null)
+        {
+            GameController.I.OnLanternStateChanged += SwapLantern;
+        }
+    }
+
+    void OnEnable()
+    {
+        // Subscribe in Start() instead to avoid race condition with GameController.Awake()
+    }
+
+    void OnDisable()
+    {
+        if(GameController.I != null)
+        {
+            GameController.I.OnLanternStateChanged -= SwapLantern;
+        }
     }
 
     private void FixedUpdate()

@@ -10,22 +10,18 @@ public enum PlayState { Exploring, Hiding, Dead, Paused }
 
 public class GameController : MonoBehaviour
 {
-    public static GameController I;           // tiny singleton
+    public static GameController I;
     public PlayState State { get; private set; }
 
     [SerializeField] private JumpscareUI jumpscareUI;
     [SerializeField] private bool reloadSceneAfterDeath = false;
 
     public event System.Action<bool> OnHidingChanged; 
+    public event System.Action<bool> OnLanternStateChanged;
 
     public TMP_Text messageUI;
     private Vector3 _currentRespawnPos;
-    [SerializeField] private GameObject normalLantern;
-    [SerializeField] private GameObject brokenLantern;
-
-    private ILantern _normalLantern;
-    private ILantern _brokenLantern;
-
+    private bool _islanternBroken = false;
 
     void Awake() 
     {
@@ -33,19 +29,25 @@ public class GameController : MonoBehaviour
         I = this;
         PlayerController p = FindObjectOfType<PlayerController>();
         if (p != null) _currentRespawnPos = p.transform.position;
+    }
 
-        _normalLantern = normalLantern.GetComponent<ILantern>();
-        _brokenLantern = brokenLantern.GetComponent<ILantern>();
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            _islanternBroken = !_islanternBroken;
+            TriggerLanternBreak(_islanternBroken);
+            string status = _islanternBroken ? "Broken" : "Normal";
+            Debug.Log($"[GameController] Lantern State: {status}");
+            writeMessage($"Lantern State: {status}");
+        }
     }
 
     // SIMPLIFIED API
     public void SetHidingState(bool isHiding)
     {
         State = isHiding ? PlayState.Hiding : PlayState.Exploring;
-        
-        // Notify anyone listening (like AI or Music)
         OnHidingChanged?.Invoke(isHiding);
-        
         Debug.Log($"Game State Changed: {State}");
     }
     public void SetRespawnPoint(Vector3 newPos)
@@ -97,6 +99,14 @@ public class GameController : MonoBehaviour
 
     public void writeMessage(string s)
     {
-        messageUI.text = s;
+        if(messageUI != null)
+        {
+            messageUI.text = s;
+        }
     }
+    public void TriggerLanternBreak(bool isBroken)
+    {
+        OnLanternStateChanged?.Invoke(isBroken);
+    }
+
 }

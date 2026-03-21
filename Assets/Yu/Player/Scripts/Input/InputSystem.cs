@@ -10,6 +10,8 @@ public class InputSystem : MonoBehaviour
 	static readonly string CrouchInput = "Crouch";
 	static readonly string SlideInput = "Slide";
 	static readonly string InteractInput = "Interact";
+	static readonly int FlashLanternInput = 0;
+	static readonly string debugSwitchLanternInput = "debugSwitchLanternInput"; // right mouse for testing lantern break
 
 	public static float HorizontalRaw()
 	{
@@ -44,6 +46,10 @@ public class InputSystem : MonoBehaviour
 	// NEW: left-click flash
 	public static bool FlashLantern()
 	{
-		return Input.GetMouseButtonDown(0); // left mouse
+		return Input.GetMouseButtonDown(FlashLanternInput); // left mouse
+	}
+	public static bool ToggleBrokenState()
+	{
+		return Input.GetButtonDown(debugSwitchLanternInput);
 	}
 }

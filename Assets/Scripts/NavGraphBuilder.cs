@@ -18,10 +18,10 @@ public class NavGraphBuilder : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("NavGB Start");
+        //Debug.Log("NavGB Start");
 
-        Debug.Log("clustering is " + (clustering == null ? "NULL" : "OK"));
-        Debug.Log("tilemap is " + (tilemap == null ? "NULL" : "OK"));
+        //Debug.Log("clustering is " + (clustering == null ? "NULL" : "OK"));
+        //Debug.Log("tilemap is " + (tilemap == null ? "NULL" : "OK"));
 
         if (clustering == null || tilemap == null)
             return;
@@ -54,7 +54,7 @@ public class NavGraphBuilder : MonoBehaviour
             nodes.Add(node);
         }
 
-        Debug.Log($"Built {nodes.Count} NavNodes");
+        //Debug.Log($"Built {nodes.Count} NavNodes");
     }
 
     Bounds CalculateBounds(PlatformCluster cluster)
@@ -114,7 +114,7 @@ public class NavGraphBuilder : MonoBehaviour
             }
         }
 
-        Debug.Log("Connections built");
+        //Debug.Log("Connections built");
     }
 
     NavNode GetClosestNode(Vector3 pos)
