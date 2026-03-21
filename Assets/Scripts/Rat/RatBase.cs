@@ -33,9 +33,14 @@ public abstract class RatBase : MonoBehaviour
         if (isAttacking) return;
 
         float speed = GetCurrentSpeed();
+
         Move(speed);
         CheckWall();
         CheckEdge();
+    }
+
+    protected virtual void Update()
+    {
         TryAttack();
     }
 
@@ -47,7 +52,10 @@ public abstract class RatBase : MonoBehaviour
         float heightDiff = Mathf.Abs(player.position.y - transform.position.y);
 
         if (dist < detectionDistance && heightDiff < samePlatformHeight)
+        {
+            facingDir = player.position.x > transform.position.x ? 1 : -1;
             return chaseSpeed;
+        }
 
         return patrolSpeed;
     }
@@ -61,7 +69,6 @@ public abstract class RatBase : MonoBehaviour
     {
         Vector2 dir = Vector2.right * facingDir;
         RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, wallCheckDist, platform);
-        Debug.DrawRay(transform.position, dir * wallCheckDist, Color.red);
 
         if (hit.collider != null)
             Flip();
@@ -71,7 +78,6 @@ public abstract class RatBase : MonoBehaviour
     {
         Vector2 origin = transform.position + new Vector3(0.4f * facingDir, 0);
         RaycastHit2D ground = Physics2D.Raycast(origin, Vector2.down, edgeCheckDist, platform);
-        Debug.DrawRay(origin, Vector2.down * edgeCheckDist, Color.blue);
 
         if (ground.collider == null)
             Flip();
