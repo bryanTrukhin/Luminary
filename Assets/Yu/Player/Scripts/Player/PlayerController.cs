@@ -392,9 +392,18 @@ public class PlayerController : MonoBehaviour, IHidable
     void Flip()
     {
         m_facingRight = !m_facingRight;
-        transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+        // if (_spriteRenderers != null)
+        // {
+        //     foreach (var sr in _spriteRenderers)
+        //     {
+        //     sr.flipX = !m_facingRight;
+        //     }
+        // }
+        Vector3 localScale = transform.localScale;
+        localScale.x *= -1f;
+        transform.localScale = localScale;
+        _lantern?.UpdateFacingDirection(!m_facingRight);
     }
-
     void CalculateSides()
     {
         m_onWallSide = m_onRightWall ? 1 : (m_onLeftWall ? -1 : 0);

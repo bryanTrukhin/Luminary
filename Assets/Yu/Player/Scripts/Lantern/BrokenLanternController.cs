@@ -12,7 +12,14 @@ public class BrokenLanternController : MonoBehaviour, ILantern
     [SerializeField] private float dashCost;
     [SerializeField] private float doubleJumpCost;
 
-    private void Start() => ResetHealth();
+    [Header("Visuals")]
+    [SerializeField] private HingeJoint2D topChainJoint;
+    private float _baseAnchorX;
+
+    private void Start(){
+        _baseAnchorX = Mathf.Abs(topChainJoint.connectedAnchor.x);
+        ResetHealth();
+    }
 
     private void Update()
     {
@@ -76,4 +83,12 @@ public class BrokenLanternController : MonoBehaviour, ILantern
         // basic sprite flicker logic
         // stripped of complex Light2D bulb loops since it is broken.
     }
+
+        public void UpdateFacingDirection(bool facingLeft)
+    {
+        Vector2 currentAnchor = topChainJoint.connectedAnchor;
+        currentAnchor.x = facingLeft ? -_baseAnchorX : _baseAnchorX;
+        topChainJoint.connectedAnchor = currentAnchor;
+    }
+
 }

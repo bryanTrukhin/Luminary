@@ -44,15 +44,8 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private Transform playerRoot;
     [SerializeField] private Vector3 frontOffset = new Vector3(0.55f, -0.20f, 0);
     [SerializeField] private float smoothTime = 0.08f;
-
-    [Header("Visuals: Motion")]
-    [SerializeField] private float bobAmp = 0.05f;
-    [SerializeField] private float bobSpeed = 8f;
-    [SerializeField] private float groundSwayAngle = 12f;
-    [SerializeField] private float airSwayMaxAngle = 45f;
-    [SerializeField] private float basePivotSpeed = 120f;   // degrees/sec at rest
-    [SerializeField] private float fallPivotBoost = 80f;    // extra deg/sec per unit of downward speed
-    private float _bobTimer;
+    [SerializeField] private HingeJoint2D topChainJoint;
+    private float _baseAnchorX;
     private Rigidbody2D _rb;
     private PlayerController _pc;
 
@@ -84,6 +77,7 @@ public class LanternController : MonoBehaviour, ILantern
         transform.localPosition = frontOffset;
         _rb = playerRoot.GetComponent<Rigidbody2D>();
         _pc = playerRoot.GetComponent<PlayerController>();
+        _baseAnchorX = Mathf.Abs(topChainJoint.connectedAnchor.x);
 
         freezeFrame = false;
     }
@@ -199,43 +193,12 @@ public class LanternController : MonoBehaviour, ILantern
     // ================= Lantern Visuals and COROUTINES ================= //
     void LateUpdate()
     {
-        float speed = Mathf.Abs(_rb.velocity.x);
-        if (speed > 0.1f) _bobTimer += Time.deltaTime * bobSpeed;
-        else                _bobTimer = 0f;
-
-        float bob = Mathf.Sin(_bobTimer) * bobAmp;
-
-        Vector3 targetPos = new Vector3(frontOffset.x, frontOffset.y + bob, frontOffset.z);
-        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetPos, ref _swingVelocity, smoothTime);
-
-        float tiltZ = 0f;
-        bool grounded = _pc != null && _pc.isGrounded;
-        // Parent's negative scale.x mirrors child rotations, so we compensate
-        float flipSign = Mathf.Sign(playerRoot.localScale.x);
-
-        if (grounded)
-        {
-            float moveX = _rb.velocity.x;
-            if (Mathf.Abs(moveX) > 0.1f)
-                tiltZ = -Mathf.Sign(moveX) * flipSign * groundSwayAngle;
-        }
-        else
-        {
-            float inputX = InputSystem.HorizontalRaw();
-            if (Mathf.Abs(inputX) > 0.01f)
-            {
-                float velY = Mathf.Max(_rb.velocity.y, 0f); // clamp downward component
-                float angle = Mathf.Atan2(inputX, Mathf.Max(velY, 0.01f)) * Mathf.Rad2Deg;
-                tiltZ = -Mathf.Clamp(angle, -airSwayMaxAngle, airSwayMaxAngle) * flipSign;
-            }
-        }
-        float downSpeed = Mathf.Max(-_rb.velocity.y, 0f); 
-        float pivotDegPerSec = basePivotSpeed + downSpeed * fallPivotBoost;
-
-        Quaternion targetRot = Quaternion.Euler(0f, 0f, tiltZ);
-        transform.localRotation = Quaternion.RotateTowards(
-            transform.localRotation, targetRot, pivotDegPerSec * Time.deltaTime
-        );
+    }
+    public void UpdateFacingDirection(bool facingLeft)
+    {
+        Vector2 currentAnchor = topChainJoint.connectedAnchor;
+        currentAnchor.x = facingLeft ? -_baseAnchorX : _baseAnchorX;
+        topChainJoint.connectedAnchor = currentAnchor;
     }
 
     public void SetVisible(bool on)

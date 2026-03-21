@@ -16,5 +16,6 @@ public interface ILantern
     bool TryUseDoubleJump();
 
     void TakeDamage(float amount);
+    void UpdateFacingDirection(bool facingLeft);
     void ResetHealth();
 }
