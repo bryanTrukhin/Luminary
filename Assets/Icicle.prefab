@@ -155,6 +155,9 @@ MonoBehaviour:
   platform:
     serializedVersion: 2
     m_Bits: 1024
+  startSize: {x: 0.1, y: 0.1}
+  endSize: {x: 0.5, y: 0.5}
+  shatterEffect: {fileID: 6716249464493105388, guid: 17fbf1b9f0fbb4c85bae7a2db53adc5f, type: 3}
 --- !u!50 &8082408288939340102
 Rigidbody2D:
   serializedVersion: 4

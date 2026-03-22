@@ -13,6 +13,9 @@ public class IcicleScript : MonoBehaviour
     public float fallTimer;
     public bool isFalling;
     [SerializeField] public LayerMask platform;
+    [SerializeField] public Vector2 startSize = new Vector2(0.1f, 0.1f);
+    [SerializeField] public Vector2 endSize = new Vector2(0.5f, 0.5f);
+    [SerializeField] public GameObject shatterEffect;
 
     void Awake()
     {
@@ -22,6 +25,7 @@ public class IcicleScript : MonoBehaviour
 
     void OnEnable()
     {
+        transform.localScale = startSize;
         fallTimer = 0;
         isFalling = false;
         fallSpeed = initialFallSpeed;
@@ -48,8 +52,15 @@ public class IcicleScript : MonoBehaviour
 
             rb.velocity = -transform.up * fallSpeed;
             fallSpeed += fallAcceleration;
+            CheckIfHit();
         }
-        CheckIfHit();
+        else
+        {
+            float step = fallTimer / buildUpDuration;
+            float xScale = Mathf.Lerp(startSize.x, endSize.x, step);
+            float yScale = Mathf.Lerp(startSize.y, endSize.y, step);
+            transform.localScale = new Vector2(xScale, yScale);
+        }
     }
 
     void CheckIfHit()
@@ -65,12 +76,14 @@ public class IcicleScript : MonoBehaviour
             DespawnIcicle();
         }
     }
-    
+
     void CheckIfSpawnedInsidePlatform()
     {
-        Collider2D myCollider = GetComponent<Collider2D>();
-        Collider2D hit = Physics2D.OverlapBox(transform.position, myCollider.bounds.size, 0f);
-        if (hit != null && hit.CompareTag("Platform"))
+        Vector2 checkPos = (Vector2)transform.position - (Vector2)transform.up * 0.2f;
+        float checkRadius = 0.01f;
+        Collider2D hit = Physics2D.OverlapCircle(checkPos, checkRadius, platform);
+
+        if (hit != null)
         {
             DespawnIcicle();
         }
@@ -78,6 +91,10 @@ public class IcicleScript : MonoBehaviour
 
     public void DespawnIcicle()
     {
+        if (shatterEffect != null)
+        {
+            Instantiate(shatterEffect, transform.position, Quaternion.identity);
+        }
         if (AntMoving.iciclePos.Contains(gameObject))
         {
             AntMoving.iciclePos.Remove(gameObject);
