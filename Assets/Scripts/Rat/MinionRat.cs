@@ -33,7 +33,6 @@ public class MinionRat : RatBase
     {
         base.Start();
 
-        // 自动寻找玩家
         GameObject foundPlayer = GameObject.FindWithTag("Player");
         if (foundPlayer != null)
         {
