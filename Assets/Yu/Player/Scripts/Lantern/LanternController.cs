@@ -16,6 +16,7 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private float fireflyRegenRate;
     public float _currentFireflies;
     public TMP_Text currentFireFlyCountUI;
+    public GameObject cooldownUI;
 
     [Header("Damage Settings")]
     [SerializeField] private float damageCooldown = 1.0f; // I-Frames
@@ -152,6 +153,7 @@ public class LanternController : MonoBehaviour, ILantern
         {
             audioSource.clip = dashSound;
             audioSource.Play();
+            cooldownUI.GetComponent<CooldownUI>().TriggerDashCooldown();
         }
         return result;
     }
