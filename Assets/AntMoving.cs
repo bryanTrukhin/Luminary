@@ -115,7 +115,9 @@ public class AntMoving : MonoBehaviour
         {
             if (hit.collider != null && hit.collider.gameObject != gameObject)
             {
-                FlipX();
+                Collider2D col = GetComponent<Collider2D>();
+                Physics2D.IgnoreCollision(col, hit.collider);
+                //FlipX();
                 break;
             }
         }
@@ -130,11 +132,14 @@ public class AntMoving : MonoBehaviour
 
     void CreateTrail()
     {
+        Collider2D col = GetComponent<Collider2D>();
+        float feetOffset = col.bounds.extents.y;
+
         //Setting up spawn position
         Vector3 spawnLocation = transform.position;
         float backOffset = 0.5f;
         spawnLocation -= transform.right * facingDir * backOffset;
-        float feetOffset = transform.localScale.y * 0.5f;
+        //float feetOffset = transform.localScale.y * 0.5f;
         spawnLocation -= transform.up * feetOffset;
 
         //Setting up constraints

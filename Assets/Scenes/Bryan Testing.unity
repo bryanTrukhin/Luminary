@@ -204,11 +204,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8301383272468994657, guid: 1ed29e4cbf3274e7d94b4d0bf006a556, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.66
+      value: 6.289
       objectReference: {fileID: 0}
     - target: {fileID: 8301383272468994657, guid: 1ed29e4cbf3274e7d94b4d0bf006a556, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.35
+      value: 5.304
       objectReference: {fileID: 0}
     - target: {fileID: 8301383272468994657, guid: 1ed29e4cbf3274e7d94b4d0bf006a556, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2920,13 +2920,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Frost Ant
       objectReference: {fileID: 0}
+    - target: {fileID: 6854548787114636488, guid: 1ed29e4cbf3274e7d94b4d0bf006a556, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8301383272468994657, guid: 1ed29e4cbf3274e7d94b4d0bf006a556, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.74
+      value: 8.295
       objectReference: {fileID: 0}
     - target: {fileID: 8301383272468994657, guid: 1ed29e4cbf3274e7d94b4d0bf006a556, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.35
+      value: 5.313
       objectReference: {fileID: 0}
     - target: {fileID: 8301383272468994657, guid: 1ed29e4cbf3274e7d94b4d0bf006a556, type: 3}
       propertyPath: m_LocalPosition.z
