@@ -17,6 +17,7 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private Transform parent;
     public float _currentFireflies;
     public TMP_Text currentFireFlyCountUI;
+    public GameObject cooldownUI;
 
     [Header("Damage Settings")]
     [SerializeField] private float damageCooldown = 1.0f; // I-Frames
@@ -31,8 +32,8 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private float flashLanternCost;
     [SerializeField] private float flashBonusIntensity;
     [SerializeField] private float flashDuration;
-    [SerializeField] private float flashCooldown;
-    private float _flashCooldownTimer;
+    [SerializeField] public float flashCooldown;
+    public float _flashCooldownTimer;
 
     [Header("Burning Mechanics")]
     [SerializeField] private LayerMask burnableMask;
@@ -200,6 +201,7 @@ public class LanternController : MonoBehaviour, ILantern
         {
             audioSource.clip = dashSound;
             audioSource.Play();
+            cooldownUI.GetComponent<CooldownUI>().TriggerDashCooldown();
         }
         return result;
     }
