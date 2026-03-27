@@ -12,10 +12,12 @@ public class IcicleScript : MonoBehaviour
     private float initialFallSpeed;
     public float fallTimer;
     public bool isFalling;
+
     [SerializeField] public LayerMask platform;
     [SerializeField] public Vector2 startSize = new Vector2(0.1f, 0.1f);
     [SerializeField] public Vector2 endSize = new Vector2(0.5f, 0.5f);
     [SerializeField] public GameObject shatterEffect;
+    public bool canShatter;
 
     void Awake()
     {
@@ -29,6 +31,7 @@ public class IcicleScript : MonoBehaviour
         fallTimer = 0;
         isFalling = false;
         fallSpeed = initialFallSpeed;
+        canShatter = false;
 
         if (rb != null)
         {
@@ -70,9 +73,9 @@ public class IcicleScript : MonoBehaviour
         Debug.DrawRay(origin, -transform.up * rayLength, Color.magenta);
 
         RaycastHit2D hit = Physics2D.Raycast(origin, -transform.up, rayLength, platform);
-
         if (hit.collider != null)
         {
+            canShatter = true;
             DespawnIcicle();
         }
     }
@@ -91,7 +94,7 @@ public class IcicleScript : MonoBehaviour
 
     public void DespawnIcicle()
     {
-        if (shatterEffect != null)
+        if (shatterEffect != null && canShatter)
         {
             Instantiate(shatterEffect, transform.position, Quaternion.identity);
         }

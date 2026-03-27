@@ -2,13 +2,13 @@ using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class AntMoving : MonoBehaviour
+public class AntMoving : EnemyController /*MonoBehaviour*/
 {
     [Header("General")]
     public int facingDir = 1;
-    public Vector2 forwardDir;
-    public Rigidbody2D rb;
-    public float speed = 1f;
+    //public Vector2 forwardDir;
+   // public Rigidbody2D rb;
+    //public float speed = 1f;
     public float gravStrength = 2f;
     public bool canFlip = true;
 
@@ -29,21 +29,31 @@ public class AntMoving : MonoBehaviour
     [SerializeField] public LayerMask icicleLayer;
     public static List<GameObject> iciclePos = new List<GameObject>();
 
-    void Start()
+    protected override void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        base.Start();
+        //rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0;
         isTurning = false;
         canSpawnIceSheets = false;
     }
 
-    void FixedUpdate()
+    protected override void HandleMovement()
     {
         if (isTurning) return;
+
         facingDir = (transform.localScale.x < 0) ? -1 : 1;
         Vector2 moveDir = transform.right * facingDir;
+        forwardDir = moveDir;
 
-        RaycastHit2D overhangCheck = Physics2D.Raycast(transform.position, -transform.up, transform.localScale.y * 2f, platform);
+        //RaycastHit2D overhangCheck = Physics2D.Raycast(transform.position, -transform.up, transform.localScale.y * 2f, platform);
+        BoxCollider2D col = GetComponent<BoxCollider2D>();
+        float distanceToFeet = col.size.y * 0.5f;
+        float rayLength = distanceToFeet + 0.2f;
+        RaycastHit2D overhangCheck = Physics2D.Raycast(transform.position, -transform.up, rayLength, platform);
+        
+        Debug.DrawRay(transform.position, -transform.up * transform.localScale.y * 2f, Color.yellow);
+
         if (overhangCheck.collider != null)
         {
             lastValidLedge = overhangCheck.point;
@@ -103,24 +113,26 @@ public class AntMoving : MonoBehaviour
         Debug.DrawRay(transform.position, moveDir * rayDist, Color.red);
         if (wallHit.collider != null)
         {
+            FlipX();
+            /*
             float dot = Vector2.Dot(wallHit.normal, moveDir);
             if (dot < 0f)
             {
                 FlipX();
             }
+            */
         }
-
+        /*
         RaycastHit2D[] allEnemyHits = Physics2D.RaycastAll(transform.position, moveDir, rayDist, enemy);
         foreach (RaycastHit2D hit in allEnemyHits)
         {
             if (hit.collider != null && hit.collider.gameObject != gameObject)
             {
-                Collider2D col = GetComponent<Collider2D>();
-                Physics2D.IgnoreCollision(col, hit.collider);
                 //FlipX();
                 break;
             }
         }
+        */
     }
 
     void FlipX()
@@ -132,14 +144,13 @@ public class AntMoving : MonoBehaviour
 
     void CreateTrail()
     {
-        Collider2D col = GetComponent<Collider2D>();
-        float feetOffset = col.bounds.extents.y;
-
         //Setting up spawn position
         Vector3 spawnLocation = transform.position;
-        float backOffset = 0.5f;
+        Collider2D col = GetComponent<Collider2D>();
+
+        float feetOffset = col.bounds.extents.y;
+        float backOffset = col.bounds.extents.x; //0.5f
         spawnLocation -= transform.right * facingDir * backOffset;
-        //float feetOffset = transform.localScale.y * 0.5f;
         spawnLocation -= transform.up * feetOffset;
 
         //Setting up constraints
@@ -178,8 +189,9 @@ public class AntMoving : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected override void OnCollisionEnter2D(Collision2D collision)
     {
+        base.OnCollisionEnter2D(collision);
         if (collision.gameObject.CompareTag("Platform"))
         {
             canSpawnIceSheets = true;
