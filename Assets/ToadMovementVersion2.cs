@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 using UnityEngine;
@@ -27,6 +27,10 @@ public class ToadMovementVersion2 : MonoBehaviour
     // Gizmo variable to track the actual point we are aiming for
     private Vector3 debugLandingPos;
 
+    public Transform player;
+    [HideInInspector] public bool isAttacking = false;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -42,6 +46,10 @@ public class ToadMovementVersion2 : MonoBehaviour
 
     void Update()
     {
+        UpdateFacing();
+
+        if (isAttacking) return;
+
         currentPos = transform.position;
         if (nav != null && nav.debugTilePath != null)
         {
@@ -57,6 +65,27 @@ public class ToadMovementVersion2 : MonoBehaviour
             StartCoroutine(JumpSequence());
         }
     }
+
+    void UpdateFacing()
+    {
+        if (player == null) return;
+
+        float direction = player.position.x - transform.position.x;
+
+        Vector3 scale = transform.localScale;
+
+        if (direction > 0)
+        {
+            scale.x = Mathf.Abs(scale.x);
+        }
+        else if (direction < 0)
+        {
+            scale.x = -Mathf.Abs(scale.x);
+        }
+
+        transform.localScale = scale;
+    }
+
 
     Vector2 targetPos;
     IEnumerator JumpSequence()

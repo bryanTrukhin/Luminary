@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,6 +26,8 @@ public class ToadAttacking : MonoBehaviour
     public DistanceJoint2D tongueJoint;
     public bool canTongueGrab;
     private bool isRetracting = false;
+
+    private bool facingRight = true;
 
 
     void Start()
@@ -64,6 +66,8 @@ public class ToadAttacking : MonoBehaviour
         //Determining whether theres a obstacle between the toad and the target
         if (foundTarget)
         {
+            UpdateFacingDirection();
+
             Vector3 direction = target.transform.position - transform.position;
             RaycastHit2D obstacleTouched = Physics2D.Raycast(transform.position, direction.normalized, detectionRadius, obstacleLayer);
             if (!obstacleTouched)
@@ -140,14 +144,31 @@ public class ToadAttacking : MonoBehaviour
 
     void UpdateFacingDirection()
     {
-        if (localTargetPos.x < 0)
+        if (target == null) return;
+
+        float direction = target.transform.position.x - transform.position.x;
+
+        if (direction > 0 && !facingRight)
         {
-            Vector2 currentScale = transform.localScale;
-            currentScale *= -1;
-            transform.localScale = currentScale;
-            Debug.Log("Swapped!");
+            Flip(true);
+        }
+        else if (direction < 0 && facingRight)
+        {
+            Flip(false);
         }
     }
+
+    void Flip(bool faceRight)
+    {
+        facingRight = faceRight;
+
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * (faceRight ? 1 : -1);
+        transform.localScale = scale;
+        Debug.Log("Swapped!");
+
+    }
+
 
     void selfDestruct()
     {

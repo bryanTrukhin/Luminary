@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -19,6 +19,8 @@ public class PlatformClustering : MonoBehaviour
         {
             BuildTileNodes(cluster);
         }
+
+        FindClusterExits();
 
         Debug.Log("PlatformClustering clusters: " + clusters.Count);
     }
@@ -117,6 +119,34 @@ public class PlatformClustering : MonoBehaviour
 
         Debug.Log($"Cluster {cluster.id} surface nodes: {cluster.tileNodes.Count}");
     }
+
+    void FindClusterExits()
+    {
+        float maxJumpDistance = 6f;
+
+        foreach (var a in clusters)
+        {
+            foreach (var node in a.tileNodes)
+            {
+                foreach (var b in clusters)
+                {
+                    if (a == b) continue;
+
+                    foreach (var otherNode in b.tileNodes)
+                    {
+                        float dist = Vector2.Distance(node.worldPos, otherNode.worldPos);
+
+                        if (dist < maxJumpDistance)
+                        {
+                            a.exits.Add(node);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     void BuildTileNeighbors(PlatformCluster cluster)
     {

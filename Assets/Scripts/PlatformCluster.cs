@@ -19,5 +19,4 @@ public class PlatformCluster
 
     public Dictionary<Vector3Int, TileNode> tileNodeMap = new Dictionary<Vector3Int, TileNode>();
 
-
 }
