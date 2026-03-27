@@ -16,8 +16,6 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private float fireflyRegenRate;
     [SerializeField] private Transform parent;
     public float _currentFireflies;
-    public TMP_Text currentFireFlyCountUI;
-    public GameObject cooldownUI;
 
     [Header("Damage Settings")]
     [SerializeField] private float damageCooldown = 1.0f; // I-Frames
@@ -42,6 +40,9 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private float burnTickInterval = 0.1f;
 
     [Header("Visuals")]
+    public TMP_Text currentFireFlyCountUI;
+    public CooldownUI flashUI;
+    public CooldownUI dashUI;
     [SerializeField] private List<Light2D> bulbs = new();
     [SerializeField] private Transform playerRoot;
     [SerializeField] private Vector3 frontOffset = new Vector3(0.55f, -0.20f, 0);
@@ -105,14 +106,11 @@ public class LanternController : MonoBehaviour, ILantern
     }
     void Update()
     {
-        //new: display num of fireflies
-        //currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/" + fireflyCapacity;
-        
-        // 1. Handle Cooldowns internally
+        currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/" + fireflyCapacity;
+
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;
         if (_damageTimer > 0f) _damageTimer -= Time.deltaTime;
 
-        // 2. Regenerate Fireflies
         if (_currentFireflies < fireflyCapacity && fireflyRegenRate > 0f)
         {
             _currentFireflies += fireflyRegenRate * Time.deltaTime;
@@ -197,11 +195,19 @@ public class LanternController : MonoBehaviour, ILantern
     public bool TryUseDash()
     {
         bool result = TryConsumeEnergy(dashCost);
-        if (result && dashSound)
+        if (result)
         {
-            audioSource.clip = dashSound;
-            audioSource.Play();
-            cooldownUI.GetComponent<CooldownUI>().TriggerDashCooldown();
+            if (dashSound)
+            {
+                Debug.Log("Playing Dash Sound");
+                audioSource.clip = dashSound;
+                audioSource.Play();
+            }
+            
+            if (dashUI != null) 
+            {
+                dashUI.TriggerDashCooldown();
+            }
         }
         return result;
     }
