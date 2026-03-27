@@ -14,6 +14,7 @@ public class LanternController : MonoBehaviour, ILantern
     [Header("Firefly")]
     [SerializeField] private float fireflyCapacity;
     [SerializeField] private float fireflyRegenRate;
+    [SerializeField] private Transform parent;
     public float _currentFireflies;
     public TMP_Text currentFireFlyCountUI;
 
@@ -48,6 +49,7 @@ public class LanternController : MonoBehaviour, ILantern
     private float _baseAnchorX;
     private Rigidbody2D _rb;
     private PlayerController _pc;
+    [SerializeField] private Rigidbody2D handPosRB;
 
     [SerializeField] private Animator _animator;
 
@@ -57,6 +59,7 @@ public class LanternController : MonoBehaviour, ILantern
     private readonly List<BulbState> _originals = new();
     private Vector3 _swingVelocity;
     private Coroutine _flickerCo;
+    private bool _wasFacingRight = true;
 
 
     void Start()
@@ -78,14 +81,31 @@ public class LanternController : MonoBehaviour, ILantern
         _rb = playerRoot.GetComponent<Rigidbody2D>();
         _pc = playerRoot.GetComponent<PlayerController>();
         _baseAnchorX = Mathf.Abs(topChainJoint.connectedAnchor.x);
-
+        _wasFacingRight = playerRoot.localScale.x >= 0f;
         freezeFrame = false;
     }
+    void FixedUpdate()
+    {
+        if (playerRoot == null || handPosRB == null) return;
 
+        bool isFacingRight = playerRoot.localScale.x > 0 && playerRoot.right.x > 0;
+        float side = isFacingRight ? 1f : -1f;
+
+        Vector3 targetOffset = new Vector3(frontOffset.x * side, frontOffset.y, frontOffset.z);
+        Vector3 targetWorldPos = playerRoot.position + targetOffset;
+        if ((side > 0) != _wasFacingRight)
+        {
+            _swingVelocity = Vector3.zero;
+            _wasFacingRight = (side > 0);
+        }
+
+        Vector3 newPos = Vector3.SmoothDamp(handPosRB.position, targetWorldPos, ref _swingVelocity, smoothTime);
+        handPosRB.MovePosition(newPos);
+    }
     void Update()
     {
         //new: display num of fireflies
-        currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/" + fireflyCapacity;
+        //currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/" + fireflyCapacity;
         
         // 1. Handle Cooldowns internally
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;
@@ -191,15 +211,12 @@ public class LanternController : MonoBehaviour, ILantern
     }
 
     // ================= Lantern Visuals and COROUTINES ================= //
-    void LateUpdate()
-    {
-    }
-    public void UpdateFacingDirection(bool facingLeft)
-    {
-        Vector2 currentAnchor = topChainJoint.connectedAnchor;
-        currentAnchor.x = facingLeft ? -_baseAnchorX : _baseAnchorX;
-        topChainJoint.connectedAnchor = currentAnchor;
-    }
+    // public void UpdateFacingDirection(bool facingLeft)
+    // {
+    //     Vector2 currentAnchor = topChainJoint.connectedAnchor;
+    //     currentAnchor.x = facingLeft ? -_baseAnchorX : _baseAnchorX;
+    //     topChainJoint.connectedAnchor = currentAnchor;
+    // }
 
     public void SetVisible(bool on)
     {

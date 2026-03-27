@@ -399,10 +399,8 @@ public class PlayerController : MonoBehaviour, IHidable
         //     sr.flipX = !m_facingRight;
         //     }
         // }
-        Vector3 localScale = transform.localScale;
-        localScale.x *= -1f;
-        transform.localScale = localScale;
-        _lantern?.UpdateFacingDirection(!m_facingRight);
+        transform.Rotate(0f, 180f, 0f);
+        // _lantern?.UpdateFacingDirection(!m_facingRight);
     }
     void CalculateSides()
     {
