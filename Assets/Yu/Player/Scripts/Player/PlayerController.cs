@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour, IHidable
         m_col = GetComponent<CapsuleCollider2D>();
         _spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
         m_dustParticle = GetComponentInChildren<ParticleSystem>();
-        _lantern = GetComponentInChildren<ILantern>();
+        _lantern = normalLantern.GetComponent<ILantern>();
 
         // Cache lantern interfaces from the serialized GameObjects
         if (normalLantern != null)

@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Luminary.sln"
+    "dotnet.defaultSolution": "Luminary.slnx"
 }

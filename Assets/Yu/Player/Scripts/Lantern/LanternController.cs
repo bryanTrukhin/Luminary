@@ -194,12 +194,12 @@ public class LanternController : MonoBehaviour, ILantern
 
     public bool TryUseDash()
     {
+        Debug.Log("Playing Dash Sound");
         bool result = TryConsumeEnergy(dashCost);
         if (result)
         {
             if (dashSound)
             {
-                Debug.Log("Playing Dash Sound");
                 audioSource.clip = dashSound;
                 audioSource.Play();
             }
