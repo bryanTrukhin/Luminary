@@ -5319,50 +5319,10 @@ MonoBehaviour:
     - {fileID: 3791521877762561282, guid: 69723373f1928d44c9fd5a902d89bed5, type: 3}
     - {fileID: 339558397799932526, guid: ff205fb7afe85654493a4bbb25268031, type: 3}
   generationSequence:
-  - stepName: Intro
+  - stepName: Gen
     type: 0
-    repetitions: 1
+    repetitions: 4
     specificRoom: {fileID: 4939072560925602611, guid: 8106af00c5fbb6748a3367ab29942806, type: 3}
-    poolIDToUse: 
-  - stepName: Intro
-    type: 0
-    repetitions: 1
-    specificRoom: {fileID: 941112676867223044, guid: ca654accb120c7f49bb97c215aa6ecf0, type: 3}
-    poolIDToUse: 
-  - stepName: Alt1
-    type: 0
-    repetitions: 1
-    specificRoom: {fileID: 4939072560925602611, guid: 781e06c71c4cafd43964e6d5708acdcc, type: 3}
-    poolIDToUse: 1
-  - stepName: Alt2
-    type: 0
-    repetitions: 1
-    specificRoom: {fileID: 339558397799932526, guid: ff205fb7afe85654493a4bbb25268031, type: 3}
-    poolIDToUse: 1
-  - stepName: PickAndRoll
-    type: 0
-    repetitions: 1
-    specificRoom: {fileID: 3791521877762561282, guid: 69723373f1928d44c9fd5a902d89bed5, type: 3}
-    poolIDToUse: 1
-  - stepName: Elevation
-    type: 0
-    repetitions: 1
-    specificRoom: {fileID: 1024489251468986927, guid: 4a80e734c6a1fa649a4445e96857b1a8, type: 3}
-    poolIDToUse: 1
-  - stepName: Arena
-    type: 0
-    repetitions: 1
-    specificRoom: {fileID: 619933439264723553, guid: f08ec6f933e45e34198ad04dcc5646e8, type: 3}
-    poolIDToUse: 1
-  - stepName: RandomRooms
-    type: 1
-    repetitions: 2
-    specificRoom: {fileID: 5510525077582085511, guid: d4aa4f03b12bcea4d891ac5cef0f3494, type: 3}
-    poolIDToUse: 1
-  - stepName: Ending
-    type: 0
-    repetitions: 1
-    specificRoom: {fileID: 5510525077582085511, guid: d4aa4f03b12bcea4d891ac5cef0f3494, type: 3}
     poolIDToUse: 1
 --- !u!850595691 &481843130
 LightingSettings:

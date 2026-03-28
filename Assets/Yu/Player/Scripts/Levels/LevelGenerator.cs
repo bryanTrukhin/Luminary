@@ -6,14 +6,14 @@ public class LevelGenerator : MonoBehaviour
     [System.Serializable]
     public class RoomPool
     {
-        public string poolID; 
+        public string poolID;
         public List<GameObject> rooms;
     }
 
     [System.Serializable]
     public class LevelStep
     {
-        public string stepName = "Step"; 
+        public string stepName = "Step";
         public enum StepType { FixedRoom, FromPool }
         public StepType type;
 
@@ -24,11 +24,11 @@ public class LevelGenerator : MonoBehaviour
         public GameObject specificRoom;
 
         [Header("If From Pool")]
-        public string poolIDToUse; 
+        public string poolIDToUse;
     }
 
     [Header("Level Collections")]
-    public List<RoomPool> roomPalettes; 
+    public List<RoomPool> roomPalettes;
 
     [Header("Sequence")]
     public List<LevelStep> generationSequence;
@@ -69,7 +69,7 @@ public class LevelGenerator : MonoBehaviour
                 }
             }
         }
-        
+
         Destroy(startPointObj);
     }
 
@@ -97,7 +97,7 @@ public class LevelGenerator : MonoBehaviour
 
         // Find markers
         Transform markers = newRoom.transform.Find("Markers");
-        if(markers == null) { Debug.LogError("Room missing Markers!"); return; }
+        if (markers == null) { Debug.LogError("Room missing Markers!"); return; }
 
         Transform entrance = markers.Find("Entrance");
         Transform exit = markers.Find("Exit");
