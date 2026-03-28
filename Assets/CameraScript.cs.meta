@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/CooldownUI.cs.meta
+guid: 2fddc22378a81434e9df59eab232c425
+========
+guid: d188d0da9a97249f78df73f0efdf8551
+>>>>>>>> origin/BryanYYMergeV2:Assets/CameraScript.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
