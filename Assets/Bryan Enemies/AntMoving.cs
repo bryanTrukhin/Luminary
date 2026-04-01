@@ -13,8 +13,8 @@ public class AntMoving : EnemyController /*MonoBehaviour*/
     public bool canFlip = true;
 
     [Header("Rotating")]
-    [SerializeField] public LayerMask platform;
-    [SerializeField] public LayerMask enemy;
+    [SerializeField] public LayerMask platformLayer;
+    [SerializeField] public LayerMask enemyLayer;
     public Vector3 lastValidLedge;
     public bool isTurning;
 
@@ -29,6 +29,9 @@ public class AntMoving : EnemyController /*MonoBehaviour*/
     [SerializeField] public LayerMask icicleLayer;
     public static List<GameObject> iciclePos = new List<GameObject>();
 
+    [Header("Effects")]
+    [SerializeField] public GameObject vaporEffect;
+
     protected override void Start()
     {
         base.Start();
@@ -42,22 +45,29 @@ public class AntMoving : EnemyController /*MonoBehaviour*/
     {
         if (isTurning) return;
 
-        facingDir = (transform.localScale.x < 0) ? -1 : 1;
-        Vector2 moveDir = transform.right * facingDir;
+        facingDir = (transform.localScale.x < 0) ? -1 : 1; 
+        Vector2 moveDir = (Vector2)transform.right * facingDir;
         forwardDir = moveDir;
 
+        //Setting overhang raycast to be relative to box collider,not transform scale
         //RaycastHit2D overhangCheck = Physics2D.Raycast(transform.position, -transform.up, transform.localScale.y * 2f, platform);
         BoxCollider2D col = GetComponent<BoxCollider2D>();
         float distanceToFeet = col.size.y * 0.5f;
         float rayLength = distanceToFeet + 0.2f;
-        RaycastHit2D overhangCheck = Physics2D.Raycast(transform.position, -transform.up, rayLength, platform);
-        
+        RaycastHit2D overhangCheck = Physics2D.Raycast(transform.position, -transform.up, rayLength, platformLayer);
         Debug.DrawRay(transform.position, -transform.up * transform.localScale.y * 2f, Color.yellow);
 
         if (overhangCheck.collider != null)
         {
             lastValidLedge = overhangCheck.point;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+            //Adding a buffer in case the ant gets stuck randomly
+            if (canMove && rb.velocity.sqrMagnitude < 0.1f)
+            {
+                float pushAmount = 0.01f * facingDir;
+                transform.position += new Vector3(pushAmount, 0, 0);
+            }
             rb.velocity = moveDir * speed;
             rb.AddForce(-transform.up * gravStrength);
             canFlip = true;
@@ -109,30 +119,12 @@ public class AntMoving : EnemyController /*MonoBehaviour*/
         float colliderWidth = myCollider.bounds.extents.x;
         float rayDist = colliderWidth + 0.1f;
 
-        RaycastHit2D wallHit = Physics2D.Raycast(transform.position, moveDir, rayDist, platform);
+        RaycastHit2D wallHit = Physics2D.Raycast(transform.position, moveDir, rayDist, platformLayer);
         Debug.DrawRay(transform.position, moveDir * rayDist, Color.red);
         if (wallHit.collider != null)
         {
             FlipX();
-            /*
-            float dot = Vector2.Dot(wallHit.normal, moveDir);
-            if (dot < 0f)
-            {
-                FlipX();
-            }
-            */
         }
-        /*
-        RaycastHit2D[] allEnemyHits = Physics2D.RaycastAll(transform.position, moveDir, rayDist, enemy);
-        foreach (RaycastHit2D hit in allEnemyHits)
-        {
-            if (hit.collider != null && hit.collider.gameObject != gameObject)
-            {
-                //FlipX();
-                break;
-            }
-        }
-        */
     }
 
     void FlipX()
@@ -195,6 +187,15 @@ public class AntMoving : EnemyController /*MonoBehaviour*/
         if (collision.gameObject.CompareTag("Platform"))
         {
             canSpawnIceSheets = true;
+        }
+    }
+
+    void OnParticleCollision(GameObject other)
+    {
+        if (other.CompareTag("Fire"))
+        {
+            Instantiate(vaporEffect, transform.position, Quaternion.identity);
+            Destroy(gameObject);
         }
     }
 

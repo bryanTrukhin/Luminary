@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f49e14e2306ac4e9eaf0809d4f85f28d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slipperyStrength: 5
   lifetimeDuration: 15
   meltSpeed: 1
   meltTimer: 0

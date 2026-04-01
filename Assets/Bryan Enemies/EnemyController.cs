@@ -36,8 +36,6 @@ public class EnemyController : MonoBehaviour
             rb.velocity = Vector2.zero;
             rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         }
-
-
     }
 
     protected virtual void HandleMovement()
