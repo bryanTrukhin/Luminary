@@ -6,7 +6,8 @@ public class ToadAttacking : MonoBehaviour
 {
     [Header("General")]
     [SerializeField] public float detectionRadius;
-    public bool canExplode;
+    public ToadMovementVersion2 movementScript;
+   
 
     [Header("Target Detection")]
     [SerializeField] public LayerMask playerLayer;
@@ -19,28 +20,35 @@ public class ToadAttacking : MonoBehaviour
     public bool notBehindObstacle; //this variable exists soley for Gizmo visualization, NOT IMPORTANT
 
     [Header("Tongue Handling")]
+    [SerializeField] public GameObject tongue;
+    public DistanceJoint2D tongueJoint;
     public float reachSpeed;
-    public GameObject tongue;
     private float lerpTimer = 0f;
     public float tongueDuration;
-    public DistanceJoint2D tongueJoint;
     public bool canTongueGrab;
     private bool isRetracting = false;
+
+    [Header("Death Handling")]
+    [SerializeField] public GameObject lightReleaseEffect;
+    public bool canExplode;
 
 
     void Start()
     {
+        movementScript = GetComponent<ToadMovementVersion2>();
         tongueJoint = tongue.GetComponent<DistanceJoint2D>();
         tongueJoint.connectedAnchor = transform.position;
-        canExplode = false;
         tongueJoint.enabled = false;
+        tongue.SetActive(false);
+
+        canExplode = false;
         foundTarget = false;
         notBehindObstacle = false;
     }
 
     void Update()
     {   
-        //Finding whether the player or a firefly entered the radius
+        //Finding whether the player or a firefly entered the radius, with priority to the firefly
         Collider2D playerHit = Physics2D.OverlapCircle(transform.position, detectionRadius, playerLayer);
         Collider2D fireflyHit = Physics2D.OverlapCircle(transform.position, detectionRadius, fireflyLayer);
 
@@ -70,9 +78,7 @@ public class ToadAttacking : MonoBehaviour
             {
                 localTargetPos = transform.InverseTransformPoint(target.transform.position);
                 notBehindObstacle = true;
-                UpdateFacingDirection();
                 canTongueGrab = true;
-                //SET UP A COOLDOWN FOR WHEN THE TONGUE GRAB CAN BE CALLED AGAIN
             }
             else
             {
@@ -90,14 +96,19 @@ public class ToadAttacking : MonoBehaviour
     {
         if (canTongueGrab)
         {
+            tongue.SetActive(true);
             TongueGrab();
+        }
+        if (!canTongueGrab)
+        {
+            tongue.SetActive(false);
+            tongueJoint.connectedAnchor = transform.position;
         }
 
     }
 
     void TongueGrab()
     {
-        
         tongueJoint.enabled = true;
         tongueJoint.autoConfigureConnectedAnchor = false;
         if (lerpTimer == 0f && !isRetracting)
@@ -109,13 +120,10 @@ public class ToadAttacking : MonoBehaviour
         if (!isRetracting)
         {
             tongueJoint.connectedAnchor = Vector2.Lerp(tongueJoint.connectedAnchor, lockedTargetPos, lerpTimer);
-
-            
             if (lerpTimer >= 1f)
             {
                 lerpTimer = 0f;
                 isRetracting = true;
-                Debug.Log("Switching to Retract Mode");
             }
         }
         else
@@ -138,20 +146,14 @@ public class ToadAttacking : MonoBehaviour
         tongueJoint.connectedAnchor = transform.position;
     }
 
-    void UpdateFacingDirection()
-    {
-        if (localTargetPos.x < 0)
-        {
-            Vector2 currentScale = transform.localScale;
-            currentScale *= -1;
-            transform.localScale = currentScale;
-            Debug.Log("Swapped!");
-        }
-    }
-
     void selfDestruct()
     {
+        //1.) Create delay timer to play for the toad to have time to be on the ground before death
+        //2.) Play animation of toad getting filled up like a balloon before popping
+
+        Instantiate(lightReleaseEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
+        //3.) Release a small batch of fireflies for player to collect
     }
 
     void OnDrawGizmos()

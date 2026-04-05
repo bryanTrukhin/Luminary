@@ -199,7 +199,7 @@ MonoBehaviour:
   lastKnownIciclePos: {x: 0, y: 0}
   icicleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   vaporEffect: {fileID: 5270493957111772019, guid: d161aa4bb955d43a48fb1becbace94f7, type: 3}
 --- !u!114 &2348492163429044372
 MonoBehaviour:

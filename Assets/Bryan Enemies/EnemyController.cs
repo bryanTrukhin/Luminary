@@ -23,7 +23,7 @@ public class EnemyController : MonoBehaviour
 
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (canMove)
         {
@@ -41,6 +41,13 @@ public class EnemyController : MonoBehaviour
     protected virtual void HandleMovement()
     {
         rb.velocity = forwardDir.normalized * speed;
+    }
+
+    protected void FlipX()
+    {
+        Vector3 newScale = transform.localScale;
+        newScale.x *= -1;
+        transform.localScale = newScale;
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)

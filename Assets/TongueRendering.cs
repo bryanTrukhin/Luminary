@@ -19,7 +19,7 @@ public class TongueRendering : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.position = toad.transform.position;
+        transform.position = toad.transform.position;
         circleCollider.offset = transform.InverseTransformPoint(toadAttacking.tongueJoint.connectedAnchor);
         lineRenderer.SetPosition(0, toadAttacking.transform.position);
         lineRenderer.SetPosition(1, toadAttacking.tongueJoint.connectedAnchor);
@@ -27,6 +27,10 @@ public class TongueRendering : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), collision.collider);
+        }
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("PLAYER WAS HIT");
@@ -35,6 +39,7 @@ public class TongueRendering : MonoBehaviour
         {
             Debug.Log("FIREFLY WAS HIT");
             toadAttacking.canExplode = true;
+            Destroy(collision.gameObject);
         }
     }
 }

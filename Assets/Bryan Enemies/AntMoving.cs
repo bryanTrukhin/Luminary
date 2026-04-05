@@ -127,13 +127,6 @@ public class AntMoving : EnemyController /*MonoBehaviour*/
         }
     }
 
-    void FlipX()
-    {
-        Vector3 newScale = transform.localScale;
-        newScale.x *= -1;
-        transform.localScale = newScale;
-    }
-
     void CreateTrail()
     {
         //Setting up spawn position

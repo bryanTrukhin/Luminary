@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class NavGraphBuilder : MonoBehaviour
 {
+    [SerializeField] GameObject gameManager;
     public PlatformClustering clustering;
     public Tilemap tilemap;
 
@@ -17,8 +18,12 @@ public class NavGraphBuilder : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("NavGB Start");
+        //All references to clusters are centralized in one game manager, giving each enemy individual pathfinding
+        clustering = gameManager.GetComponent<PlatformClustering>();
+        tilemap = clustering.tilemap;
+        enemy = this.transform;
 
+        Debug.Log("NavGB Start");
         Debug.Log("clustering is " + (clustering == null ? "NULL" : "OK"));
         Debug.Log("tilemap is " + (tilemap == null ? "NULL" : "OK"));
 
