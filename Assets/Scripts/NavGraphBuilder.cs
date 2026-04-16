@@ -19,9 +19,11 @@ public class NavGraphBuilder : MonoBehaviour
     void Start()
     {
         //All references to clusters are centralized in one game manager, giving each enemy individual pathfinding
+        gameManager = GameObject.FindWithTag("Game Manager");
         clustering = gameManager.GetComponent<PlatformClustering>();
         tilemap = clustering.tilemap;
         enemy = this.transform;
+        target = GameObject.FindWithTag("Player").transform;
 
         Debug.Log("NavGB Start");
         Debug.Log("clustering is " + (clustering == null ? "NULL" : "OK"));

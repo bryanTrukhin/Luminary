@@ -94,7 +94,7 @@ public class ToadAttacking : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (canTongueGrab)
+        if (canTongueGrab && movementScript.canJump)
         {
             tongue.SetActive(true);
             TongueGrab();
@@ -134,7 +134,6 @@ public class ToadAttacking : MonoBehaviour
                 ResetTongue();
             }
         }
-        
     }
 
     void ResetTongue()

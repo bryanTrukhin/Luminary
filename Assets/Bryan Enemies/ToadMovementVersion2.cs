@@ -6,7 +6,6 @@ using UnityEngine;
 public class ToadMovementVersion2 : EnemyController /*MonoBehaviour*/
 {
     [Header("General")]
-    public Vector2 currentPos;
     public bool canFlip;
 
     [Header("Pathfinding")]
@@ -47,7 +46,6 @@ public class ToadMovementVersion2 : EnemyController /*MonoBehaviour*/
 
     protected override void FixedUpdate()
     {
-        currentPos = transform.position; // REMOVE THIS AND ALL INSTANCES LATER ON CUSE ITS UNNECESSARY
         if (nav != null && nav.debugTilePath != null)
         {
             if (path != nav.debugTilePath)

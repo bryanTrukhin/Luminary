@@ -59,8 +59,9 @@ public class EnemyController : MonoBehaviour
             Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
             if (playerRb != null)
             {
-                // Note: We use the move direction for knockback
-                playerRb.AddForce(forwardDir * knockbackStrength, ForceMode2D.Impulse);
+                Vector2 direction = (playerRb.transform.position - transform.position).normalized;
+                direction += new Vector2(0, 1f); //adds upward bias to knockback
+                playerRb.AddForce(direction * knockbackStrength, ForceMode2D.Impulse);
             }
         }
 
