@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class NavGraphBuilder : MonoBehaviour
+public class NavGraphBuilderDemo : MonoBehaviour
+
+    // need to change back to NavGraphBuilder when done testing for AntMoving.cs
 {
-    [SerializeField] GameObject gameManager;
     public PlatformClustering clustering;
     public Tilemap tilemap;
 
@@ -18,25 +20,28 @@ public class NavGraphBuilder : MonoBehaviour
 
     void Start()
     {
-        //All references to clusters are centralized in one game manager, giving each enemy individual pathfinding
-        gameManager = GameObject.FindWithTag("Game Manager");
-        clustering = gameManager.GetComponent<PlatformClustering>();
-        tilemap = clustering.tilemap;
-        enemy = this.transform;
-        target = GameObject.FindWithTag("Player").transform;
+        //Debug.Log("NavGB Start");
 
-        Debug.Log("NavGB Start");
-        Debug.Log("clustering is " + (clustering == null ? "NULL" : "OK"));
-        Debug.Log("tilemap is " + (tilemap == null ? "NULL" : "OK"));
+        //Debug.Log("clustering is " + (clustering == null ? "NULL" : "OK"));
+        //Debug.Log("tilemap is " + (tilemap == null ? "NULL" : "OK"));
 
         if (clustering == null || tilemap == null)
             return;
 
         Debug.Log("clusters is " +
             (clustering.clusters == null ? "NULL" : clustering.clusters.Count.ToString()));
-
+        target = GameObject.FindGameObjectWithTag("Player").transform;
+        enemy = this.gameObject.transform;
         BuildNodes();
         BuildConnections();
+    }
+    void Awake()
+    {
+        target = GameObject.FindGameObjectWithTag("Player").transform;
+        if (tilemap == null)
+        {
+            tilemap = Object.FindFirstObjectByType<Tilemap>();
+        }
     }
 
 
@@ -55,7 +60,7 @@ public class NavGraphBuilder : MonoBehaviour
             nodes.Add(node);
         }
 
-        Debug.Log($"Built {nodes.Count} NavNodes");
+        //Debug.Log($"Built {nodes.Count} NavNodes");
     }
 
     Bounds CalculateBounds(PlatformCluster cluster)
@@ -115,7 +120,7 @@ public class NavGraphBuilder : MonoBehaviour
             }
         }
 
-        Debug.Log("Connections built");
+        //Debug.Log("Connections built");
     }
 
     NavNode GetClosestNode(Vector3 pos)
@@ -205,39 +210,68 @@ public class NavGraphBuilder : MonoBehaviour
 
     List<NavNode> debugPath;
 
-    void Update()
+    public void UpdateNavigation(Transform activeAnt, Tilemap localMap, PlatformClustering localClustering)
     {
+        this.enemy = activeAnt;
+        this.tilemap = localMap;
+        this.clustering = localClustering;
+
+        // Now run the pathfinding logic safely
+        if (tilemap == null || clustering == null) return;
+
         var enemyCluster = GetClusterOfPosition(enemy.position);
         var targetCluster = GetClusterOfPosition(target.position);
 
         if (enemyCluster == null || targetCluster == null)
         {
-            Debug.Log("Cluster missing");
+            //Debug.Log("Cluster missing");
             return;
         }
 
         if (enemyCluster == targetCluster)
         {
-            Debug.Log("Same Cluster ?? Tile A*");
+            //Debug.Log("Same Cluster ?? Tile A*");
 
             TileNode startTile = GetClosestTile(enemy.position, enemyCluster);
             TileNode goalTile = GetClosestTile(target.position, targetCluster);
 
-            debugTilePath = TileAStar.FindPath(
-                 startTile,
-                 goalTile,
-                 enemyCluster.tileNodes
-            );
+            debugTilePath = TileAStar.FindPath(startTile, goalTile, enemyCluster.tileNodes);
 
-            Debug.Log(debugTilePath == null
-                    ? "No tile path"
-                    : $"Tile path length: {debugTilePath.Count}");
+            //Debug.Log(debugTilePath == null? "No tile path": $"Tile path length: {debugTilePath.Count}");
         }
         else
         {
-            Debug.Log("Different Cluster ?? Nav A* (later)");
+            //Debug.Log("Different Cluster ?? Nav A* (later)");
         }
     }
+
+    //void Update()
+    //{
+    //    var enemyCluster = GetClusterOfPosition(enemy.position);
+    //    var targetCluster = GetClusterOfPosition(target.position);
+
+    //    if (enemyCluster == null || targetCluster == null)
+    //    {
+    //        //Debug.Log("Cluster missing");
+    //        return;
+    //    }
+
+    //    if (enemyCluster == targetCluster)
+    //    {
+    //        //Debug.Log("Same Cluster ?? Tile A*");
+
+    //        TileNode startTile = GetClosestTile(enemy.position, enemyCluster);
+    //        TileNode goalTile = GetClosestTile(target.position, targetCluster);
+
+    //        debugTilePath = TileAStar.FindPath(startTile, goalTile,enemyCluster.tileNodes);
+
+    //        //Debug.Log(debugTilePath == null? "No tile path": $"Tile path length: {debugTilePath.Count}");
+    //    }
+    //    else
+    //    {
+    //        //Debug.Log("Different Cluster ?? Nav A* (later)");
+    //    }
+    //}
 
     TileNode GetClosestTile(Vector3 worldPos, PlatformCluster cluster)
     {
@@ -271,12 +305,12 @@ public class NavGraphBuilder : MonoBehaviour
         {
             if (cluster.tiles.Contains(cell))
             {
-                Debug.Log($"Found cluster {cluster.id}");
+                //Debug.Log($"Found cluster {cluster.id}");
                 return cluster;
             }
         }
 
-        Debug.Log("Cluster missing");
+        //Debug.Log("Cluster missing");
         return null;
     }
 
