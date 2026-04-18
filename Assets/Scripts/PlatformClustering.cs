@@ -8,27 +8,27 @@ public class PlatformClustering : MonoBehaviour
     public Tilemap tilemap;
     public List<PlatformCluster> clusters;
 
-    // Start is called before the first frame update
-    void Awake()
+    void Awake()
     {
         tilemap = GetComponentInChildren<Tilemap>();
-        // 1. ALWAYS assign references first!
-        if (tilemap == null)
+
+        // 1. ALWAYS assign references first!
+        if (tilemap == null)
         {
-            // Try to find the tilemap on this object or its children
-            tilemap = GetComponent<Tilemap>();
+            // Try to find the tilemap on this object or its children
+            tilemap = GetComponent<Tilemap>();
             if (tilemap == null) tilemap = GetComponentInChildren<Tilemap>();
         }
 
-        // 2. Double-check to prevent the crash if it's STILL null
-        if (tilemap == null)
+        // 2. Double-check to prevent the crash if it's STILL null
+        if (tilemap == null)
         {
             Debug.LogError($"PlatformClustering on {gameObject.name} can't find a Tilemap!");
             return;
         }
 
-        // 3. Now it is safe to run the logic
-        clusters = FindAllClusters(tilemap);
+        // 3. Now it is safe to run the logic
+        clusters = FindAllClusters(tilemap);
 
         foreach (var cluster in clusters)
         {
@@ -40,33 +40,25 @@ public class PlatformClustering : MonoBehaviour
         Debug.Log("PlatformClustering clusters: " + clusters.Count);
     }
 
-    // Update is called once per frame
-    void Update()
+    void Update()
     {
-        //not needed right now
-    }
+        // not needed right now
+    }
 
     public List<PlatformCluster> FindAllClusters(Tilemap tilemap)
     {
-        // This holds finished clusters
-        List<PlatformCluster> allClusters = new List<PlatformCluster>();
-
-        // This holds visted cells
-        HashSet<Vector3Int> visited = new HashSet<Vector3Int>();
+        List<PlatformCluster> allClusters = new List<PlatformCluster>();
+        HashSet<Vector3Int> visited = new HashSet<Vector3Int>();
         BoundsInt bounds = tilemap.cellBounds;
 
         int clusterId = 0;
 
-        //Scanning all possible cells (outer loop will create seed points, and the BFS will explore the seed points to make a cluster)
-        foreach (Vector3Int pos in bounds.allPositionsWithin)
+        foreach (Vector3Int pos in bounds.allPositionsWithin)
         {
             if (!tilemap.HasTile(pos) || visited.Contains(pos))
-            {
                 continue;
-            }
 
-            //BFS logic
-            PlatformCluster cluster = new PlatformCluster();
+            PlatformCluster cluster = new PlatformCluster();
             cluster.id = clusterId++;
 
             Queue<Vector3Int> queue = new Queue<Vector3Int>();
@@ -81,17 +73,16 @@ public class PlatformClustering : MonoBehaviour
                 cluster.tiles.Add(current);
                 sum += current;
 
-                // Check the 4 possible neighbors
-                Vector3Int[] neighbors = {
-          current + Vector3Int.up,
-          current + Vector3Int.down,
-          current + Vector3Int.left,
-          current + Vector3Int.right,
-          current + Vector3Int.right + Vector3Int.up,
-          current + Vector3Int.left + Vector3Int.up,
-          current + Vector3Int.right + Vector3Int.down,
-          current + Vector3Int.left + Vector3Int.down
-        };
+                Vector3Int[] neighbors = {
+                    current + Vector3Int.up,
+                    current + Vector3Int.down,
+                    current + Vector3Int.left,
+                    current + Vector3Int.right,
+                    current + Vector3Int.right + Vector3Int.up,
+                    current + Vector3Int.left + Vector3Int.up,
+                    current + Vector3Int.right + Vector3Int.down,
+                    current + Vector3Int.left + Vector3Int.down
+                };
 
                 foreach (Vector3Int n in neighbors)
                 {
@@ -102,12 +93,15 @@ public class PlatformClustering : MonoBehaviour
                     }
                 }
             }
+
             Vector3 avgCell = (Vector3)sum / cluster.tiles.Count;
             cluster.center = tilemap.CellToWorld(Vector3Int.RoundToInt(avgCell));
             allClusters.Add(cluster);
         }
+
         return allClusters;
     }
+
     void BuildTileNodes(PlatformCluster cluster)
     {
         cluster.tileNodes.Clear();
@@ -115,13 +109,11 @@ public class PlatformClustering : MonoBehaviour
 
         foreach (Vector3Int cell in cluster.tiles)
         {
-            if (tilemap.HasTile(cell) &&
-              !tilemap.HasTile(cell + Vector3Int.up))
+            if (tilemap.HasTile(cell) && !tilemap.HasTile(cell + Vector3Int.up))
             {
                 TileNode node = new TileNode();
                 node.cellPos = cell;
-                node.worldPos =
-                  tilemap.CellToWorld(cell) + tilemap.cellSize / 2f;
+                node.worldPos = tilemap.CellToWorld(cell) + tilemap.cellSize / 2f;
 
                 cluster.tileNodes.Add(node);
                 cluster.tileNodeMap[cell] = node;
@@ -168,15 +160,13 @@ public class PlatformClustering : MonoBehaviour
 
             Vector3Int[] candidates =
             {
-      Vector3Int.left,
-      Vector3Int.right,
-
-      Vector3Int.left + Vector3Int.up,
-      Vector3Int.right + Vector3Int.up,
-
-      Vector3Int.left + Vector3Int.down,
-      Vector3Int.right + Vector3Int.down
-    };
+                Vector3Int.left,
+                Vector3Int.right,
+                Vector3Int.left + Vector3Int.up,
+                Vector3Int.right + Vector3Int.up,
+                Vector3Int.left + Vector3Int.down,
+                Vector3Int.right + Vector3Int.down
+            };
 
             foreach (var offset in candidates)
             {
@@ -194,8 +184,7 @@ public class PlatformClustering : MonoBehaviour
         }
     }
 
-    //Drawing the clusters for visualization
-    void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         if (clusters == null || clusters.Count == 0 || tilemap == null) return;
 
@@ -221,6 +210,7 @@ public class PlatformClustering : MonoBehaviour
                 if (pos.x > max.x) max.x = pos.x;
                 if (pos.y > max.y) max.y = pos.y;
             }
+
             Vector3 worldMin = tilemap.CellToWorld(new Vector3Int(min.x, min.y, 0));
             Vector3 worldMax = tilemap.CellToWorld(new Vector3Int(max.x + 1, max.y + 1, 0));
 
@@ -240,14 +230,13 @@ public class PlatformClustering : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawSphere(cluster.center, 0.15f);
 
-            // Draw tile-level nodes
-            Gizmos.color = Color.blue;
+            Gizmos.color = Color.blue;
             foreach (var node in cluster.tileNodes)
             {
                 Gizmos.DrawSphere(node.worldPos, 0.08f);
             }
-            // tile-level connections
-            Gizmos.color = Color.cyan;
+
+            Gizmos.color = Color.cyan;
             foreach (var node in cluster.tileNodes)
             {
                 foreach (var nei in node.neighbors)
@@ -255,7 +244,6 @@ public class PlatformClustering : MonoBehaviour
                     Gizmos.DrawLine(node.worldPos, nei.worldPos);
                 }
             }
-
         }
     }
 }
