@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 using UnityEngine;
-using System.Linq;
 
-public class ToadMovementVersion2 : MonoBehaviour
+public class ToadMovementVersion2 : EnemyController /*MonoBehaviour*/
 {
     [Header("General")]
-    public Rigidbody2D rb;
-    public Vector2 currentPos;
+    public bool canFlip;
 
     [Header("Pathfinding")]
-    public GameObject gameManager;
     public NavGraphBuilder nav;
     public List<TileNode> path;
     public int pathIndex = 0;
@@ -24,33 +21,31 @@ public class ToadMovementVersion2 : MonoBehaviour
     public bool canJump;
     public bool isJumping;
 
+    [Header("Attacking")]
+    public ToadAttacking attackingScript;
+
     // Gizmo variable to track the actual point we are aiming for
     private Vector3 debugLandingPos;
 
-    public Transform player;
-    [HideInInspector] public bool isAttacking = false;
-
-
-    void Start()
+    protected override void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        if (gameManager != null)
+        base.Start();
+        attackingScript = GetComponent<ToadAttacking>();
+        nav = GetComponent<NavGraphBuilder>();
+        if (nav != null && nav.tilemap != null)
         {
-            nav = gameManager.GetComponent<NavGraphBuilder>();
+            tilemap = nav.tilemap;
             Grid grid = tilemap.layoutGrid;
-            tileOffset= grid.cellSize.y / 2f;
+            tileOffset = grid.cellSize.y / 2f;
         }
+
         canJump = false;
         isJumping = false;
+        canFlip = true;
     }
 
-    void Update()
+    protected override void FixedUpdate()
     {
-        UpdateFacing();
-
-        if (isAttacking) return;
-
-        currentPos = transform.position;
         if (nav != null && nav.debugTilePath != null)
         {
             if (path != nav.debugTilePath)
@@ -59,33 +54,23 @@ public class ToadMovementVersion2 : MonoBehaviour
                 pathIndex = 0;
             }
         }
-
         if (path != null && pathIndex < path.Count - 1 && canJump && !isJumping)
         {
             StartCoroutine(JumpSequence());
         }
-    }
 
-    void UpdateFacing()
-    {
-        if (player == null) return;
-
-        float direction = player.position.x - transform.position.x;
-
-        Vector3 scale = transform.localScale;
-
-        if (direction > 0)
+        if (canFlip)
         {
-            scale.x = Mathf.Abs(scale.x);
+            Vector3 localTargetPos = transform.InverseTransformPoint(nav.target.position);
+            if (localTargetPos.x < 0)
+            {
+                FlipX();
+                float worldDirToPlayer = Mathf.Sign(nav.target.position.x - transform.position.x);
+                forwardDir = new Vector2(worldDirToPlayer, 0);
+                canFlip = false;
+            }
         }
-        else if (direction < 0)
-        {
-            scale.x = -Mathf.Abs(scale.x);
-        }
-
-        transform.localScale = scale;
     }
-
 
     Vector2 targetPos;
     IEnumerator JumpSequence()
@@ -97,21 +82,30 @@ public class ToadMovementVersion2 : MonoBehaviour
         targetPos = path[pathIndex + step].worldPos;
         Vector2 homeTilePos = path[pathIndex].worldPos;
 
-        //Re-adjusting
-        float distToTarget = Mathf.Abs(transform.position.x - targetPos.x);
-        if (distToTarget < tileOffset * 2f)
+        float xDistToTarget = transform.position.x - targetPos.x;
+        float yDistToTarget = transform.position.y - targetPos.y;
+
+        if (Mathf.Abs(xDistToTarget) < tileOffset * 2f && Mathf.Abs(yDistToTarget) > 0)
         {
             rb.velocity = CalculateLaunchVelocity(transform.position, homeTilePos, jumpHeightConstant * 0.5f);
             yield return new WaitForSeconds(0.5f);
+
+            float surfaceY = homeTilePos.y + tileOffset + 0.01f;
+            Vector3 adjustLandingPos = new Vector3(homeTilePos.x, surfaceY, transform.position.z);
+            transform.position = adjustLandingPos;
+
         }
 
         //Main jump
         pathIndex += step;
         debugLandingPos = new Vector3(targetPos.x, targetPos.y + tileOffset, 0);
-        Debug.Log($"Leaping {step} tiles!");
 
         rb.velocity = CalculateLaunchVelocity(transform.position, targetPos, jumpHeightConstant);
         yield return new WaitUntil(() => canJump);
+        canFlip = true;
+
+        //Standing still until attacking is finished
+        yield return new WaitUntil(() => !attackingScript.canTongueGrab);
         isJumping = false;
     }
 
@@ -132,17 +126,6 @@ public class ToadMovementVersion2 : MonoBehaviour
 
         return new Vector2(velocityX, velocityY);
     }
-
-    /*
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        //RaycastHit2D downCheck = Physics2D.Raycast(currentPos, Vector2.down, tileOffset, platformLayerMask);
-        if (collision.gameObject.CompareTag("Platform"))
-        {
-            canJump = true;
-        }
-    }
-    */
 
     private void OnTriggerEnter2D(Collider2D other)
     {

@@ -23,7 +23,7 @@ public class EnemyController : MonoBehaviour
 
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (canMove)
         {
@@ -36,13 +36,18 @@ public class EnemyController : MonoBehaviour
             rb.velocity = Vector2.zero;
             rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         }
-
-
     }
 
     protected virtual void HandleMovement()
     {
         rb.velocity = forwardDir.normalized * speed;
+    }
+
+    protected void FlipX()
+    {
+        Vector3 newScale = transform.localScale;
+        newScale.x *= -1;
+        transform.localScale = newScale;
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
@@ -54,8 +59,9 @@ public class EnemyController : MonoBehaviour
             Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
             if (playerRb != null)
             {
-                // Note: We use the move direction for knockback
-                playerRb.AddForce(forwardDir * knockbackStrength, ForceMode2D.Impulse);
+                Vector2 direction = (playerRb.transform.position - transform.position).normalized;
+                direction += new Vector2(0, 1f); //adds upward bias to knockback
+                playerRb.AddForce(direction * knockbackStrength, ForceMode2D.Impulse);
             }
         }
 
