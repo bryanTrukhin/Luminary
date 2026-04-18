@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class NavGraphBuilder : MonoBehaviour
 {
+    [SerializeField] GameObject gameManager;
     public PlatformClustering clustering;
     public Tilemap tilemap;
 
@@ -15,14 +16,16 @@ public class NavGraphBuilder : MonoBehaviour
 
     public List<TileNode> debugTilePath;
 
-    Vector3 lastEnemyPos;
-Vector3 lastTargetPos;
-
-
     void Start()
     {
-        Debug.Log("NavGB Start");
+        //All references to clusters are centralized in one game manager, giving each enemy individual pathfinding
+        gameManager = GameObject.FindWithTag("Game Manager");
+        clustering = gameManager.GetComponent<PlatformClustering>();
+        tilemap = clustering.tilemap;
+        enemy = this.transform;
+        target = GameObject.FindWithTag("Player").transform;
 
+        Debug.Log("NavGB Start");
         Debug.Log("clustering is " + (clustering == null ? "NULL" : "OK"));
         Debug.Log("tilemap is " + (tilemap == null ? "NULL" : "OK"));
 
@@ -34,17 +37,6 @@ Vector3 lastTargetPos;
 
         BuildNodes();
         BuildConnections();
-    }
-    void Update()
-    {
-        if (Vector2.Distance(enemy.position, lastEnemyPos) < 0.5f &&
-            Vector2.Distance(target.position, lastTargetPos) < 0.5f)
-            return;
-
-        lastEnemyPos = enemy.position;
-        lastTargetPos = target.position;
-
-        CalculatePath();
     }
 
 
@@ -97,44 +89,34 @@ Vector3 lastTargetPos;
 
     void BuildConnections()
     {
-        float maxJumpDistance = 6f;
+        // for test, change to enemy info in real game
+        float maxHorizontal = 6f;
+        float maxVertical = 6f;
 
         foreach (var a in nodes)
         {
             a.neighbors.Clear();
 
-            var clusterA = clustering.clusters[a.clusterIndex];
-
             foreach (var b in nodes)
             {
                 if (a == b) continue;
 
-                var clusterB = clustering.clusters[b.clusterIndex];
+                Vector3 delta = b.center - a.center;
 
-                bool canConnect = false;
+                // horizontal distance
+                if (Mathf.Abs(delta.x) > maxHorizontal)
+                    continue;
 
-                foreach (var exit in clusterA.exits)
-                {
-                    foreach (var node in clusterB.tileNodes)
-                    {
-                        float dist = Vector2.Distance(exit.worldPos, node.worldPos);
+                // vertical distance
+                if (delta.y > maxVertical || delta.y < -maxVertical)
+                    continue;
 
-                        if (dist < maxJumpDistance)
-                        {
-                            canConnect = true;
-                            break;
-                        }
-                    }
-
-                    if (canConnect) break;
-                }
-
-                if (canConnect)
-                    a.neighbors.Add(b);
+                a.neighbors.Add(b);
             }
         }
-    }
 
+        Debug.Log("Connections built");
+    }
 
     NavNode GetClosestNode(Vector3 pos)
     {
@@ -223,70 +205,37 @@ Vector3 lastTargetPos;
 
     List<NavNode> debugPath;
 
-    void CalculatePath()
+    void Update()
     {
         var enemyCluster = GetClusterOfPosition(enemy.position);
         var targetCluster = GetClusterOfPosition(target.position);
 
         if (enemyCluster == null || targetCluster == null)
         {
-            //Debug.Log("Cluster missing");
+            Debug.Log("Cluster missing");
             return;
         }
 
         if (enemyCluster == targetCluster)
         {
-            //Debug.Log("Same Cluster ?? Tile A*");
+            Debug.Log("Same Cluster ?? Tile A*");
 
             TileNode startTile = GetClosestTile(enemy.position, enemyCluster);
             TileNode goalTile = GetClosestTile(target.position, targetCluster);
 
-            debugTilePath = TileAStar.FindPath(startTile, goalTile,enemyCluster.tileNodes);
+            debugTilePath = TileAStar.FindPath(
+                 startTile,
+                 goalTile,
+                 enemyCluster.tileNodes
+            );
 
-            //Debug.Log(debugTilePath == null? "No tile path": $"Tile path length: {debugTilePath.Count}");
+            Debug.Log(debugTilePath == null
+                    ? "No tile path"
+                    : $"Tile path length: {debugTilePath.Count}");
         }
         else
         {
-            //Debug.Log("Different Cluster ?? Nav A* (later)");
-            NavNode startNode = GetClosestNode(enemy.position);
-            NavNode goalNode = GetClosestNode(target.position);
-
-            debugPath = FindPath(startNode, goalNode);
-
-            if (debugPath == null || debugPath.Count < 2)
-                return;
-
-            NavNode nextClusterNode = debugPath[1];
-
-            PlatformCluster enemyClusterData =
-                clustering.clusters[startNode.clusterIndex];
-
-            PlatformCluster nextCluster =
-                clustering.clusters[nextClusterNode.clusterIndex];
-
-            TileNode startTile =
-                GetClosestTile(enemy.position, enemyClusterData);
-
-            TileNode exitTile = null;
-
-            float bestDist = float.MaxValue;
-
-            foreach (var exit in enemyClusterData.exits)
-            {
-                float d = Vector2.Distance(exit.worldPos, nextCluster.center);
-
-                if (d < bestDist)
-                {
-                    bestDist = d;
-                    exitTile = exit;
-                }
-            }
-
-            if (exitTile != null)
-            {
-                debugTilePath =
-                    TileAStar.FindPath(startTile, exitTile, enemyClusterData.tileNodes);
-            }
+            Debug.Log("Different Cluster ?? Nav A* (later)");
         }
     }
 
@@ -322,12 +271,12 @@ Vector3 lastTargetPos;
         {
             if (cluster.tiles.Contains(cell))
             {
-                //Debug.Log($"Found cluster {cluster.id}");
+                Debug.Log($"Found cluster {cluster.id}");
                 return cluster;
             }
         }
 
-        //Debug.Log("Cluster missing");
+        Debug.Log("Cluster missing");
         return null;
     }
 

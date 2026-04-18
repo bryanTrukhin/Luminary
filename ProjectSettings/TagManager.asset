@@ -4,10 +4,20 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Platform
+  - Ground
+  - Interactable
+  - wall
+  - Stunner
+  - Launcher
+  - levelStart
+  - levelEnd
   - Enemy
-  - Firefly
+  - lanternBroken
+  - lanternNormal
   - Icicle
+  - Firefly
+  - Platform
+  - Tail
   layers:
   - Default
   - TransparentFX
@@ -44,4 +54,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Walls
+    uniqueID: 3190737467
+    locked: 0
+  - name: Interactables
+    uniqueID: 646182709
+    locked: 0
+  - name: Floor
+    uniqueID: 3511622815
+    locked: 0
+  - name: Player
+    uniqueID: 916059751
     locked: 0

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/AntMoving.cs.meta
 guid: a3ec549c26b0240a5ba45003b44d60e0
+========
+guid: 664056fcb0494418bb93a3693f772cb5
+>>>>>>>> origin/StaffPlaytest:Assets/ObjectPoolManager.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
