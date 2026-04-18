@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8570448400691397153}
   - component: {fileID: 8287305892423332289}
   - component: {fileID: 7073986669132732555}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Icicle Shatter
   m_TagString: Untagged
   m_Icon: {fileID: 0}

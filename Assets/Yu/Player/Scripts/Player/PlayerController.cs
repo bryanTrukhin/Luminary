@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour, IHidable
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private LayerMask whatIsSlow;
     [SerializeField] private int extraJumpCount = 1;
     [SerializeField] private GameObject jumpEffect;
 
@@ -55,6 +56,7 @@ public class PlayerController : MonoBehaviour, IHidable
     [SerializeField] private AudioClip walkSound;
     // Logic States
     public bool isGrounded;
+    public bool isSlowed;
     [HideInInspector] public float moveInput;
     [HideInInspector] public bool canMove = true;
     [HideInInspector] public bool actuallyWallGrabbing = false;
@@ -64,7 +66,7 @@ public class PlayerController : MonoBehaviour, IHidable
     [HideInInspector] public bool isSliding = false;
 
     // Internal References
-    private Rigidbody2D m_rb;
+    [SerializeField] private Rigidbody2D m_rb;
     private CapsuleCollider2D m_col;
     private SpriteRenderer[] _spriteRenderers;
     private ParticleSystem m_dustParticle;
@@ -87,6 +89,7 @@ public class PlayerController : MonoBehaviour, IHidable
     private readonly float m_wallStickTime = 0.25f;
     private int m_onWallSide = 0;
     private int m_playerSide = 1;
+    private float m_originalDrag;
 
     // Slope internals
     private Vector2 m_groundNormal = Vector2.up;
@@ -110,6 +113,7 @@ public class PlayerController : MonoBehaviour, IHidable
             _normalLantern = normalLantern.GetComponent<ILantern>();
         if (brokenLantern != null)
             _brokenLantern = brokenLantern.GetComponent<ILantern>();
+        m_originalDrag = m_rb.drag;
     }
 
     void Start()
@@ -148,7 +152,8 @@ public class PlayerController : MonoBehaviour, IHidable
         // 1. Environmental Checks
         _prevGrounded = isGrounded;
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
-        
+        isSlowed = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsSlow);
+
         var pos = (Vector2)transform.position;
         m_onRightWall = Physics2D.OverlapCircle(pos + grabRightOffset, grabCheckRadius, whatIsGround);
         m_onLeftWall = Physics2D.OverlapCircle(pos + grabLeftOffset, grabCheckRadius, whatIsGround);
@@ -191,6 +196,16 @@ public class PlayerController : MonoBehaviour, IHidable
         // 4. Gravity Modifiers
         if (m_rb.velocity.y < 0f)
             m_rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
+
+        // Water and Snow speed Modifiers
+        if (isSlowed)
+        {
+            sprintEnabled = false;
+        }
+        else
+        {
+            sprintEnabled = true;
+        }
 
         // Slope Stick — push player into the slope surface when grounded
         if (isGrounded && m_onSlope && !m_wallGrabbing && !isDashing && !m_isJumping && Mathf.Abs(moveInput) > 0.01f)
@@ -527,4 +542,33 @@ public class PlayerController : MonoBehaviour, IHidable
         _lantern = useBroken ? _brokenLantern : _normalLantern;
         _lantern.ResetHealth();
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Icicle"))
+        {
+            if (other.transform.position.y > transform.position.y)
+            {
+                _lantern?.TakeDamage(40);
+                other.gameObject.SetActive(false);
+            }
+        }
+
+        if (other.CompareTag("Tail"))
+        {
+            _lantern?.TakeDamage(25);
+            other.gameObject.SetActive(false);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Enemy"))
+        {
+            _lantern?.TakeDamage(25);
+            Vector2 knockbackDir = (transform.position - collision.transform.position).normalized;
+            m_rb.AddForce(knockbackDir * 5f, ForceMode2D.Impulse);
+        }
+    }
+
 }

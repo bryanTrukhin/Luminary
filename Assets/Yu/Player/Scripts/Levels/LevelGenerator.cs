@@ -34,6 +34,8 @@ public class LevelGenerator : MonoBehaviour
     public List<LevelStep> generationSequence;
 
     private Transform currentExitPoint;
+    public ProximityManager proxManager;
+
 
     void Start()
     {
@@ -92,21 +94,24 @@ public class LevelGenerator : MonoBehaviour
 
     void SpawnAndConnect(GameObject roomPrefab)
     {
-        // Instantiate
         GameObject newRoom = Instantiate(roomPrefab, Vector3.zero, Quaternion.identity, transform);
+        newRoom.AddComponent<PlatformClustering>();
 
-        // Find markers
         Transform markers = newRoom.transform.Find("Markers");
         if (markers == null) { Debug.LogError("Room missing Markers!"); return; }
 
         Transform entrance = markers.Find("Entrance");
         Transform exit = markers.Find("Exit");
-
-        // Align
         Vector3 displacement = currentExitPoint.position - entrance.position;
         newRoom.transform.position += displacement;
 
-        // Advance
         currentExitPoint = exit;
+        AntMoving[] antsInRoom = newRoom.GetComponentsInChildren<AntMoving>(true);
+
+        foreach (AntMoving ant in antsInRoom)
+        {
+            proxManager.RegisterAnt(ant.gameObject);
+        }
+
     }
 }

@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Scripts/CooldownUI.cs.meta
-guid: 2fddc22378a81434e9df59eab232c425
-========
-guid: d188d0da9a97249f78df73f0efdf8551
->>>>>>>> origin/BryanYYMergeV2:Assets/CameraScript.cs.meta
+guid: 2d78e01a9dfd48e4dbaf3db9d299b867
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

@@ -44,6 +44,7 @@ public class LanternController : MonoBehaviour, ILantern
     public CooldownUI flashUI;
     public CooldownUI dashUI;
     [SerializeField] private List<Light2D> bulbs = new();
+    [SerializeField] private SpriteRenderer playerSprite;
     [SerializeField] private Transform playerRoot;
     [SerializeField] private Vector3 frontOffset = new Vector3(0.55f, -0.20f, 0);
     [SerializeField] private float smoothTime = 0.08f;
@@ -142,8 +143,10 @@ public class LanternController : MonoBehaviour, ILantern
         // Visual Feedback
         if(!freezeFrame){
             freezeFrame = true;
-            StartCoroutine(FrameFreeze(2f));
+            StartCoroutine(FrameFreeze(.25f));
         }
+        if (playerSprite != null) StartCoroutine(FrameFreezeSprite(damageCooldown));
+
         Flicker(0.5f, 20f, 0.5f); 
         _damageTimer = damageCooldown;
 
@@ -166,6 +169,22 @@ public class LanternController : MonoBehaviour, ILantern
         yield return new WaitForSecondsRealtime(duration);
         Time.timeScale = timeScale;
         freezeFrame = false;
+    }
+
+    private IEnumerator FrameFreezeSprite(float duration)
+    {
+        float endTime = Time.time + duration;
+        Color damageColor = Color.red;
+        Color normalColor = Color.white;
+
+        while (Time.time < endTime)
+        {
+            playerSprite.color = damageColor;
+            yield return new WaitForSecondsRealtime(0.1f);
+            playerSprite.color = normalColor;
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+        playerSprite.color = normalColor; // Reset
     }
 
     public void ResetHealth()
@@ -307,7 +326,21 @@ public class LanternController : MonoBehaviour, ILantern
     {
         if (burnDamagePerTick <= 0f) return;
 
+        // Check where the lantern is and what the mask value is
+        Debug.Log($"Checking at {transform.position}. Radius: {burnRadius}. Mask Value: {burnableMask.value}");
+
         var hits = Physics2D.OverlapCircleAll(transform.position, burnRadius, burnableMask);
+
+        if (hits.Length == 0)
+        {
+            // This checks if ANY collider is there, ignoring the mask
+            var anyHits = Physics2D.OverlapCircleAll(transform.position, burnRadius);
+            if (anyHits.Length > 0)
+                Debug.Log($"Found {anyHits.Length} objects, but NONE were on the Burnable mask. Check your layers!");
+            else
+                Debug.Log("Nothing at all is inside the radius.");
+        }
+
         foreach (var h in hits)
         {
             var burnable = h.GetComponent<IBurnable>();

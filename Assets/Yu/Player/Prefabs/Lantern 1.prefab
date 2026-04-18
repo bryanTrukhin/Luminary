@@ -5860,6 +5860,7 @@ GameObject:
   - component: {fileID: 1583892505010176046}
   - component: {fileID: 4202706243534956580}
   - component: {fileID: 643734303255361971}
+  - component: {fileID: 315314057011602813}
   m_Layer: 0
   m_Name: Lantern 1
   m_TagString: lanternNormal
@@ -5875,7 +5876,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4440391992959482709}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1, y: 1, z: 0}
   m_LocalScale: {x: 0.4, y: 0.56, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5952,10 +5953,9 @@ MonoBehaviour:
   flashSound: {fileID: 8300000, guid: 0e65bad048f194a2491b4f77ee281a05, type: 3}
   dashSound: {fileID: 8300000, guid: 01fb0da8c81b443729a77fb56255dff5, type: 3}
   fireflyCapacity: 100
-  fireflyRegenRate: 90
+  fireflyRegenRate: 30
   parent: {fileID: 6656792306217490374}
   _currentFireflies: 50
-  currentFireFlyCountUI: {fileID: 0}
   damageCooldown: 1
   freezeFrame: 0
   dashCost: 5
@@ -5964,16 +5964,20 @@ MonoBehaviour:
   flashBonusIntensity: 5
   flashDuration: 0.5
   flashCooldown: 0.5
+  _flashCooldownTimer: 0
   burnableMask:
     serializedVersion: 2
     m_Bits: 384
   burnRadius: 1.5
   burnDamagePerTick: 1
   burnTickInterval: 0.1
+  currentFireFlyCountUI: {fileID: 0}
+  flashUI: {fileID: 0}
+  dashUI: {fileID: 0}
   bulbs: []
   playerRoot: {fileID: 0}
-  frontOffset: {x: 0.4, y: 0.5, z: 0}
-  smoothTime: 0.08
+  frontOffset: {x: 0.25, y: 0.1, z: 0}
+  smoothTime: 0.1
   topChainJoint: {fileID: 4743100781457968357}
   handPosRB: {fileID: 7642960596098610252}
   _animator: {fileID: 8800936590563157223}
@@ -5988,6 +5992,102 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 0e65bad048f194a2491b4f77ee281a05, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!82 &315314057011602813
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4440391992959482709}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 01fb0da8c81b443729a77fb56255dff5, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

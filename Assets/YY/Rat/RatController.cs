@@ -28,7 +28,14 @@ public class RatController : RatBase
 
     protected override void TryAttack()
     {
-        if (player == null || isAttacking) return;
+        if (player == null)
+        {
+            GameObject p = GameObject.FindGameObjectWithTag("Player");
+            if (p != null) player = p.transform;
+            else return; // Still not found
+        }
+            
+        if(isAttacking) return;
 
         switch (stage)
         {

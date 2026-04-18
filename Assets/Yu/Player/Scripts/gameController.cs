@@ -33,13 +33,17 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    _islanternBroken = !_islanternBroken;
+        //    TriggerLanternBreak(_islanternBroken);
+        //    string status = _islanternBroken ? "Broken" : "Normal";
+        //    Debug.Log($"[GameController] Lantern State: {status}");
+        //    writeMessage($"Lantern State: {status}");
+        //}
+        if (Input.GetKeyDown(KeyCode.O))
         {
-            _islanternBroken = !_islanternBroken;
-            TriggerLanternBreak(_islanternBroken);
-            string status = _islanternBroken ? "Broken" : "Normal";
-            Debug.Log($"[GameController] Lantern State: {status}");
-            writeMessage($"Lantern State: {status}");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 

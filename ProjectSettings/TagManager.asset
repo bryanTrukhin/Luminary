@@ -14,6 +14,10 @@ TagManager:
   - Enemy
   - lanternBroken
   - lanternNormal
+  - Icicle
+  - Firefly
+  - Platform
+  - Tail
   layers:
   - Default
   - TransparentFX

@@ -14,13 +14,13 @@ GameObject:
   - component: {fileID: 4293234413666847346}
   - component: {fileID: 5446172356623081510}
   - component: {fileID: 2348492163429044372}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: Frost Ant
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8301383272468994657
 Transform:
   m_ObjectHideFlags: 0
@@ -145,7 +145,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 900
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -184,10 +184,10 @@ MonoBehaviour:
   canFlip: 1
   platform:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 64
   enemy:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1024
   lastValidLedge: {x: 0, y: 0, z: 0}
   isTurning: 0
   iceSheet: {fileID: 1636877798883136396, guid: 687693b3905204d8d9120d43669b3278, type: 3}
@@ -199,7 +199,7 @@ MonoBehaviour:
   lastKnownIciclePos: {x: 0, y: 0}
   icicleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
 --- !u!114 &2348492163429044372
 MonoBehaviour:
   m_ObjectHideFlags: 0

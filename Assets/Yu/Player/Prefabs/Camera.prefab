@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2644038771920387393}
   - component: {fileID: 2644038771920387395}
   - component: {fileID: 2644038771920387516}
-  - component: {fileID: 3925678098900774934}
+  - component: {fileID: 3603046041898216056}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -74,7 +74,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 5943
+    m_Bits: 63479
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -109,9 +109,9 @@ MonoBehaviour:
   target: {fileID: 0}
   smoothSpeed: 0.125
   offset: {x: 0, y: 2.5, z: -10}
-  minCamerabounds: {x: 0.55, y: -10, z: -10}
-  maxCamerabounds: {x: 14, y: 10, z: 10}
---- !u!114 &3925678098900774934
+  minCamerabounds: {x: -90, y: -200, z: -10}
+  maxCamerabounds: {x: 1000, y: 200, z: 10}
+--- !u!114 &3603046041898216056
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

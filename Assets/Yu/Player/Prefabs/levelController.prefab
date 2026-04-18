@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9089991295133078537
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2439633965469364182}
+  - component: {fileID: 4195405147225912594}
+  m_Layer: 0
+  m_Name: levelController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2439633965469364182
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9089991295133078537}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4195405147225912594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9089991295133078537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6706c462e9465394e928da1929ec8236, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomPalettes:
+  - poolID: 1
+    rooms:
+    - {fileID: 4939072560925602611, guid: 781e06c71c4cafd43964e6d5708acdcc, type: 3}
+    - {fileID: 1024489251468986927, guid: 4a80e734c6a1fa649a4445e96857b1a8, type: 3}
+    - {fileID: 619933439264723553, guid: f08ec6f933e45e34198ad04dcc5646e8, type: 3}
+    - {fileID: 3791521877762561282, guid: 69723373f1928d44c9fd5a902d89bed5, type: 3}
+    - {fileID: 339558397799932526, guid: ff205fb7afe85654493a4bbb25268031, type: 3}
+  generationSequence:
+  - stepName: Gen
+    type: 0
+    repetitions: 4
+    specificRoom: {fileID: 4939072560925602611, guid: 8106af00c5fbb6748a3367ab29942806, type: 3}
+    poolIDToUse: 1

@@ -1,14 +1,17 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Tilemaps;
 
-public class AntMoving : EnemyController /*MonoBehaviour*/
+public class AntMoving : EnemyController
 {
+    [Header("Context Injection")]
+    private Tilemap myTilemap;
+    private PlatformClustering myClustering;
+    private NavGraphBuilderDemo globalBuilder; // need to change back to NavGraphBuilder when done testing
+
     [Header("General")]
     public int facingDir = 1;
-    //public Vector2 forwardDir;
-   // public Rigidbody2D rb;
-    //public float speed = 1f;
     public float gravStrength = 2f;
     public bool canFlip = true;
 
@@ -32,26 +35,51 @@ public class AntMoving : EnemyController /*MonoBehaviour*/
     protected override void Start()
     {
         base.Start();
-        //rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0;
         isTurning = false;
         canSpawnIceSheets = false;
+
+        myTilemap = GetComponentInParent<Tilemap>();
+        myClustering = GetComponentInParent<PlatformClustering>();
+        if (myClustering != null)
+        {
+            myTilemap = myClustering.tilemap;
+        }
+        globalBuilder = Object.FindFirstObjectByType<NavGraphBuilderDemo>(); // need to change back to NavGraphBuilder when done testing
+    }
+
+    void OnEnable()
+    {
+        // 1. Wake up the physics engine for this object
+        if (rb != null)
+        {
+            rb.WakeUp();
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation; // Reset constraints in case it was turning
+        }
+
+        // 2. Reset the turning flag so it doesn't get permanently stuck
+        isTurning = false;
     }
 
     protected override void HandleMovement()
     {
+        // Inject current context to global builder every frame it moves
+        if (globalBuilder != null)
+        {
+            globalBuilder.UpdateNavigation(this.transform, myTilemap, myClustering);
+        }
+
         if (isTurning) return;
 
         facingDir = (transform.localScale.x < 0) ? -1 : 1;
         Vector2 moveDir = transform.right * facingDir;
         forwardDir = moveDir;
 
-        //RaycastHit2D overhangCheck = Physics2D.Raycast(transform.position, -transform.up, transform.localScale.y * 2f, platform);
         BoxCollider2D col = GetComponent<BoxCollider2D>();
         float distanceToFeet = col.size.y * 0.5f;
         float rayLength = distanceToFeet + 0.2f;
         RaycastHit2D overhangCheck = Physics2D.Raycast(transform.position, -transform.up, rayLength, platform);
-        
+
         Debug.DrawRay(transform.position, -transform.up * transform.localScale.y * 2f, Color.yellow);
 
         if (overhangCheck.collider != null)
@@ -92,8 +120,6 @@ public class AntMoving : EnemyController /*MonoBehaviour*/
             Quaternion currentRot = Quaternion.Slerp(startRot, targetRot, percent);
             rb.MoveRotation(currentRot);
 
-            //This effectively updates your currentRot to account for the change from the startRot
-            //This way everything is not just based on startRot
             Quaternion relativeChange = currentRot * Quaternion.Inverse(startRot);
             rb.MovePosition(pivot + (relativeChange * startOffset));
             yield return null;
@@ -114,25 +140,7 @@ public class AntMoving : EnemyController /*MonoBehaviour*/
         if (wallHit.collider != null)
         {
             FlipX();
-            /*
-            float dot = Vector2.Dot(wallHit.normal, moveDir);
-            if (dot < 0f)
-            {
-                FlipX();
-            }
-            */
         }
-        /*
-        RaycastHit2D[] allEnemyHits = Physics2D.RaycastAll(transform.position, moveDir, rayDist, enemy);
-        foreach (RaycastHit2D hit in allEnemyHits)
-        {
-            if (hit.collider != null && hit.collider.gameObject != gameObject)
-            {
-                //FlipX();
-                break;
-            }
-        }
-        */
     }
 
     void FlipX()
@@ -144,26 +152,22 @@ public class AntMoving : EnemyController /*MonoBehaviour*/
 
     void CreateTrail()
     {
-        //Setting up spawn position
         Vector3 spawnLocation = transform.position;
         Collider2D col = GetComponent<Collider2D>();
 
         float feetOffset = col.bounds.extents.y;
-        float backOffset = col.bounds.extents.x; //0.5f
+        float backOffset = col.bounds.extents.x;
         spawnLocation -= transform.right * facingDir * backOffset;
         spawnLocation -= transform.up * feetOffset;
 
-        //Setting up constraints
         float currentZ = transform.eulerAngles.z;
         float distanceFromCorner = Vector2.Distance(transform.position, lastKnownCornerPos);
 
-        //ICE MANAGEMENT
         if (Mathf.Approximately(currentZ, 0f) && canSpawnIceSheets && distanceFromCorner >= 1f)
         {
             ObjectPoolManager.SpawnObject(iceSheet, spawnLocation, Quaternion.identity, ObjectPoolManager.PoolType.Gameobject);
         }
 
-        //ICICLE MANAGEMENT
         if (Mathf.Approximately(currentZ, 180f))
         {
             float distanceFromLast = (iciclePos.Count > 0)
@@ -200,7 +204,6 @@ public class AntMoving : EnemyController /*MonoBehaviour*/
 
     void OnDestroy()
     {
-        //Clearing the static array memory on death
         if (iciclePos != null)
         {
             iciclePos.Clear();
