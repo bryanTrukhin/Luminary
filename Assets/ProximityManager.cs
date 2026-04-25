@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,55 +7,53 @@ public class ProximityManager : MonoBehaviour
     public float activationRadius = 15f;
     public NavGraphBuilder navGraph;
 
-    private List<GameObject> allAnts = new List<GameObject>();
-    private GameObject currentlyActiveAnt;
+    private List<GameObject> allEnemies = new List<GameObject>();
+    private GameObject currentlyActiveEnemy;
 
-    public void RegisterAnt(GameObject ant)
+    public void RegisterEnemy(GameObject enemy)
     {
-        if (ant == null) return;
-        allAnts.Add(ant);
-        ant.SetActive(false);
+        if (enemy == null) return;
+        allEnemies.Add(enemy);
+        enemy.SetActive(false);
     }
 
     void Update()
     {
-        // 1. Clean up list (Robustness against destroyed ants)
-        allAnts.RemoveAll(ant => ant == null);
+        // 1. Clean up list
+        allEnemies.RemoveAll(e => e == null);
 
         if (player == null) return;
 
-        GameObject closestAnt = null;
+        GameObject closestEnemy = null;
         float minDistance = activationRadius;
 
-        // 2. Find the single closest ant within radius
-        foreach (GameObject ant in allAnts)
+        // 2. Find closest enemy within radius
+        foreach (GameObject enemy in allEnemies)
         {
-            float dist = Vector3.Distance(player.position, ant.transform.position);
+            float dist = Vector3.Distance(player.position, enemy.transform.position);
             if (dist < minDistance)
             {
                 minDistance = dist;
-                closestAnt = ant;
+                closestEnemy = enemy;
             }
         }
 
-        // 3. Robust state switching
-        if (closestAnt != currentlyActiveAnt)
+        // 3. State switching
+        if (closestEnemy != currentlyActiveEnemy)
         {
-            // Disable previous
-            if (currentlyActiveAnt != null)
-                currentlyActiveAnt.SetActive(false);
+            if (currentlyActiveEnemy != null)
+                currentlyActiveEnemy.SetActive(false);
 
-            // Enable new winner
-            currentlyActiveAnt = closestAnt;
+            currentlyActiveEnemy = closestEnemy;
 
-            if (currentlyActiveAnt != null)
+            if (currentlyActiveEnemy != null)
             {
-                currentlyActiveAnt.SetActive(true);
-                navGraph.enemy = currentlyActiveAnt.transform;
+                currentlyActiveEnemy.SetActive(true);
+                if (navGraph != null) navGraph.enemy = currentlyActiveEnemy.transform;
             }
             else
             {
-                navGraph.enemy = null; // Clear graph if none in range
+                if (navGraph != null) navGraph.enemy = null;
             }
         }
     }

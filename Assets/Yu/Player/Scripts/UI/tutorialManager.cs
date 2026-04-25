@@ -32,7 +32,7 @@ public class TutorialManager : MonoBehaviour
         {
             SetTaskStatus(2, true);
         }
-        if (Input.GetKeyDown(KeyCode.S)&& currentTaskNumber == 3) 
+        if (Input.GetKeyDown(KeyCode.LeftControl)&& currentTaskNumber == 3) 
         {
             SetTaskStatus(3, true);
         }
@@ -40,7 +40,7 @@ public class TutorialManager : MonoBehaviour
         {
             SetTaskStatus(4, true);
         }
-        if (Input.GetKeyDown(KeyCode.X)&& currentTaskNumber == 5) 
+        if (Input.GetKeyDown(KeyCode.LeftShift)&& currentTaskNumber == 5) 
         {
             SetTaskStatus(5, true);
         }

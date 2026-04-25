@@ -8,26 +8,16 @@ public class PlatformClustering : MonoBehaviour
     public Tilemap tilemap;
     public List<PlatformCluster> clusters;
 
-    void Awake()
+    public void Initialize(Tilemap mergedTilemap)
     {
-        tilemap = GetComponentInChildren<Tilemap>();
+        tilemap = mergedTilemap;
 
-        // 1. ALWAYS assign references first!
         if (tilemap == null)
         {
-            // Try to find the tilemap on this object or its children
-            tilemap = GetComponent<Tilemap>();
-            if (tilemap == null) tilemap = GetComponentInChildren<Tilemap>();
-        }
-
-        // 2. Double-check to prevent the crash if it's STILL null
-        if (tilemap == null)
-        {
-            Debug.LogError($"PlatformClustering on {gameObject.name} can't find a Tilemap!");
+            Debug.LogError($"PlatformClustering on {gameObject.name} received a null Tilemap!");
             return;
         }
 
-        // 3. Now it is safe to run the logic
         clusters = FindAllClusters(tilemap);
 
         foreach (var cluster in clusters)

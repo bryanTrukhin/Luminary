@@ -18,6 +18,8 @@ TagManager:
   - Firefly
   - Platform
   - Tail
+  - Fire
+  - Game Manager
   layers:
   - Default
   - TransparentFX

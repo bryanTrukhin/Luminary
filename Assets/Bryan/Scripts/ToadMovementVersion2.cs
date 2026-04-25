@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Tilemaps;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
-public class ToadMovementVersion2 : EnemyController /*MonoBehaviour*/
+public class ToadMovementVersion2 : EnemyController
 {
     [Header("General")]
     public bool canFlip;
@@ -23,41 +23,31 @@ public class ToadMovementVersion2 : EnemyController /*MonoBehaviour*/
 
     [Header("Attacking")]
     public ToadAttacking attackingScript;
-
-    // Gizmo variable to track the actual point we are aiming for
     private Vector3 debugLandingPos;
 
     protected override void Start()
     {
         base.Start();
         attackingScript = GetComponent<ToadAttacking>();
-        nav = GetComponent<NavGraphBuilder>();
-        if (nav != null && nav.tilemap != null)
-        {
-            tilemap = nav.tilemap;
-            Grid grid = tilemap.layoutGrid;
-            tileOffset = grid.cellSize.y / 2f;
-        }
+        StartCoroutine(WaitForGeneration());
+    }
 
-        canJump = false;
+    IEnumerator WaitForGeneration()
+    {
+        nav = FindFirstObjectByType<NavGraphBuilder>();
+        yield return new WaitUntil(() => nav != null && nav.tilemap != null && nav.target != null);
+
+        tilemap = nav.tilemap;
+        tileOffset = tilemap.layoutGrid.cellSize.y / 2f;
+
+        canJump = true;
         isJumping = false;
         canFlip = true;
     }
 
     protected override void FixedUpdate()
     {
-        if (nav != null && nav.debugTilePath != null)
-        {
-            if (path != nav.debugTilePath)
-            {
-                path = nav.debugTilePath;
-                pathIndex = 0;
-            }
-        }
-        if (path != null && pathIndex < path.Count - 1 && canJump && !isJumping)
-        {
-            StartCoroutine(JumpSequence());
-        }
+        if (nav == null || tilemap == null || nav.target == null) return;
 
         if (canFlip)
         {
@@ -68,6 +58,17 @@ public class ToadMovementVersion2 : EnemyController /*MonoBehaviour*/
                 float worldDirToPlayer = Mathf.Sign(nav.target.position.x - transform.position.x);
                 forwardDir = new Vector2(worldDirToPlayer, 0);
                 canFlip = false;
+            }
+        }
+
+        if (canJump && !isJumping)
+        {
+            path = nav.GetTilePath(transform.position, nav.target.position);
+            pathIndex = 0;
+
+            if (path != null && path.Count > 1)
+            {
+                StartCoroutine(JumpSequence());
             }
         }
     }

@@ -326,20 +326,10 @@ public class LanternController : MonoBehaviour, ILantern
     {
         if (burnDamagePerTick <= 0f) return;
 
-        // Check where the lantern is and what the mask value is
-        Debug.Log($"Checking at {transform.position}. Radius: {burnRadius}. Mask Value: {burnableMask.value}");
+        // Use the physical lantern position instead of the script's transform
+        Vector2 checkPos = handPosRB != null ? handPosRB.position : (Vector2)transform.position;
 
-        var hits = Physics2D.OverlapCircleAll(transform.position, burnRadius, burnableMask);
-
-        if (hits.Length == 0)
-        {
-            // This checks if ANY collider is there, ignoring the mask
-            var anyHits = Physics2D.OverlapCircleAll(transform.position, burnRadius);
-            if (anyHits.Length > 0)
-                Debug.Log($"Found {anyHits.Length} objects, but NONE were on the Burnable mask. Check your layers!");
-            else
-                Debug.Log("Nothing at all is inside the radius.");
-        }
+        var hits = Physics2D.OverlapCircleAll(checkPos, burnRadius, burnableMask);
 
         foreach (var h in hits)
         {

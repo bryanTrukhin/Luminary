@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 998207015028247629}
   - component: {fileID: 7827721661567779287}
   - component: {fileID: 1286343227527842187}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Vines
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 479462240764542342}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.85, y: 2.02, z: 0.06586675}
   m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0

@@ -603,16 +603,6 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: -13, y: 1, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
   - first: {x: 2, y: 1, z: 0}
     second:
       serializedVersion: 2
@@ -644,6 +634,16 @@ Tilemap:
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
   - first: {x: 17, y: 1, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 0
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -12, y: 3, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 0
@@ -1209,6 +1209,7 @@ Transform:
   - {fileID: 2549480429410713937}
   - {fileID: 3931030879705344829}
   - {fileID: 2137594468070312094}
+  - {fileID: 9121430775738159973}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &5571319376866998772
@@ -2755,4 +2756,67 @@ PrefabInstance:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9143494815228736532, guid: b022dfde54bb09144ab3cc8bcc401559, type: 3}
   m_PrefabInstance: {fileID: 1125845246403440576}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4700679122078799036
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5190943461453849073}
+    m_Modifications:
+    - target: {fileID: 4587477207993698265, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4587477207993698265, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4587477207993698265, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4587477207993698265, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4587477207993698265, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4587477207993698265, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4587477207993698265, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4587477207993698265, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4587477207993698265, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4587477207993698265, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7923629641063324703, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+      propertyPath: m_Name
+      value: Leaping Toad
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6675592198175450492, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+--- !u!4 &9121430775738159973 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4587477207993698265, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
+  m_PrefabInstance: {fileID: 4700679122078799036}
   m_PrefabAsset: {fileID: 0}
