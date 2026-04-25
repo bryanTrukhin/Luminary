@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -76,7 +76,7 @@ public class ToadAttacking : MonoBehaviour
             RaycastHit2D obstacleTouched = Physics2D.Raycast(transform.position, direction.normalized, detectionRadius, obstacleLayer);
             if (!obstacleTouched)
             {
-                localTargetPos = transform.InverseTransformPoint(target.transform.position);
+                localTargetPos = transform.InverseTransformPoint(Vector3Int.RoundToInt(target.transform.position));
                 notBehindObstacle = true;
                 canTongueGrab = true;
             }
@@ -113,7 +113,7 @@ public class ToadAttacking : MonoBehaviour
         tongueJoint.autoConfigureConnectedAnchor = false;
         if (lerpTimer == 0f && !isRetracting)
         {
-            lockedTargetPos = target.transform.position;
+            lockedTargetPos = Vector2Int.RoundToInt(target.transform.position);
         }
         lerpTimer += Time.deltaTime * reachSpeed;
 
