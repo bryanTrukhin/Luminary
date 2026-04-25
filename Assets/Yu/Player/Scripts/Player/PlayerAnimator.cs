@@ -17,7 +17,7 @@ public class PlayerAnimator : MonoBehaviour
 	
 
 	private void Start()
-	{
+	{	
 		m_anim = GetComponentInChildren<Animator>();
 		m_controller = GetComponent<PlayerController>();
 		m_rb = GetComponent<Rigidbody2D>();

@@ -457,7 +457,7 @@ GameObject:
   - component: {fileID: 614134518}
   - component: {fileID: 614134517}
   m_Layer: 0
-  m_Name: Global Volume
+  m_Name: Shaders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -622,6 +622,26 @@ PrefabInstance:
     - target: {fileID: 2644038771920387516, guid: 87bf8c1bb82c18141b66b97e913ccc1e, type: 3}
       propertyPath: offset.y
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2644038771920387516, guid: 87bf8c1bb82c18141b66b97e913ccc1e, type: 3}
+      propertyPath: smoothSpeed
+      value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 2644038771920387516, guid: 87bf8c1bb82c18141b66b97e913ccc1e, type: 3}
+      propertyPath: originalPos.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2644038771920387516, guid: 87bf8c1bb82c18141b66b97e913ccc1e, type: 3}
+      propertyPath: originalPos.z
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2644038771920387516, guid: 87bf8c1bb82c18141b66b97e913ccc1e, type: 3}
+      propertyPath: verticalOffset
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2644038771920387516, guid: 87bf8c1bb82c18141b66b97e913ccc1e, type: 3}
+      propertyPath: horizontalOffset
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2644038771920387516, guid: 87bf8c1bb82c18141b66b97e913ccc1e, type: 3}
       propertyPath: maxCamerabounds.z
@@ -941,6 +961,10 @@ PrefabInstance:
     - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
       propertyPath: burnableMask.m_Bits
       value: 384
+      objectReference: {fileID: 0}
+    - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
+      propertyPath: flashBonusIntensity
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
       propertyPath: currentFireFlyCountUI
