@@ -12,6 +12,7 @@ public class CooldownUI : MonoBehaviour
 
     public float cooldown;
     public float dashCooldown;
+    public float flashAreaCooldown;
     public int skillNum;
     float dashTimer;
 
@@ -33,6 +34,10 @@ public class CooldownUI : MonoBehaviour
         {
             dashCooldown = 0.5f;
         }
+        if (skillNum == 2)
+        {
+            flashAreaCooldown = lantern._flashAreaCooldown;
+        }
     }
 
     void Update()
@@ -44,7 +49,7 @@ public class CooldownUI : MonoBehaviour
             textCooldown.text = timer > 0.1f ? timer.ToString("F1") : "";
             imageCooldown.fillAmount = timer / cooldown;
         }
-        else
+        else if(skillNum == 2)
         {
             if (dashTimer > 0)
                 dashTimer -= Time.deltaTime;
@@ -53,6 +58,12 @@ public class CooldownUI : MonoBehaviour
 
             textCooldown.text = timer > 0.1f ? timer.ToString("F1") : "";
             imageCooldown.fillAmount = timer / dashCooldown;
+        }
+        else{
+            float timer = lantern._flashAreaCooldownTimer;
+
+            textCooldown.text = timer > 0.1f ? timer.ToString("F1") : "";
+            imageCooldown.fillAmount = timer / flashAreaCooldown;
         }
     }
 

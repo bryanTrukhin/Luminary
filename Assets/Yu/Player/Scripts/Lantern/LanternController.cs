@@ -31,7 +31,11 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private float flashBonusIntensity;
     [SerializeField] private float flashDuration;
     [SerializeField] public float flashCooldown;
+    [SerializeField] public float FlashAreaCost;
+    [SerializeField] public float _flashAreaCooldown;
+    
     public float _flashCooldownTimer;
+    public float _flashAreaCooldownTimer;
 
     [Header("Burning Mechanics")]
     [SerializeField] private LayerMask burnableMask;
@@ -43,6 +47,7 @@ public class LanternController : MonoBehaviour, ILantern
     public TMP_Text currentFireFlyCountUI;
     public CooldownUI flashUI;
     public CooldownUI dashUI;
+    public CooldownUI flashAreaUI;
     [SerializeField] private List<Light2D> bulbs = new();
     [SerializeField] private SpriteRenderer playerSprite;
     [SerializeField] private Transform playerRoot;
@@ -110,6 +115,7 @@ public class LanternController : MonoBehaviour, ILantern
         currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/" + fireflyCapacity;
 
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;
+        if (_flashAreaCooldownTimer > 0) _flashAreaCooldownTimer -= Time.deltaTime;
         if (_damageTimer > 0f) _damageTimer -= Time.deltaTime;
 
         if (_currentFireflies < fireflyCapacity && fireflyRegenRate > 0f)
@@ -122,12 +128,16 @@ public class LanternController : MonoBehaviour, ILantern
         {
             TriggerFlash();
         }
+        if (InputSystem.FlashArea())
+        {
+            TriggerFlashArea();
+        }
     }
     public bool TryConsumeEnergy(float amount)
     {
         if (_currentFireflies >= amount)
         {
-            _currentFireflies -= amount;
+
             return true;
         }
         
@@ -201,6 +211,7 @@ public class LanternController : MonoBehaviour, ILantern
         bool result = TryConsumeEnergy(flashLanternCost);
         if (_flashCooldownTimer <= 0f && result)
         {
+             _currentFireflies -= flashLanternCost;
             Flash(flashBonusIntensity, flashDuration);
             if (flashSound)
             {
@@ -217,6 +228,7 @@ public class LanternController : MonoBehaviour, ILantern
         bool result = TryConsumeEnergy(dashCost);
         if (result)
         {
+            _currentFireflies -= dashCost;
             if (dashSound)
             {
                 audioSource.clip = dashSound;
@@ -229,6 +241,23 @@ public class LanternController : MonoBehaviour, ILantern
             }
         }
         return result;
+    }
+
+    public void TriggerFlashArea()  
+    {
+        // Check Cooldown AND Firefly count
+        bool result = TryConsumeEnergy(FlashAreaCost);
+        if (_flashAreaCooldownTimer <= 0f && result)
+        {
+            _currentFireflies -= FlashAreaCost;
+            Flash(flashBonusIntensity-0.2f, flashDuration+4f);
+            if (flashSound)
+            {
+                audioSource.clip = flashSound;
+                audioSource.Play();
+            }
+            _flashAreaCooldownTimer = _flashAreaCooldown;
+        }
     }
 
     public bool TryUseDoubleJump()
@@ -282,6 +311,25 @@ public class LanternController : MonoBehaviour, ILantern
                 nextTickTime += burnTickInterval;
             }
 
+            float t = 1f - ((endTime - Time.time) / dur);
+            float factor = Mathf.Lerp(bonusI, 0f, t);
+
+            for (int i = 0; i < bulbs.Count; i++)
+                bulbs[i].intensity = _originals[i].intensity + factor;
+
+            yield return null;
+        }
+        if(_animator) _animator.SetTrigger("isFlashing");
+        RestoreOriginals();
+    }
+
+    IEnumerator AreaFlashRoutine(float bonusI, float dur)
+    {
+        float endTime = Time.time + dur;
+
+        if(_animator) _animator.SetTrigger("isFlashing");
+        while (Time.time < endTime)
+        {
             float t = 1f - ((endTime - Time.time) / dur);
             float factor = Mathf.Lerp(bonusI, 0f, t);
 

@@ -10,6 +10,7 @@ public class InputSystem : MonoBehaviour
 	static readonly string CrouchInput = "Crouch";
 	static readonly string SlideInput = "Slide";
 	static readonly string InteractInput = "Interact";
+	static readonly int FlashAreaInput = 1;
 	static readonly int FlashLanternInput = 0;
 	
 	static readonly string HorizontalLookInput = "HorizontalLook";
@@ -58,6 +59,10 @@ public class InputSystem : MonoBehaviour
 	public static bool FlashLantern()
 	{
 		return Input.GetMouseButtonDown(FlashLanternInput); // left mouse
+	}
+	public static bool FlashArea()
+	{
+		return Input.GetMouseButtonDown(FlashAreaInput); // right mouse
 	}
 	public static bool ToggleBrokenState()
 	{
