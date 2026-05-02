@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6587099835367361959}
   - component: {fileID: 3232549366129038476}
   - component: {fileID: 2452845514493171613}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: FireflyBomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Intensity: 5
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 000000003bca2ebe35f783269f1c4fd167f69936
+  m_ApplyToSortingLayers: 67f6993635f783263bca2ebe
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
