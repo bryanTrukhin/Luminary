@@ -7,6 +7,12 @@ using TMPro;
 [DisallowMultipleComponent]
 public class LanternController : MonoBehaviour, ILantern
 {
+    [Header("Health")] 
+    [SerializeField] private float maxHealth;
+    [SerializeField] private float healHealthCost;
+    [SerializeField] private float healHealthCooldown;
+    private float _currentHealth;
+    public float _healHealthCooldownTimer;
     
     [Header("Firefly")]
     [SerializeField] private float fireflyCapacity;
@@ -47,6 +53,8 @@ public class LanternController : MonoBehaviour, ILantern
 
     [Header("Visuals")]
     public TMP_Text currentFireFlyCountUI;
+
+    public TMP_Text currentHealthUI;
     public CooldownUI flashUI;
     public CooldownUI dashUI;
     public CooldownUI flashAreaUI;
@@ -75,6 +83,7 @@ public class LanternController : MonoBehaviour, ILantern
     private Vector3 _swingVelocity;
     private Coroutine _flickerCo;
     private bool _wasFacingRight = true;
+    
     
     // make ability to spend some fireflies to enable regeneration
     // Likely need to make this inumerator
@@ -122,6 +131,7 @@ public class LanternController : MonoBehaviour, ILantern
     void Update()
     {
         currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/" + fireflyCapacity;
+        currentHealthUI.text = _currentHealth.ToString("0.0") + "/" + maxHealth;
 
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;
         if (bombCdTimer > 0) bombCdTimer -= Time.deltaTime;
@@ -141,6 +151,11 @@ public class LanternController : MonoBehaviour, ILantern
         {
             TriggerFireflyBomb();
         }
+
+        if (InputSystem.Heal())
+        {
+            TriggerHealHealth();
+        }
     }
     public bool TryConsumeEnergy(float amount)
     {
@@ -157,7 +172,9 @@ public class LanternController : MonoBehaviour, ILantern
         //Check for I-Frames or God Mode
         if (_damageTimer > 0 || GameController.I.State == PlayState.Dead) return;
 
-        _currentFireflies -= amount;
+        _currentFireflies -= Mathf.Min(_currentFireflies, amount);
+        _currentHealth--;
+        
         // Visual Feedback
         if(!freezeFrame){
             freezeFrame = true;
@@ -169,8 +186,9 @@ public class LanternController : MonoBehaviour, ILantern
         _damageTimer = damageCooldown;
 
         // Check Death
-        if (_currentFireflies <= 0)
+        if (_currentHealth <= 0)
         {
+            _currentHealth = 0;
             _currentFireflies = 0;
             PlayerController pc = playerRoot.GetComponent<PlayerController>();
             GameController.I.KillPlayer(pc);
@@ -207,7 +225,8 @@ public class LanternController : MonoBehaviour, ILantern
 
     public void ResetHealth()
     {
-        _currentFireflies = fireflyCapacity;
+        _currentFireflies = fireflyStarting;
+        _currentHealth = maxHealth;
         _damageTimer = 0;
     }
 
@@ -227,6 +246,18 @@ public class LanternController : MonoBehaviour, ILantern
                 audioSource.Play();
             }
             _flashCooldownTimer = flashCooldown;
+        }
+    }
+
+    public void TriggerHealHealth()
+    {
+        bool result = TryConsumeEnergy(healHealthCost);
+        if (_healHealthCooldownTimer <= 0f && result)
+        {
+            _currentFireflies -= healHealthCost;
+            // add heal sound here
+            // add effects here
+            _healHealthCooldownTimer = healHealthCooldown;
         }
     }
 
