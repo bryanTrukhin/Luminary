@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 5839413919596127368}
   - component: {fileID: 5073337965157754311}
   - component: {fileID: 8722906203713096884}
-  - component: {fileID: 8637816698960160420}
   - component: {fileID: 6812223747525029230}
+  - component: {fileID: 5863755392992595173}
   m_Layer: 0
   m_Name: Tongue Toad
   m_TagString: Enemy
@@ -98,7 +98,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2049238401371619064}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -123,7 +123,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0015149117, y: 0.006340027}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0.4666667, y: 0, z: 0.6, w: 1.2666668}
     pivot: {x: 0.46875, y: 0.203125}
@@ -134,7 +134,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.0716639, y: 0.8943329}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!50 &5839413919596127368
 Rigidbody2D:
@@ -161,7 +161,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &5073337965157754311
 MonoBehaviour:
@@ -185,12 +185,12 @@ MonoBehaviour:
   canFlip: 0
   nav: {fileID: 0}
   pathIndex: 0
-  jumpHeightConstant: 0
+  jumpHeightConstant: 1
   tilemap: {fileID: 0}
   platformLayerMask:
     serializedVersion: 2
-    m_Bits: 0
-  tileOffset: 0
+    m_Bits: 64
+  tileOffset: 1
   canJump: 0
   isJumping: 0
   attackingScript: {fileID: 0}
@@ -229,24 +229,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -0.25}
   serializedVersion: 2
   m_Radius: 0.4
---- !u!114 &8637816698960160420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2049238401371619064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba9f6f88248a97145a47ae117f369605, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
-  clustering: {fileID: 0}
-  tilemap: {fileID: 0}
-  nodes: []
-  enemy: {fileID: 0}
-  target: {fileID: 0}
 --- !u!114 &6812223747525029230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,28 +242,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectionRadius: 2
-  movementScript: {fileID: 0}
+  movementScript: {fileID: 5073337965157754311}
   playerLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 1024
   fireflyLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 65536
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 64
   target: {fileID: 0}
   localTargetPos: {x: 0, y: 0}
   lockedTargetPos: {x: 0, y: 0}
   foundTarget: 0
   notBehindObstacle: 0
   tongue: {fileID: 6045085542050507163}
-  tongueJoint: {fileID: 0}
-  reachSpeed: 1
+  tongueJoint: {fileID: 3221596256935665499}
+  reachSpeed: 2
   tongueDuration: 0
   canTongueGrab: 0
   lightReleaseEffect: {fileID: 4177714251848944262, guid: 2ba72aecd94de462092be5764aeccd60, type: 3}
   canExplode: 0
+--- !u!70 &5863755392992595173
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049238401371619064}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 1}
+  m_Direction: 0
 --- !u!1 &6045085542050507163
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,7 +380,7 @@ DistanceJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 9.313151
+  m_Distance: 17.253551
   m_MaxDistanceOnly: 0
 --- !u!114 &3225895055203910561
 MonoBehaviour:

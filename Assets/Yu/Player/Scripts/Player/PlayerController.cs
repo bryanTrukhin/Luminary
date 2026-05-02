@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour, IHidable
     [SerializeField] private float groundGrav = 9f;
     [SerializeField] private float airGrav = 2.5f;
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private float groundCheckRadius = 0.2f;
+    [SerializeField] private float groundCheckRadius = 0.1f;
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private LayerMask whatIsSlow;
     [SerializeField] private int extraJumpCount = 1;
@@ -152,6 +152,7 @@ public class PlayerController : MonoBehaviour, IHidable
         // 1. Environmental Checks
         _prevGrounded = isGrounded;
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+        // isGrounded = CheckGroundWithRaycast(); 
         isSlowed = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsSlow);
 
         var pos = (Vector2)transform.position;
@@ -361,8 +362,9 @@ public class PlayerController : MonoBehaviour, IHidable
         }
 
         if (!isSliding)
-        {
-            bool wantsToCrouch = InputSystem.CrouchHeld();
+        { //CROUCH DISABLED
+            bool wantsToCrouch = false;
+                //InputSystem.CrouchHeld();
 
             if (!wantsToCrouch && HeadClear())
             {
@@ -441,11 +443,13 @@ public class PlayerController : MonoBehaviour, IHidable
         }
         else
         {
+            // isGrounded = false;
             m_groundNormal = Vector2.up;
             m_slopeAngle = 0f;
             m_onSlope = false;
         }
     }
+    
 
     bool HeadClear()
     {

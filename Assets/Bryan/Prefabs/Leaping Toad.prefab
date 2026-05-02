@@ -254,8 +254,8 @@ GameObject:
   - component: {fileID: 2565719420430177904}
   - component: {fileID: 1401441995174166909}
   - component: {fileID: 4533127236952394447}
-  - component: {fileID: 6675592198175450492}
   - component: {fileID: 4338509867529104007}
+  - component: {fileID: 5673455536173890722}
   m_Layer: 0
   m_Name: Leaping Toad
   m_TagString: Enemy
@@ -338,7 +338,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7923629641063324703}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -417,7 +417,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   damage: 0
-  speed: 0
+  speed: 10
   knockbackStrength: 5
   rb: {fileID: 0}
   forwardDir: {x: 0, y: 0}
@@ -430,7 +430,7 @@ MonoBehaviour:
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  tileOffset: 0
+  tileOffset: 1
   canJump: 0
   isJumping: 0
   attackingScript: {fileID: 0}
@@ -469,7 +469,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -0.25}
   serializedVersion: 2
   m_Radius: 0.4
---- !u!114 &6675592198175450492
+--- !u!114 &4338509867529104007
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -478,38 +478,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 7923629641063324703}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba9f6f88248a97145a47ae117f369605, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
-  clustering: {fileID: 0}
-  tilemap: {fileID: 0}
-  nodes: []
-  enemy: {fileID: 0}
-  target: {fileID: 0}
---- !u!114 &4338509867529104007
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7923629641063324703}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6200c78b3a4c24676904acc70da96fd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   detectionRadius: 2
-  movementScript: {fileID: 0}
+  movementScript: {fileID: 1401441995174166909}
   playerLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 1024
   fireflyLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 65536
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 64
   target: {fileID: 0}
   localTargetPos: {x: 0, y: 0}
   lockedTargetPos: {x: 0, y: 0}
@@ -522,3 +504,38 @@ MonoBehaviour:
   canTongueGrab: 0
   lightReleaseEffect: {fileID: 4177714251848944262, guid: 2ba72aecd94de462092be5764aeccd60, type: 3}
   canExplode: 0
+--- !u!70 &5673455536173890722
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7923629641063324703}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 1}
+  m_Direction: 0
