@@ -31,11 +31,10 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private float flashBonusIntensity;
     [SerializeField] private float flashDuration;
     [SerializeField] public float flashCooldown;
-    [SerializeField] public float FlashAreaCost;
-    [SerializeField] public float _flashAreaCooldown;
+
     
     public float _flashCooldownTimer;
-    public float _flashAreaCooldownTimer;
+
 
     [Header("Burning Mechanics")]
     [SerializeField] private LayerMask burnableMask;
@@ -69,7 +68,11 @@ public class LanternController : MonoBehaviour, ILantern
     private Coroutine _flickerCo;
     private bool _wasFacingRight = true;
 
-
+    [Header("Firefly Bomb")]
+    [SerializeField] private GameObject fireflyBomb;
+    [SerializeField] private float projectileCost = 10f;
+    [SerializeField] private float projectileCooldown = 3f;
+    public float cdTimer;
     void Start()
     {
         ResetHealth();
@@ -115,7 +118,7 @@ public class LanternController : MonoBehaviour, ILantern
         currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/" + fireflyCapacity;
 
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;
-        if (_flashAreaCooldownTimer > 0) _flashAreaCooldownTimer -= Time.deltaTime;
+        if (cdTimer > 0) cdTimer -= Time.deltaTime;
         if (_damageTimer > 0f) _damageTimer -= Time.deltaTime;
 
         if (_currentFireflies < fireflyCapacity && fireflyRegenRate > 0f)
@@ -130,7 +133,7 @@ public class LanternController : MonoBehaviour, ILantern
         }
         if (InputSystem.FlashArea())
         {
-            TriggerFlashArea();
+            TriggerFireflyBomb();
         }
     }
     public bool TryConsumeEnergy(float amount)
@@ -243,22 +246,7 @@ public class LanternController : MonoBehaviour, ILantern
         return result;
     }
 
-    public void TriggerFlashArea()  
-    {
-        // Check Cooldown AND Firefly count
-        bool result = TryConsumeEnergy(FlashAreaCost);
-        if (_flashAreaCooldownTimer <= 0f && result)
-        {
-            _currentFireflies -= FlashAreaCost;
-            Flash(flashBonusIntensity-0.2f, flashDuration+4f);
-            if (flashSound)
-            {
-                audioSource.clip = flashSound;
-                audioSource.Play();
-            }
-            _flashAreaCooldownTimer = _flashAreaCooldown;
-        }
-    }
+
 
     public bool TryUseDoubleJump()
     {
@@ -385,4 +373,17 @@ public class LanternController : MonoBehaviour, ILantern
             if (burnable != null) burnable.ApplyHeat(burnDamagePerTick);
         }
     }
+public void TriggerFireflyBomb()
+{
+    if (cdTimer > 0f || !TryConsumeEnergy(projectileCost)) return;
+
+    Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    mouseWorld.z = 0f;
+
+    GameObject proj = Instantiate(fireflyBomb, handPosRB.position, Quaternion.identity);
+    proj.GetComponent<ProjectileScript>().Init(mouseWorld);
+
+    _currentFireflies -= projectileCost;
+    cdTimer = projectileCooldown;
+}
 }

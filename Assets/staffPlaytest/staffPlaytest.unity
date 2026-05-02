@@ -529,7 +529,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8696945606797242859, guid: 9a8c404ba6a5b4b8195a185ccc0d40cc, type: 3}
       propertyPath: flashAreaCooldown
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8696945606797242859, guid: 9a8c404ba6a5b4b8195a185ccc0d40cc, type: 3}
       propertyPath: lanternController
@@ -563,7 +563,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1340094103138693242, guid: 9a8c404ba6a5b4b8195a185ccc0d40cc, type: 3}
-      insertIndex: -1
+      insertIndex: 0
       addedObject: {fileID: 1793941163}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a8c404ba6a5b4b8195a185ccc0d40cc, type: 3}
@@ -1049,6 +1049,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 422638170}
     - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
+      propertyPath: cdTimer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
       propertyPath: flashUI
       value: 
       objectReference: {fileID: 1259969332}
@@ -1060,6 +1064,14 @@ PrefabInstance:
       propertyPath: playerRoot
       value: 
       objectReference: {fileID: 1756325369}
+    - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
+      propertyPath: fireflyBomb
+      value: 
+      objectReference: {fileID: 8978944820731587455, guid: 9cec2875dd3910a4fada10a8c913f71e, type: 3}
+    - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
+      propertyPath: flashAreaUI
+      value: 
+      objectReference: {fileID: 1616646846}
     - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
       propertyPath: playerSprite
       value: 
@@ -1091,6 +1103,10 @@ PrefabInstance:
     - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
       propertyPath: _flashAreaCooldown
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
+      propertyPath: projectileCooldown
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
       propertyPath: burnableMask.m_Bits
@@ -1617,6 +1633,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c03e784d6e23efa4ba54c1f1fd565195, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1616646846 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8696945606797242859, guid: 9a8c404ba6a5b4b8195a185ccc0d40cc, type: 3}
+  m_PrefabInstance: {fileID: 596615022}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf19316f04239db4b9315e9986f04612, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1756325369 stripped

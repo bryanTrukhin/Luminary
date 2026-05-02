@@ -56,7 +56,7 @@ public class BrokenLanternController : MonoBehaviour, ILantern
     { 
         // Intentionally blank. Lantern is broken.
     }
-    public void TriggerFlashArea() 
+    public void TriggerFireflyBomb() 
     { 
         // Intentionally blank. Lantern is broken.
     }
