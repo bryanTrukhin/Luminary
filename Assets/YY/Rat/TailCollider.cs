@@ -11,7 +11,7 @@ public class TailCollider : MonoBehaviour
         if (((1 << other.gameObject.layer) & LayerMask.GetMask("Player")) != 0)
         {
             Debug.Log("TAIL HIT PLAYER!");
-            // other.GetComponent<Player>().TakeDamage(damage);
+            //other.GetComponent<Player>().TakeDamage(damage);
         }
     }
 }
