@@ -18,6 +18,7 @@ public class ToadAttacking : MonoBehaviour
     public Vector2 lockedTargetPos;
     public bool foundTarget;
     public bool notBehindObstacle; //this variable exists soley for Gizmo visualization, NOT IMPORTANT
+    private Vector2 tongueStartPos;
 
     [Header("Tongue Handling")]
     [SerializeField] public GameObject tongue;
@@ -39,7 +40,17 @@ public class ToadAttacking : MonoBehaviour
         tongueJoint = tongue.GetComponent<DistanceJoint2D>();
         tongueJoint.connectedAnchor = transform.position;
         tongueJoint.enabled = false;
+
+        tongue.transform.SetParent(null);
         tongue.SetActive(false);
+
+        Collider2D toadCollider = GetComponent<Collider2D>();
+        Collider2D tongueCollider = tongue.GetComponent<Collider2D>();
+
+        if (toadCollider != null && tongueCollider != null)
+        {
+            Physics2D.IgnoreCollision(toadCollider, tongueCollider, true);
+        }
 
         canExplode = false;
         foundTarget = false;
@@ -67,6 +78,7 @@ public class ToadAttacking : MonoBehaviour
             target = null;
             foundTarget = false;
             notBehindObstacle = false;
+
         }
 
         //Determining whether theres a obstacle between the toad and the target
@@ -83,6 +95,7 @@ public class ToadAttacking : MonoBehaviour
             else
             {
                 notBehindObstacle = false;
+                canTongueGrab = false;
             }
         }
 
@@ -113,6 +126,11 @@ public class ToadAttacking : MonoBehaviour
         tongueJoint.autoConfigureConnectedAnchor = false;
         if (lerpTimer == 0f && !isRetracting)
         {
+            if (target == null)
+            {
+                ResetTongue();
+                return;
+            }
             lockedTargetPos = Vector2Int.RoundToInt(target.transform.position);
         }
         lerpTimer += Time.deltaTime * reachSpeed;

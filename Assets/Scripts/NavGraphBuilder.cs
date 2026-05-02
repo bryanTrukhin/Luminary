@@ -21,7 +21,6 @@ public class NavGraphBuilder : MonoBehaviour
         clustering = clusteringRef;
         tilemap = clustering.tilemap;
 
-        // Note: Assigning enemy this way assumes only one enemy exists or this script handles global pathing.
         GameObject enemyObj = GameObject.FindWithTag("Enemy"); // Ensure your enemy has this tag
         if (enemyObj != null) enemy = enemyObj.transform;
 
