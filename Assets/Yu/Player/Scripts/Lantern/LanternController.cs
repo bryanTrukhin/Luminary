@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using TMPro;
+using UnityEngine.Serialization;
 
 [DisallowMultipleComponent]
 public class LanternController : MonoBehaviour, ILantern
@@ -11,20 +12,16 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private float maxHealth;
     [SerializeField] private float healHealthCost;
     [SerializeField] private float healHealthCooldown;
-    private float _currentHealth;
-    public float _healHealthCooldownTimer;
     
     [Header("Firefly")]
     [SerializeField] private float fireflyCapacity;
     [SerializeField] private float fireflyStarting;
     [SerializeField] private float fireflyRegenRate;
     [SerializeField] private Transform parent;
-    public float _currentFireflies;
-
+    
     [Header("Damage Settings")]
     [SerializeField] private float damageCooldown = 1.0f; // I-Frames
     [SerializeField] private bool freezeFrame;
-    private float _damageTimer;
 
     [Header("Movement Abilities")]
     [SerializeField] private float dashCost;
@@ -40,10 +37,6 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private GameObject fireflyBomb;
     [SerializeField] private float projectileCost = 10f;
     [SerializeField] private float projectileCooldown = 3f;
-    public float bombCdTimer;
-
-    
-    public float _flashCooldownTimer;
     
     [Header("Vine Burning Mechanics")]
     [SerializeField] private LayerMask burnableMask;
@@ -75,7 +68,14 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip flashSound;
     [SerializeField] private AudioClip dashSound;
-
+    
+    [Header("Internal")]
+    public float _currentFireflies;
+    private float _currentHealth;
+    public float _healHealthCooldownTimer;
+    public float _flashCooldownTimer;
+    private float _damageTimer;
+    [FormerlySerializedAs("bombCdTimer")] public float _bombCdTimer;
 
     // Internal State
     struct BulbState { public float intensity; public float radius; }
@@ -132,17 +132,21 @@ public class LanternController : MonoBehaviour, ILantern
     {
         currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/" + fireflyCapacity;
         currentHealthUI.text = _currentHealth.ToString("0.0") + "/" + maxHealth;
-
+        
+        // Run cooldowns
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;
-        if (bombCdTimer > 0) bombCdTimer -= Time.deltaTime;
+        if (_healHealthCooldownTimer > 0) _healHealthCooldownTimer -= Time.deltaTime;
+        if (_bombCdTimer > 0) _bombCdTimer -= Time.deltaTime;
         if (_damageTimer > 0f) _damageTimer -= Time.deltaTime;
 
+        //Firefly passive regeneration
         if (_currentFireflies < fireflyCapacity && fireflyRegenRate > 0f)
         {
             _currentFireflies += fireflyRegenRate * Time.deltaTime;
             _currentFireflies = Mathf.Min(_currentFireflies, fireflyCapacity);
         }
         
+        // Ability input systems
         if (InputSystem.FlashLantern())
         {
             TriggerFlash();
@@ -180,7 +184,8 @@ public class LanternController : MonoBehaviour, ILantern
             freezeFrame = true;
             StartCoroutine(FrameFreeze(.25f));
         }
-        if (playerSprite != null) StartCoroutine(FrameFreezeSprite(damageCooldown));
+        Color damageColor = Color.red;
+        if (playerSprite != null) StartCoroutine(FrameFreezeSprite(damageCooldown, damageColor));
 
         Flicker(0.5f, 20f, 0.5f); 
         _damageTimer = damageCooldown;
@@ -207,10 +212,10 @@ public class LanternController : MonoBehaviour, ILantern
         freezeFrame = false;
     }
 
-    private IEnumerator FrameFreezeSprite(float duration)
+    private IEnumerator FrameFreezeSprite(float duration, Color color)
     {
         float endTime = Time.time + duration;
-        Color damageColor = Color.red;
+        Color damageColor = color;
         Color normalColor = Color.white;
 
         while (Time.time < endTime)
@@ -252,12 +257,15 @@ public class LanternController : MonoBehaviour, ILantern
     public void TriggerHealHealth()
     {
         bool result = TryConsumeEnergy(healHealthCost);
-        if (_healHealthCooldownTimer <= 0f && result)
+        if (_healHealthCooldownTimer <= 0f && result && _currentHealth < maxHealth)
         {
             _currentFireflies -= healHealthCost;
+            _currentHealth = Mathf.Min(_currentHealth + 1, maxHealth);
             // add heal sound here
             // add effects here
             _healHealthCooldownTimer = healHealthCooldown;
+            Color healColor = Color.green;
+            if (playerSprite != null) StartCoroutine(FrameFreezeSprite(damageCooldown, healColor));
         }
     }
 
@@ -411,7 +419,7 @@ public class LanternController : MonoBehaviour, ILantern
     }
     public void TriggerFireflyBomb()
     {
-        if (bombCdTimer > 0f || !TryConsumeEnergy(projectileCost)) return;
+        if (_bombCdTimer > 0f || !TryConsumeEnergy(projectileCost)) return;
 
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseWorld.z = 0f;
@@ -420,6 +428,6 @@ public class LanternController : MonoBehaviour, ILantern
         proj.GetComponent<ProjectileScript>().Init(mouseWorld);
 
         _currentFireflies -= projectileCost;
-        bombCdTimer = projectileCooldown;
+        _bombCdTimer = projectileCooldown;
     }
 }
