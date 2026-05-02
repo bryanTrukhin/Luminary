@@ -37,7 +37,7 @@ public class TailRat : RatBase
 
         rb.velocity = Vector2.zero;
 
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.05f); //0.15f before
 
         float startAngle = tailSweepAngle * 0.5f;
         float endAngle = -tailSweepAngle * 0.5f;
