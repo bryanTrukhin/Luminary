@@ -39,6 +39,7 @@ public abstract class RatBase : MonoBehaviour
         CheckEdge();
     }
 
+
     protected virtual void Update()
     {
         TryAttack();
@@ -92,4 +93,5 @@ public abstract class RatBase : MonoBehaviour
     }
 
     protected abstract void TryAttack();
+
 }

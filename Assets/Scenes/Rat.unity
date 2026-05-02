@@ -318,11 +318,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 207a6c88a68123647a93e07aa1622dc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clustering: {fileID: 574604930}
-  tilemap: {fileID: 1307362302}
-  nodes: []
-  enemy: {fileID: 0}
-  target: {fileID: 1799226851}
 --- !u!1 &629671186
 GameObject:
   m_ObjectHideFlags: 0
@@ -2070,6 +2065,37 @@ Transform:
   - {fileID: 1307362298}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1504216605 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7995450614356127337, guid: 667238887cfb37143a89eb79c27613fc, type: 3}
+  m_PrefabInstance: {fileID: 8590052693358249489}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1504216611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504216605}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6282b6d8f5727c14684a76e407039e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 10
+  patrolSpeed: 2
+  chaseSpeed: 4
+  facingDir: 1
+  platform:
+    serializedVersion: 2
+    m_Bits: 64
+  wallCheckDist: 0.4
+  edgeCheckDist: 0.7
+  player: {fileID: 1799226851}
+  detectionDistance: 6
+  samePlatformHeight: 0.8
+  tailRange: 1.5
+  cooldown: 2
 --- !u!1 &1799226848
 GameObject:
   m_ObjectHideFlags: 0
@@ -2202,13 +2228,17 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1799226851}
+    - target: {fileID: 3979779392233650023, guid: 667238887cfb37143a89eb79c27613fc, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5188480384046355058, guid: 667238887cfb37143a89eb79c27613fc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.77
+      value: -4.38
       objectReference: {fileID: 0}
     - target: {fileID: 5188480384046355058, guid: 667238887cfb37143a89eb79c27613fc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.8
+      value: 5.54
       objectReference: {fileID: 0}
     - target: {fileID: 5188480384046355058, guid: 667238887cfb37143a89eb79c27613fc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2246,6 +2276,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rat
       objectReference: {fileID: 0}
+    - target: {fileID: 7995450614356127337, guid: 667238887cfb37143a89eb79c27613fc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5722949156276813963, guid: b1556dc86ee105b49baea91e46f02be4, type: 3}
       propertyPath: player
       value: 
@@ -2253,7 +2287,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7995450614356127337, guid: 667238887cfb37143a89eb79c27613fc, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 1504216611}
   m_SourcePrefab: {fileID: 100100000, guid: 667238887cfb37143a89eb79c27613fc, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
