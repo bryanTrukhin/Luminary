@@ -28,6 +28,12 @@ public abstract class RatBase : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    protected virtual void Awake()
+    {
+        FindPlayer();
+    }
+
+
     protected virtual void FixedUpdate()
     {
         if (isAttacking) return;
@@ -37,12 +43,14 @@ public abstract class RatBase : MonoBehaviour
         Move(speed);
         CheckWall();
         CheckEdge();
+
     }
 
 
     protected virtual void Update()
     {
         TryAttack();
+        CheckPlayerExists();
     }
 
     protected float GetCurrentSpeed()
@@ -93,5 +101,21 @@ public abstract class RatBase : MonoBehaviour
     }
 
     protected abstract void TryAttack();
+
+    protected void FindPlayer()
+    {
+        GameObject obj = GameObject.FindGameObjectWithTag("Player");
+
+        if (obj != null)
+            player = obj.transform;
+    }
+    protected void CheckPlayerExists()
+    {
+        if (player == null)
+        {
+            FindPlayer();
+        }
+    }
+
 
 }
