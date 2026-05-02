@@ -36,7 +36,7 @@ public class CooldownUI : MonoBehaviour
         }
         if (skillNum == 2)
         {
-            flashAreaCooldown = lantern._flashAreaCooldown;
+            flashAreaCooldown = lantern.cdTimer;
         }
     }
 
@@ -60,7 +60,7 @@ public class CooldownUI : MonoBehaviour
             imageCooldown.fillAmount = timer / dashCooldown;
         }
         else{
-            float timer = lantern._flashAreaCooldownTimer;
+            float timer = lantern.cdTimer;
 
             textCooldown.text = timer > 0.1f ? timer.ToString("F1") : "";
             imageCooldown.fillAmount = timer / flashAreaCooldown;

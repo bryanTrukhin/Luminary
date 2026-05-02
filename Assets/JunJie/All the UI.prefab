@@ -1974,6 +1974,7 @@ MonoBehaviour:
   textCooldown: {fileID: 1059370708029816319}
   cooldown: 1
   dashCooldown: 1
+  flashAreaCooldown: 0
   skillNum: 2
 --- !u!1 &5375069576841558648
 GameObject:
@@ -2287,6 +2288,7 @@ MonoBehaviour:
   textCooldown: {fileID: 2370462309003059207}
   cooldown: 1
   dashCooldown: 1
+  flashAreaCooldown: 0
   skillNum: 2
 --- !u!1 &7149732823443021825
 GameObject:
@@ -2592,6 +2594,7 @@ MonoBehaviour:
   textCooldown: {fileID: 1323051850351132074}
   cooldown: 0
   dashCooldown: 0
+  flashAreaCooldown: 0
   skillNum: 1
 --- !u!1 &7999652848522506395
 GameObject:
@@ -2686,6 +2689,7 @@ MonoBehaviour:
   textCooldown: {fileID: 1480718736027729731}
   cooldown: 1
   dashCooldown: 1
+  flashAreaCooldown: 0
   skillNum: 2
 --- !u!1 &8127257060118202600
 GameObject:
@@ -2936,6 +2940,7 @@ MonoBehaviour:
   textCooldown: {fileID: 7350654009044777865}
   cooldown: 1
   dashCooldown: 1
+  flashAreaCooldown: 0
   skillNum: 2
 --- !u!1 &8473350919141594153
 GameObject:
@@ -3044,8 +3049,8 @@ RectTransform:
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 5294935228697165860}
   - {fileID: 1357940255119464427}
+  - {fileID: 5294935228697165860}
   - {fileID: 2377868067631915793}
   m_Father: {fileID: 8486772031252217783}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
