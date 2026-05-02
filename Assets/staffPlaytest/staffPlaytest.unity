@@ -190,6 +190,17 @@ MonoBehaviour:
   nodes: []
   enemy: {fileID: 0}
   target: {fileID: 0}
+--- !u!114 &272665122 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5429967117786497455, guid: 9a8c404ba6a5b4b8195a185ccc0d40cc, type: 3}
+  m_PrefabInstance: {fileID: 596615022}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &323690436 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5435889377717381988, guid: 9a8c404ba6a5b4b8195a185ccc0d40cc, type: 3}
@@ -377,6 +388,12 @@ PrefabInstance:
     - target: {fileID: 5265171271409835226, guid: 9a8c404ba6a5b4b8195a185ccc0d40cc, type: 3}
       propertyPath: m_Name
       value: Lanturn UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435889377717381988, guid: 9a8c404ba6a5b4b8195a185ccc0d40cc, type: 3}
+      propertyPath: m_text
+      value: '100/100
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 6549202674005511180, guid: 9a8c404ba6a5b4b8195a185ccc0d40cc, type: 3}
       propertyPath: lanternController
@@ -1136,6 +1153,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1583892505010176046, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1870174648422633605, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
       propertyPath: m_Mass
       value: 1
@@ -1229,6 +1250,10 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
+      propertyPath: maxHealth
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
       propertyPath: playerRoot
       value: 
       objectReference: {fileID: 1756325369}
@@ -1261,6 +1286,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
+      propertyPath: currentHealthUI
+      value: 
+      objectReference: {fileID: 272665122}
+    - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
       propertyPath: fireflyCapacity
       value: 150
       objectReference: {fileID: 0}
@@ -1270,7 +1299,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
       propertyPath: fireflyRegenRate
-      value: 3
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
+      propertyPath: _currentFireflies
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4202706243534956580, guid: f0fe3df4eaac2d241876d7d05e173876, type: 3}
       propertyPath: burnDamagePerTick
