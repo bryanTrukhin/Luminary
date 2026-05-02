@@ -129,7 +129,7 @@ public class ToadMovementVersion2 : EnemyController
 
         float velocityY = Mathf.Sqrt(2 * gravity * heightFromStart);
         float velocityX = displacementX / totalJumpTime;
-
+ 
         return new Vector2(velocityX, velocityY);
     }
 
