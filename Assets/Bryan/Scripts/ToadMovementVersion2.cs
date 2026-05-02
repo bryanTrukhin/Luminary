@@ -34,7 +34,8 @@ public class ToadMovementVersion2 : EnemyController
 
     IEnumerator WaitForGeneration()
     {
-        nav = FindFirstObjectByType<NavGraphBuilder>();
+        yield return new WaitForSeconds(2);
+        nav = GameObject.FindGameObjectsWithTag("Game Manager")[0].GetComponent<NavGraphBuilder>();
         yield return new WaitUntil(() => nav != null && nav.tilemap != null && nav.target != null);
 
         tilemap = nav.tilemap;
@@ -91,10 +92,14 @@ public class ToadMovementVersion2 : EnemyController
             rb.velocity = CalculateLaunchVelocity(transform.position, homeTilePos, jumpHeightConstant * 0.5f);
             yield return new WaitForSeconds(0.5f);
 
-            float surfaceY = homeTilePos.y + tileOffset + 0.01f;
+            float toadHalfHeight = 0f;
+
+            CapsuleCollider2D capCol = GetComponent<CapsuleCollider2D>();
+            if (capCol != null) toadHalfHeight = capCol.bounds.extents.y;
+
+            float surfaceY = homeTilePos.y + tileOffset + toadHalfHeight + 0.02f;
             Vector3 adjustLandingPos = new Vector3(homeTilePos.x, surfaceY, transform.position.z);
             transform.position = adjustLandingPos;
-
         }
 
         //Main jump
@@ -124,7 +129,7 @@ public class ToadMovementVersion2 : EnemyController
 
         float velocityY = Mathf.Sqrt(2 * gravity * heightFromStart);
         float velocityX = displacementX / totalJumpTime;
-
+ 
         return new Vector2(velocityX, velocityY);
     }
 

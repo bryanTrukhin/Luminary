@@ -56,6 +56,10 @@ public class BrokenLanternController : MonoBehaviour, ILantern
     { 
         // Intentionally blank. Lantern is broken.
     }
+    public void TriggerFireflyBomb() 
+    { 
+        // Intentionally blank. Lantern is broken.
+    }
     public void TakeDamage(float amount)
     {
         if (GameController.I.State == PlayState.Dead) return;

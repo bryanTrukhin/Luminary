@@ -7,12 +7,10 @@ using TMPro;
 [DisallowMultipleComponent]
 public class LanternController : MonoBehaviour, ILantern
 {
-
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip flashSound;
-    [SerializeField] private AudioClip dashSound;
+    
     [Header("Firefly")]
     [SerializeField] private float fireflyCapacity;
+    [SerializeField] private float fireflyStarting;
     [SerializeField] private float fireflyRegenRate;
     [SerializeField] private Transform parent;
     public float _currentFireflies;
@@ -26,14 +24,22 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private float dashCost;
     [SerializeField] private float doubleJumpCost;
 
-    [Header("Abilities")]
+    [Header("Firefly Flash")]
     [SerializeField] private float flashLanternCost;
     [SerializeField] private float flashBonusIntensity;
     [SerializeField] private float flashDuration;
     [SerializeField] public float flashCooldown;
-    public float _flashCooldownTimer;
+    
+    [Header("Firefly Bomb")]
+    [SerializeField] private GameObject fireflyBomb;
+    [SerializeField] private float projectileCost = 10f;
+    [SerializeField] private float projectileCooldown = 3f;
+    public float bombCdTimer;
 
-    [Header("Burning Mechanics")]
+    
+    public float _flashCooldownTimer;
+    
+    [Header("Vine Burning Mechanics")]
     [SerializeField] private LayerMask burnableMask;
     [SerializeField] private float burnRadius = 1.5f;
     [SerializeField] private float burnDamagePerTick = 1f;
@@ -43,6 +49,7 @@ public class LanternController : MonoBehaviour, ILantern
     public TMP_Text currentFireFlyCountUI;
     public CooldownUI flashUI;
     public CooldownUI dashUI;
+    public CooldownUI flashAreaUI;
     [SerializeField] private List<Light2D> bulbs = new();
     [SerializeField] private SpriteRenderer playerSprite;
     [SerializeField] private Transform playerRoot;
@@ -55,6 +62,11 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private Rigidbody2D handPosRB;
 
     [SerializeField] private Animator _animator;
+    
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip flashSound;
+    [SerializeField] private AudioClip dashSound;
 
 
     // Internal State
@@ -63,8 +75,10 @@ public class LanternController : MonoBehaviour, ILantern
     private Vector3 _swingVelocity;
     private Coroutine _flickerCo;
     private bool _wasFacingRight = true;
-
-
+    
+    // make ability to spend some fireflies to enable regeneration
+    // Likely need to make this inumerator
+    
     void Start()
     {
         ResetHealth();
@@ -110,6 +124,7 @@ public class LanternController : MonoBehaviour, ILantern
         currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/" + fireflyCapacity;
 
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;
+        if (bombCdTimer > 0) bombCdTimer -= Time.deltaTime;
         if (_damageTimer > 0f) _damageTimer -= Time.deltaTime;
 
         if (_currentFireflies < fireflyCapacity && fireflyRegenRate > 0f)
@@ -122,12 +137,15 @@ public class LanternController : MonoBehaviour, ILantern
         {
             TriggerFlash();
         }
+        if (InputSystem.FlashArea())
+        {
+            TriggerFireflyBomb();
+        }
     }
     public bool TryConsumeEnergy(float amount)
     {
         if (_currentFireflies >= amount)
         {
-            _currentFireflies -= amount;
             return true;
         }
         
@@ -201,6 +219,7 @@ public class LanternController : MonoBehaviour, ILantern
         bool result = TryConsumeEnergy(flashLanternCost);
         if (_flashCooldownTimer <= 0f && result)
         {
+             _currentFireflies -= flashLanternCost;
             Flash(flashBonusIntensity, flashDuration);
             if (flashSound)
             {
@@ -217,6 +236,7 @@ public class LanternController : MonoBehaviour, ILantern
         bool result = TryConsumeEnergy(dashCost);
         if (result)
         {
+            _currentFireflies -= dashCost;
             if (dashSound)
             {
                 audioSource.clip = dashSound;
@@ -230,6 +250,8 @@ public class LanternController : MonoBehaviour, ILantern
         }
         return result;
     }
+
+
 
     public bool TryUseDoubleJump()
     {
@@ -294,6 +316,25 @@ public class LanternController : MonoBehaviour, ILantern
         RestoreOriginals();
     }
 
+    // IEnumerator AreaFlashRoutine(float bonusI, float dur)
+    // {
+    //     float endTime = Time.time + dur;
+    //
+    //     if(_animator) _animator.SetTrigger("isFlashing");
+    //     while (Time.time < endTime)
+    //     {
+    //         float t = 1f - ((endTime - Time.time) / dur);
+    //         float factor = Mathf.Lerp(bonusI, 0f, t);
+    //
+    //         for (int i = 0; i < bulbs.Count; i++)
+    //             bulbs[i].intensity = _originals[i].intensity + factor;
+    //
+    //         yield return null;
+    //     }
+    //     if(_animator) _animator.SetTrigger("isFlashing");
+    //     RestoreOriginals();
+    // }
+
     IEnumerator FlickerRoutine(float amp, float speed, float dur)
     {
         float seed = Random.value * 100f;
@@ -336,5 +377,18 @@ public class LanternController : MonoBehaviour, ILantern
             var burnable = h.GetComponent<IBurnable>();
             if (burnable != null) burnable.ApplyHeat(burnDamagePerTick);
         }
+    }
+    public void TriggerFireflyBomb()
+    {
+        if (bombCdTimer > 0f || !TryConsumeEnergy(projectileCost)) return;
+
+        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorld.z = 0f;
+
+        GameObject proj = Instantiate(fireflyBomb, handPosRB.position, Quaternion.identity);
+        proj.GetComponent<ProjectileScript>().Init(mouseWorld);
+
+        _currentFireflies -= projectileCost;
+        bombCdTimer = projectileCooldown;
     }
 }

@@ -7,6 +7,7 @@ public interface ILantern
 
     // Abilities
     void TriggerFlash();
+    void TriggerFireflyBomb();
     void SetVisible(bool state);
     
     // Effects (Added so GhostTrainEvent and cutscenes can use it)
