@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,14 @@ public class NavGraphBuilder : MonoBehaviour
     public Transform target;
 
     public List<TileNode> debugTilePath;
+
+    private void Start()
+    {
+        if (clustering)
+        {
+            Initialize(clustering);
+        }
+    }
 
     public void Initialize(PlatformClustering clusteringRef)
     {

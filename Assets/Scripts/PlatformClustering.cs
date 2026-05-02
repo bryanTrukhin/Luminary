@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,14 @@ public class PlatformClustering : MonoBehaviour
 {
     public Tilemap tilemap;
     public List<PlatformCluster> clusters;
+
+    private void Start()
+    {
+        if (tilemap)
+        {
+            Initialize(tilemap);
+        }
+    }
 
     public void Initialize(Tilemap mergedTilemap)
     {
