@@ -49,8 +49,8 @@ MonoBehaviour:
   - Press A to move left
   - Press D to move right
   - Press Space to jump
-  - Hold S to crouch
+  - Hold ctrl to crouch
   - Left click to flash your lantern
-  - Press X to dash
+  - Press shift to dash
   taskCompleted: 000000000000
   enableTesting: 1
