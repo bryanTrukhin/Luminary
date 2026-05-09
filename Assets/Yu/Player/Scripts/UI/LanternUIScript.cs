@@ -14,6 +14,10 @@ public class LanternUIScript : MonoBehaviour
     public Sprite frame6;
     public Sprite frame7;
 
+    public Sprite frame8;
+    public Sprite frame9;
+    public Sprite frame10;
+
     public LanternController lanternController;
     public float max;
     private float step;
@@ -23,7 +27,7 @@ public class LanternUIScript : MonoBehaviour
     void Start()
     {
         img = GetComponent<Image>();
-        step = max / 7f;
+        step = max / 10f;
     }
 
     void Update()
@@ -47,6 +51,14 @@ public class LanternUIScript : MonoBehaviour
             img.sprite = frame5;
         else if (capacity < 7*step)
             img.sprite = frame6;
-        else img.sprite = frame7;
+        else if (capacity < 8*step)
+            img.sprite = frame7;
+        else if (capacity < 8*step)
+            img.sprite = frame7;
+        else if (capacity < 9*step)
+            img.sprite = frame8;
+        else if (capacity < 10*step)
+            img.sprite = frame9;
+        else img.sprite = frame10;
     }
 }
