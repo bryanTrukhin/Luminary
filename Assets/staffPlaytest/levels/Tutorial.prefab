@@ -3758,10 +3758,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tongue Toad
       objectReference: {fileID: 0}
-    - target: {fileID: 2049238401371619064, guid: dddcb63f02b5a464daf47c2c42de5634, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2287217289590768336, guid: dddcb63f02b5a464daf47c2c42de5634, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5
@@ -3984,10 +3980,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2026484898326576660}
     m_Modifications:
-    - target: {fileID: 4338509867529104007, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4587477207993698265, guid: 79b28b73bf2514b41ab37de1ffbff407, type: 3}
       propertyPath: m_LocalPosition.x
       value: 14.47

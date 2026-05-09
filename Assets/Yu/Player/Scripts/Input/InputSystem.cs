@@ -12,6 +12,7 @@ public class InputSystem : MonoBehaviour
 	static readonly string InteractInput = "Interact";
 	static readonly int FlashAreaInput = 1;
 	static readonly string FlashLanternInput = "Flash";
+	static readonly string HealInput = "Heal";
 
 	static readonly string HorizontalLookInput = "HorizontalLook";
 	static readonly string VerticalLookInput = "VerticalLook";
@@ -22,43 +23,47 @@ public class InputSystem : MonoBehaviour
 	{
 		return Input.GetAxisRaw(HorizontalInput);
 	}
-	public static float HorizontalLookRaw()
+	public static float HorizontalLookRaw() // For arrow keys
 	{
 		return Input.GetAxisRaw(HorizontalLookInput);
 	}
-	public static float VerticalLookRaw()
+	public static float VerticalLookRaw() // For arrow keys
 	{
 		return Input.GetAxisRaw(VerticalLookInput);
 	}
 
 	public static bool Jump()
 	{
-		return Input.GetButtonDown(JumpInput);
+		return Input.GetButtonDown(JumpInput); // Space
 	}
 
 	public static bool Dash()
 	{
-		return Input.GetButtonDown(DashInput);
+		return Input.GetButtonDown(DashInput); // J key
 	}
 
 	public static bool CrouchHeld()
 	{
-		return Input.GetButton(CrouchInput);
+		return Input.GetButton(CrouchInput); // S key (unused)
 	}
 	
 	public static bool SlidePressed()
 	{
-		return Input.GetButtonDown(SlideInput);
+		return Input.GetButtonDown(SlideInput); // unused?
 	}
 
 	public static bool Interact()
 	{
-		return Input.GetButtonDown(InteractInput);
+		return Input.GetButtonDown(InteractInput); // F key
 	}
 	
 	public static bool FlashLantern()
 	{
 		return Input.GetButtonDown(FlashLanternInput); // left mouse
+	}
+	public static bool Heal()
+	{
+		return Input.GetButtonDown(HealInput); // I key
 	}
 	public static bool FlashArea()
 	{
