@@ -23,6 +23,12 @@ public abstract class RatBase : MonoBehaviour
     protected Rigidbody2D rb;
     protected bool isAttacking = false;
 
+    [Header("Knockback")]
+    public float knockbackForce = 8f;
+    public float knockbackDuration = 0.25f;
+
+    protected bool isKnockedBack = false;
+
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -36,8 +42,10 @@ public abstract class RatBase : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (isAttacking) return;
-
+        if (isAttacking || isKnockedBack)
+        {
+            return;
+        }
         float speed = GetCurrentSpeed();
 
         Move(speed);
@@ -49,6 +57,9 @@ public abstract class RatBase : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (isKnockedBack)
+            return;
+
         TryAttack();
         CheckPlayerExists();
     }
@@ -62,11 +73,36 @@ public abstract class RatBase : MonoBehaviour
 
         if (dist < detectionDistance && heightDiff < samePlatformHeight)
         {
-            facingDir = player.position.x > transform.position.x ? 1 : -1;
+            float xDiff = player.position.x - transform.position.x;
+
+            if (Mathf.Abs(xDiff) > 0.3f)
+            {
+                int targetDir = xDiff > 0 ? 1 : -1;
+
+                if (targetDir != facingDir)
+                {
+                    Flip();
+                }
+            }
+
             return chaseSpeed;
         }
 
         return patrolSpeed;
+    }
+
+    protected void FacePlayer()
+    {
+        if (player == null) return;
+
+        float xDiff = player.position.x - transform.position.x;
+
+        int targetDir = xDiff > 0 ? 1 : -1;
+
+        if (targetDir != facingDir)
+        {
+            Flip();
+        }
     }
 
     protected virtual void Move(float speed)
@@ -117,5 +153,37 @@ public abstract class RatBase : MonoBehaviour
         }
     }
 
+    public virtual void TakeDamage(float damage, Vector2 hitSource)
+    {
+        health -= damage;
 
+        if (health <= 0)
+        {
+            Die();
+            return;
+        }
+
+        StartCoroutine(KnockbackRoutine(hitSource));
+    }
+
+    IEnumerator KnockbackRoutine(Vector2 hitSource)
+    {
+        isKnockedBack = true;
+
+        rb.velocity = Vector2.zero;
+
+        Vector2 direction = ((Vector2)transform.position - hitSource).normalized;
+
+        direction += Vector2.up * 0.5f;
+
+        rb.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(knockbackDuration);
+
+        isKnockedBack = false;
+    }
+    protected virtual void Die()
+    {
+        Destroy(gameObject);
+    }
 }
