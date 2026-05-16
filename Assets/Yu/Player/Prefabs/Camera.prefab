@@ -74,7 +74,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 63479
+    m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -107,10 +107,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  smoothSpeed: 0.125
-  offset: {x: 0, y: 2.5, z: -10}
-  minCamerabounds: {x: -90, y: -200, z: -10}
-  maxCamerabounds: {x: 1000, y: 200, z: 10}
+  smoothSpeed: 0.08
+  originalPos: {x: 0, y: 2, z: -1}
+  verticalOffset: 6
+  horizontalOffset: 6
+  minCamerabounds: {x: -200, y: -200, z: -2000}
+  maxCamerabounds: {x: 1000, y: 200, z: 2000}
+  xInput: 0
+  yInput: 0
 --- !u!114 &3603046041898216056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,13 +132,13 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 0
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0

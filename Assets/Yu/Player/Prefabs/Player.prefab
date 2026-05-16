@@ -152,6 +152,7 @@ GameObject:
   - component: {fileID: 3795319768158944384}
   - component: {fileID: 5348003003042193023}
   - component: {fileID: 2249246652869150515}
+  - component: {fileID: 9187026712379217555}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -218,19 +219,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fallKillHeight: -15
-  speed: 6
-  sprintSpeed: 8
+  speed: 3
+  sprintSpeed: 6
   sprintEnabled: 1
-  jumpForce: 13
-  fallMultiplier: 1.2
+  jumpForce: 14
+  fallMultiplier: 1.1
   groundGrav: 6
   airGrav: 3
   groundCheck: {fileID: 81455343748447964}
   groundCheckRadius: 0.2
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 336
-  extraJumpCount: 0
+    m_Bits: 832
+  whatIsSlow:
+    serializedVersion: 2
+    m_Bits: 16
+  extraJumpCount: 1
   jumpEffect: {fileID: 1756864995990567119, guid: 84373b93397a4544b9f154581f7b7cf4, type: 3}
   grabRightOffset: {x: 0.16, y: 0}
   grabLeftOffset: {x: -0.16, y: 0}
@@ -253,6 +257,7 @@ MonoBehaviour:
   audioSource: {fileID: 2249246652869150515}
   walkSound: {fileID: 8300000, guid: f8ad04d9634dc41c18495599e4d022b6, type: 3}
   isGrounded: 0
+  isSlowed: 0
   moveInput: 0
   canMove: 1
   actuallyWallGrabbing: 0
@@ -260,6 +265,7 @@ MonoBehaviour:
   isDashing: 0
   isCrouching: 0
   isSliding: 0
+  m_rb: {fileID: 0}
   standColliderSize: {x: 0.5, y: 2}
   crouchColliderSize: {x: 0.5, y: 1}
 --- !u!114 &3795319768158944384
@@ -405,6 +411,56 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &9187026712379217555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4064204045358629823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_ComponentVersion: 1
+  m_HasRenderer: 0
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 1
+  m_ApplyToSortingLayers: 000000003bca2ebe35f783269f1c4fd167f69936
+  m_ShapePath:
+  - {x: -1.4506736, y: -1.0888499, z: 0}
+  - {x: -2.2687902, y: -1.0864037, z: 0}
+  - {x: -1.5877483, y: 0.021039844, z: 0}
+  - {x: -1.0592456, y: 0.5025384, z: 0}
+  - {x: -0.18780768, y: 0.6246264, z: 0}
+  - {x: -0.18774167, y: 0.5630915, z: 0}
+  - {x: -0.2505894, y: 0.562485, z: 0}
+  - {x: -0.25012717, y: 0.50070894, z: 0}
+  - {x: -0.31267732, y: 0.50064015, z: 0}
+  - {x: -0.31317517, y: 0.24917305, z: 0}
+  - {x: -0.25019273, y: 0.25007665, z: 0}
+  - {x: -0.25019258, y: 0.12491822, z: 0}
+  - {x: -0.31417817, y: 0.1263246, z: 0}
+  - {x: -0.31308845, y: 0.06255403, z: 0}
+  - {x: -0.37505, y: 0.06396577, z: 0}
+  - {x: -0.37332729, y: -0.5635735, z: 0}
+  - {x: -0.31218916, y: -0.5640492, z: 0}
+  - {x: -0.31023666, y: -0.50170535, z: 0}
+  - {x: -0.2509144, y: -0.50170535, z: 0}
+  - {x: -0.25211364, y: -0.56477296, z: 0}
+  - {x: -0.18707678, y: -0.56349766, z: 0}
+  - {x: -0.18962726, y: -0.68464494, z: 0}
+  - {x: -0.25286198, y: -0.6861196, z: 0}
+  - {x: -0.2523242, y: -1.0617324, z: 0}
+  m_ShapePathHash: -1772601315
+  m_Mesh: {fileID: 0}
+  m_InstanceId: 30198
+  m_LocalBounds:
+    m_Center: {x: -1.2279335, y: -0.23211175, z: 0}
+    m_Extent: {x: 1.0408567, y: 0.85673815, z: 0}
 --- !u!1 &4484830090921457642
 GameObject:
   m_ObjectHideFlags: 0

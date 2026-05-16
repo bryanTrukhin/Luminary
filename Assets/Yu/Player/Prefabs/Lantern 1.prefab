@@ -45,7 +45,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 1
   m_LinearDrag: 90
   m_AngularDrag: 90
   m_GravityScale: 0.02
@@ -56,7 +56,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -76,7 +76,7 @@ HingeJoint2D:
   m_BreakAction: 0
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0.2928014, y: 0.00000006580712}
+  m_ConnectedAnchor: {x: 0.29280114, y: 0.00000006580706}
   m_UseMotor: 1
   m_Motor:
     m_MotorSpeed: 0
@@ -5072,7 +5072,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -5092,7 +5092,7 @@ HingeJoint2D:
   m_BreakAction: 0
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 2.1460001, y: -0.010000269}
+  m_ConnectedAnchor: {x: 2.146, y: -0.0100003155}
   m_UseMotor: 1
   m_Motor:
     m_MotorSpeed: 0
@@ -5166,7 +5166,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 1
   m_LinearDrag: 90
   m_AngularDrag: 90
   m_GravityScale: 0.02
@@ -5177,7 +5177,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -5197,7 +5197,7 @@ HingeJoint2D:
   m_BreakAction: 0
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0.48469326, y: 0.000000108934806}
+  m_ConnectedAnchor: {x: 0.484693, y: 0.00000010893474}
   m_UseMotor: 1
   m_Motor:
     m_MotorSpeed: 0
@@ -5218,7 +5218,7 @@ GameObject:
   - component: {fileID: 7642960596098610252}
   - component: {fileID: 6415414653708594448}
   - component: {fileID: 4743100781457968357}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: HandPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5263,7 +5263,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -5389,7 +5389,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 1
   m_LinearDrag: 90
   m_AngularDrag: 90
   m_GravityScale: 0.02
@@ -5400,7 +5400,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -5420,7 +5420,7 @@ HingeJoint2D:
   m_BreakAction: 0
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0.23738827, y: 0.00000005335301}
+  m_ConnectedAnchor: {x: 0.2373884, y: 0.00000005335304}
   m_UseMotor: 1
   m_Motor:
     m_MotorSpeed: 0
@@ -5560,7 +5560,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 0.5754717, g: 0.566645, b: 0.3555981, a: 1}
-  m_Intensity: 0.09
+  m_Intensity: 0.2
   m_LightVolumeIntensity: 0.4
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: 000000000deb686b
@@ -5638,7 +5638,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 1
   m_LinearDrag: 90
   m_AngularDrag: 90
   m_GravityScale: 0.02
@@ -5649,7 +5649,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -5669,7 +5669,7 @@ HingeJoint2D:
   m_BreakAction: 0
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0.18620916, y: 0.00000004185051}
+  m_ConnectedAnchor: {x: 0.18620943, y: 0.000000041850566}
   m_UseMotor: 1
   m_Motor:
     m_MotorSpeed: 0
@@ -5723,7 +5723,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 1
   m_LinearDrag: 90
   m_AngularDrag: 90
   m_GravityScale: 0.02
@@ -5734,7 +5734,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -5754,7 +5754,7 @@ HingeJoint2D:
   m_BreakAction: 0
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0.4909624, y: 0.0000001103438}
+  m_ConnectedAnchor: {x: 0.49096265, y: 0.00000011034385}
   m_UseMotor: 1
   m_Motor:
     m_MotorSpeed: 0
@@ -5808,7 +5808,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 1
   m_LinearDrag: 90
   m_AngularDrag: 90
   m_GravityScale: 0.02
@@ -5819,7 +5819,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -5878,7 +5878,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1, y: 1, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.56, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.56, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 124787363019668887}
@@ -5927,7 +5927,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.9696431, g: 1, b: 0, a: 0.38431373}
+  m_Color: {r: 0.9696431, g: 1, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5949,38 +5949,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c03e784d6e23efa4ba54c1f1fd565195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 643734303255361971}
-  flashSound: {fileID: 8300000, guid: 0e65bad048f194a2491b4f77ee281a05, type: 3}
-  dashSound: {fileID: 8300000, guid: 01fb0da8c81b443729a77fb56255dff5, type: 3}
-  fireflyCapacity: 100
-  fireflyRegenRate: 30
+  maxHealth: 10
+  healHealthCost: 25
+  healHealthCooldown: 2
+  fireflyCapacity: 150
+  fireflyStarting: 100
+  fireflyRegenRate: 3
   parent: {fileID: 6656792306217490374}
-  _currentFireflies: 50
   damageCooldown: 1
   freezeFrame: 0
-  dashCost: 5
-  doubleJumpCost: 2
+  dashCost: 10
+  doubleJumpCost: 4
   flashLanternCost: 10
-  flashBonusIntensity: 5
+  flashBonusIntensity: 2
   flashDuration: 0.5
   flashCooldown: 0.5
-  _flashCooldownTimer: 0
+  fireflyBomb: {fileID: 8978944820731587455, guid: 9cec2875dd3910a4fada10a8c913f71e, type: 3}
+  projectileCost: 10
+  projectileCooldown: 5
   burnableMask:
     serializedVersion: 2
     m_Bits: 384
   burnRadius: 1.5
-  burnDamagePerTick: 1
+  burnDamagePerTick: 20
   burnTickInterval: 0.1
   currentFireFlyCountUI: {fileID: 0}
+  currentHealthUI: {fileID: 0}
   flashUI: {fileID: 0}
   dashUI: {fileID: 0}
+  flashAreaUI: {fileID: 0}
   bulbs: []
+  playerSprite: {fileID: 0}
   playerRoot: {fileID: 0}
-  frontOffset: {x: 0.25, y: 0.1, z: 0}
+  frontOffset: {x: 0.5, y: 0, z: 0}
   smoothTime: 0.1
   topChainJoint: {fileID: 4743100781457968357}
   handPosRB: {fileID: 7642960596098610252}
   _animator: {fileID: 8800936590563157223}
+  audioSource: {fileID: 643734303255361971}
+  flashSound: {fileID: 8300000, guid: 0e65bad048f194a2491b4f77ee281a05, type: 3}
+  dashSound: {fileID: 8300000, guid: 01fb0da8c81b443729a77fb56255dff5, type: 3}
+  _currentFireflies: 100
+  _healHealthCooldownTimer: 0
+  _flashCooldownTimer: 0
+  _bombCdTimer: 0
 --- !u!82 &643734303255361971
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5993,7 +6005,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 0e65bad048f194a2491b4f77ee281a05, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -6218,7 +6230,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 1
   m_LinearDrag: 90
   m_AngularDrag: 90
   m_GravityScale: 0.02
@@ -6229,7 +6241,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -6429,7 +6441,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 1
   m_LinearDrag: 90
   m_AngularDrag: 90
   m_GravityScale: 0.02
@@ -6440,7 +6452,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -6460,7 +6472,7 @@ HingeJoint2D:
   m_BreakAction: 0
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0.29280037, y: 0.00000006580688}
+  m_ConnectedAnchor: {x: 0.2928009, y: 0.000000065807}
   m_UseMotor: 1
   m_Motor:
     m_MotorSpeed: 0
@@ -6514,7 +6526,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 1
   m_LinearDrag: 90
   m_AngularDrag: 90
   m_GravityScale: 0.02
@@ -6525,7 +6537,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -6545,7 +6557,7 @@ HingeJoint2D:
   m_BreakAction: 0
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0.4408019, y: 0.00000009907022}
+  m_ConnectedAnchor: {x: 0.44080162, y: 0.00000009907016}
   m_UseMotor: 1
   m_Motor:
     m_MotorSpeed: 0
@@ -6603,7 +6615,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 0.5754717, g: 0.566645, b: 0.3555981, a: 1}
-  m_Intensity: 0.09
+  m_Intensity: 0.2
   m_LightVolumeIntensity: 0.4
   m_LightVolumeIntensityEnabled: 1
   m_ApplyToSortingLayers: 000000000deb686b
@@ -6681,7 +6693,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 1
   m_LinearDrag: 90
   m_AngularDrag: 90
   m_GravityScale: 0.02
@@ -6692,7 +6704,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -6712,7 +6724,7 @@ HingeJoint2D:
   m_BreakAction: 0
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0.38436025, y: 0.00096194696}
+  m_ConnectedAnchor: {x: 0.3843608, y: 0.0009621438}
   m_UseMotor: 1
   m_Motor:
     m_MotorSpeed: 0
@@ -6852,7 +6864,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 0.81274927, b: 0.3443396, a: 1}
-  m_Intensity: 0.09
+  m_Intensity: 0.2
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: 000000000deb686b
@@ -6930,7 +6942,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 1
   m_LinearDrag: 90
   m_AngularDrag: 90
   m_GravityScale: 0.02
@@ -6941,7 +6953,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -7019,7 +7031,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 0.5754717, g: 0.566645, b: 0.3555981, a: 1}
-  m_Intensity: 0.09
+  m_Intensity: 0.2
   m_LightVolumeIntensity: 0.4
   m_LightVolumeIntensityEnabled: 1
   m_ApplyToSortingLayers: 000000000deb686b
