@@ -171,7 +171,10 @@ MonoBehaviour:
   player: {fileID: 0}
   detectionDistance: 6
   samePlatformHeight: 0.8
-  minionPrefab: {fileID: 7738134610712885629, guid: 2c46486ed284b9f4c8266e397d10ee88, type: 3}
+  knockbackForce: 8
+  knockbackDuration: 0.25
+  minionPrefabs:
+  - {fileID: 0}
   maxMinions: 6
 --- !u!61 &1920095044005519625
 BoxCollider2D:

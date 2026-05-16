@@ -4,26 +4,31 @@ using UnityEngine;
 
 public class RatKing : RatBase
 {
-    public GameObject minionPrefab;
+    public GameObject[] minionPrefabs;
     public int maxMinions = 6;
 
     private List<GameObject> minions = new List<GameObject>();
 
+    private bool attackCooldownLock = false;
+
     protected override void TryAttack()
     {
-        if (player == null || isAttacking) return;
+        if (player == null || isAttacking || attackCooldownLock) return;
 
         float dist = Vector2.Distance(transform.position, player.position);
 
-        if (dist < detectionDistance)
+        if (dist < detectionDistance && !isAttacking)
         {
             StartCoroutine(RollAndSpawn());
         }
+
     }
 
     IEnumerator RollAndSpawn()
     {
         isAttacking = true;
+
+        FacePlayer();
 
         Vector2 dir = player.position.x > transform.position.x ? Vector2.right : Vector2.left;
 
@@ -49,7 +54,21 @@ public class RatKing : RatBase
             return;
         }
 
-        GameObject m = Instantiate(minionPrefab, transform.position + Vector3.right, Quaternion.identity);
+        if (minionPrefabs == null || minionPrefabs.Length == 0)
+        {
+            Debug.LogWarning("No minion prefabs assigned!");
+            return;
+        }
+
+        int index = Random.Range(0, minionPrefabs.Length);
+
+        GameObject prefab = minionPrefabs[index];
+
+        Vector3 spawnPos = transform.position + new Vector3(facingDir * 1.5f, 0, 0);
+
+        GameObject m = Instantiate(prefab, spawnPos, Quaternion.identity);
+
         minions.Add(m);
     }
+
 }

@@ -36,7 +36,7 @@ public class TailRat : RatBase
         isTailAttacking = true;
 
         rb.velocity = Vector2.zero;
-
+        FacePlayer();
         yield return new WaitForSeconds(0.15f);
 
         float startAngle = tailSweepAngle * 0.5f;

@@ -24,6 +24,8 @@ public class SneakyRat : RatBase
     {
         isAttacking = true;
 
+        FacePlayer();
+
         Vector2 dir = player.position.x > transform.position.x ? Vector2.right : Vector2.left;
 
         rb.velocity = dir * chaseSpeed;
