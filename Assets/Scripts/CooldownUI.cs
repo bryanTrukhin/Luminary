@@ -13,6 +13,7 @@ public class CooldownUI : MonoBehaviour
     public float cooldown;
     public float dashCooldown;
     public float flashAreaCooldown;
+    public float healCooldown;
     public int skillNum;
     float dashTimer;
 
@@ -21,23 +22,12 @@ public class CooldownUI : MonoBehaviour
     void Start()
     {
         lantern = lanternController.GetComponent<LanternController>();
-
+        cooldown = lantern.flashCooldown;
+        flashAreaCooldown = lantern.projectileCooldown;
+        healCooldown = lantern.healHealthCooldown;
         imageCooldown.fillAmount = 0.0f;
         dashCooldown = 0.5f;
         dashTimer = 0f;
-
-        if (skillNum == 1)
-        {
-            cooldown = lantern.flashCooldown;
-        }
-        if (skillNum == 2)
-        {
-            dashCooldown = 0.5f;
-        }
-        if (skillNum == 2)
-        {
-            flashAreaCooldown = lantern._bombCdTimer;
-        }
     }
 
     void Update()
@@ -59,11 +49,17 @@ public class CooldownUI : MonoBehaviour
             textCooldown.text = timer > 0.1f ? timer.ToString("F1") : "";
             imageCooldown.fillAmount = timer / dashCooldown;
         }
-        else{
+        else if(skillNum == 3){
             float timer = lantern._bombCdTimer;
 
             textCooldown.text = timer > 0.1f ? timer.ToString("F1") : "";
             imageCooldown.fillAmount = timer / flashAreaCooldown;
+        }
+        else{
+            float timer = lantern._healHealthCooldownTimer;
+
+            textCooldown.text = timer > 0.1f ? timer.ToString("F1") : "";
+            imageCooldown.fillAmount = timer / healCooldown;
         }
     }
 

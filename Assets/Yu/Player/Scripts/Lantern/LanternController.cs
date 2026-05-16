@@ -11,7 +11,7 @@ public class LanternController : MonoBehaviour, ILantern
     [Header("Health")] 
     [SerializeField] private float maxHealth;
     [SerializeField] private float healHealthCost;
-    [SerializeField] private float healHealthCooldown;
+    [SerializeField] public float healHealthCooldown;
     
     [Header("Firefly")]
     [SerializeField] private float fireflyCapacity;
@@ -36,7 +36,7 @@ public class LanternController : MonoBehaviour, ILantern
     [Header("Firefly Bomb")]
     [SerializeField] private GameObject fireflyBomb;
     [SerializeField] private float projectileCost = 10f;
-    [SerializeField] private float projectileCooldown = 3f;
+    [SerializeField] public float projectileCooldown = 3f;
     
     [Header("Vine Burning Mechanics")]
     [SerializeField] private LayerMask burnableMask;
@@ -51,6 +51,7 @@ public class LanternController : MonoBehaviour, ILantern
     public CooldownUI flashUI;
     public CooldownUI dashUI;
     public CooldownUI flashAreaUI;
+    public CooldownUI healUI;
     [SerializeField] private List<Light2D> bulbs = new();
     [SerializeField] private SpriteRenderer playerSprite;
     [SerializeField] private Transform playerRoot;
