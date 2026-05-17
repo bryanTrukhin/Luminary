@@ -386,16 +386,7 @@ public class PlayerController : MonoBehaviour, IHidable
             // Instantly kill by dealing massive damage
             if (_lantern != null) _lantern.TakeDamage(9999);
         }
-
-        // DEBUG DAMAGE TEST
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            if (_lantern != null)
-            {
-                _lantern.TakeDamage(10f);
-                Debug.Log("Debug Damage Applied! Current Fireflies: " + Lantern);
-            }
-        }
+        
 
     }
 
