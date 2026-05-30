@@ -36,7 +36,7 @@ public class LanternController : MonoBehaviour, ILantern
     [Header("Firefly Bomb")]
     [SerializeField] private GameObject fireflyBomb;
     [SerializeField] private float projectileCost = 10f;
-    [SerializeField] public float projectileCooldown = 3f;
+    [SerializeField] public float projectileCooldown = 5f;
     
     [Header("Vine Burning Mechanics")]
     [SerializeField] private LayerMask burnableMask;
@@ -132,7 +132,7 @@ public class LanternController : MonoBehaviour, ILantern
     void Update()
     {
         currentFireFlyCountUI.text = _currentFireflies.ToString("0") + "/" + fireflyCapacity;
-        currentHealthUI.text = _currentHealth.ToString("0") + "/" + maxHealth;
+        //currentHealthUI.text = _currentHealth.ToString("0") + "/" + maxHealth;
         
         // Run cooldowns
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;

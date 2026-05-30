@@ -6,7 +6,7 @@ using TMPro;
 
 public class CooldownUI : MonoBehaviour
 {
-    public GameObject lanternController;
+    public LanternController lanternController;
     public Image imageCooldown;
     public TMP_Text textCooldown;
 
@@ -21,7 +21,8 @@ public class CooldownUI : MonoBehaviour
 
     void Start()
     {
-        lantern = lanternController.GetComponent<LanternController>();
+        lanternController = FindObjectOfType<LanternController>();
+        lantern = FindObjectOfType<LanternController>();
         cooldown = lantern.flashCooldown;
         flashAreaCooldown = lantern.projectileCooldown;
         healCooldown = lantern.healHealthCooldown;
@@ -53,7 +54,7 @@ public class CooldownUI : MonoBehaviour
             float timer = lantern._bombCdTimer;
 
             textCooldown.text = timer > 0.1f ? timer.ToString("F1") : "";
-            imageCooldown.fillAmount = timer / flashAreaCooldown;
+            imageCooldown.fillAmount = timer / lantern.projectileCooldown;
         }
         else{
             float timer = lantern._healHealthCooldownTimer;
