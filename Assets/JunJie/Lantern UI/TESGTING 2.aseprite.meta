@@ -124,14 +124,14 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: TESGTING 2
     originalName: 
-    pivot: {x: 0.5, y: 0}
+    pivot: {x: 3, y: 0}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 96
+      width: 16
       height: 24
     spriteID: ebab9e2fb744ffe449885a6060215dc1
     spriteBone: []
@@ -162,7 +162,7 @@ ScriptedImporter:
       cellRect:
         x: 0
         y: 0
-        width: 96
+        width: 16
         height: 24
       spriteId: ebab9e2fb744ffe449885a6060215dc1
     linkedCells: []
@@ -184,4 +184,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 96, y: 24}
-  previousTextureSize: {x: 128, y: 32}
+  previousTextureSize: {x: 32, y: 32}
