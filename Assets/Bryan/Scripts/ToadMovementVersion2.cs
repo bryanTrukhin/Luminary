@@ -25,12 +25,36 @@ public class ToadMovementVersion2 : EnemyController
     public ToadAttacking attackingScript;
     private Vector3 debugLandingPos;
 
+    //yy
+    [Header("Detection")]
+    [SerializeField] private float detectionDistance = 5f;
+    private Vector3 spawnPos;
+    private bool playerDetected; 
+
     protected override void Start()
     {
         base.Start();
+        //yy
+        spawnPos = transform.position;
+        //
         attackingScript = GetComponent<ToadAttacking>();
         StartCoroutine(WaitForGeneration());
     }
+
+    //yy
+    bool CheckPlayerDetected()
+    {
+        if (nav == null || nav.target == null)
+            return false;
+
+        float dist =
+            Vector2.Distance(
+                transform.position,
+                nav.target.position);
+
+        return dist < detectionDistance;
+    }
+    //
 
     IEnumerator WaitForGeneration()
     {
@@ -49,22 +73,49 @@ public class ToadMovementVersion2 : EnemyController
     protected override void FixedUpdate()
     {
         if (nav == null || tilemap == null || nav.target == null) return;
+        //yy
+        playerDetected = CheckPlayerDetected();
 
         if (canFlip)
         {
-            Vector3 localTargetPos = transform.InverseTransformPoint(nav.target.position);
+            //Vector3 localTargetPos = transform.InverseTransformPoint(nav.target.position);
+            //yy
+            Vector3 lookTarget = playerDetected? nav.target.position: spawnPos;
+            Vector3 localTargetPos = transform.InverseTransformPoint(lookTarget);
+            //
             if (localTargetPos.x < 0)
             {
                 FlipX();
-                float worldDirToPlayer = Mathf.Sign(nav.target.position.x - transform.position.x);
+                //float worldDirToPlayer = Mathf.Sign(nav.target.position.x - transform.position.x);
+                float worldDirToPlayer = Mathf.Sign(lookTarget.x - transform.position.x);
                 forwardDir = new Vector2(worldDirToPlayer, 0);
                 canFlip = false;
             }
         }
 
-        if (canJump && !isJumping)
+        /*if (canJump && !isJumping)
         {
             path = nav.GetTilePath(transform.position, nav.target.position);
+            pathIndex = 0;
+
+            if (path != null && path.Count > 1)
+            {
+                StartCoroutine(JumpSequence());
+            }
+        }*/
+        if (canJump && !isJumping)
+        {
+            Vector3 targetPosition =playerDetected? nav.target.position: spawnPos;
+            if (!playerDetected)
+            {
+                float distToHome = Vector2.Distance( transform.position,spawnPos);
+
+                if (distToHome < 0.5f)
+                    return;
+            }
+
+            path = nav.GetTilePath(transform.position,targetPosition);
+
             pathIndex = 0;
 
             if (path != null && path.Count > 1)

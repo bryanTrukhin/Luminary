@@ -29,6 +29,9 @@ public abstract class RatBase : MonoBehaviour
 
     protected bool isKnockedBack = false;
 
+    protected bool isFrozen = false;
+    Coroutine freezeCoroutine;
+
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -42,8 +45,9 @@ public abstract class RatBase : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (isAttacking || isKnockedBack)
+        if (isAttacking || isKnockedBack || isFrozen)
         {
+            rb.velocity = new Vector2(0, rb.velocity.y);
             return;
         }
         float speed = GetCurrentSpeed();
@@ -57,7 +61,7 @@ public abstract class RatBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (isKnockedBack)
+        if (isKnockedBack || isFrozen)
             return;
 
         TryAttack();
@@ -185,5 +189,24 @@ public abstract class RatBase : MonoBehaviour
     protected virtual void Die()
     {
         Destroy(gameObject);
+    }
+
+    public void Freeze(float duration)
+    {
+        if (freezeCoroutine != null)
+            StopCoroutine(freezeCoroutine);
+
+        freezeCoroutine = StartCoroutine(FreezeRoutine(duration));
+    }
+
+    IEnumerator FreezeRoutine(float duration)
+    {
+        isFrozen = true;
+
+        rb.velocity = Vector2.zero;
+
+        yield return new WaitForSeconds(duration);
+
+        isFrozen = false;
     }
 }
