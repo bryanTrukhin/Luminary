@@ -20,6 +20,7 @@ TagManager:
   - Tail
   - Fire
   - Game Manager
+  - Spike
   layers:
   - Default
   - TransparentFX
