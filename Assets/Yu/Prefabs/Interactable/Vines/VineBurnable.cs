@@ -33,11 +33,11 @@ public class VineBurnable : MonoBehaviour, IBurnable
     public void ApplyHeat(float amount)
     {
         float diff = transform.position.x - GameObject.FindWithTag("Player").transform.position.x;
-        if (burnableDirection == Orientation.Right && diff < 0) return;
+        if (burnableDirection == Orientation.Left  && diff < 0) return;
+        if (burnableDirection == Orientation.Right && diff > 0) return;
         if (_dead) return;
 
         _health -= amount;
-        // You could also do a small "shake" or tint here for feedback
 
         if (_health <= 0f)
         {
