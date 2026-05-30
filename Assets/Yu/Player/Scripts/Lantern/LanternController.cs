@@ -9,12 +9,12 @@ using UnityEngine.Serialization;
 public class LanternController : MonoBehaviour, ILantern
 {
     [Header("Health")] 
-    [SerializeField] private float maxHealth;
+    [SerializeField] public float maxHealth;
     [SerializeField] private float healHealthCost;
     [SerializeField] public float healHealthCooldown;
     
     [Header("Firefly")]
-    [SerializeField] private float fireflyCapacity;
+    [SerializeField] public float fireflyCapacity;
     [SerializeField] private float fireflyStarting;
     [SerializeField] private float fireflyRegenRate;
     [SerializeField] private Transform parent;
@@ -36,7 +36,7 @@ public class LanternController : MonoBehaviour, ILantern
     [Header("Firefly Bomb")]
     [SerializeField] private GameObject fireflyBomb;
     [SerializeField] private float projectileCost = 10f;
-    [SerializeField] public float projectileCooldown = 3f;
+    [SerializeField] public float projectileCooldown = 5f;
     
     [Header("Vine Burning Mechanics")]
     [SerializeField] private LayerMask burnableMask;
@@ -72,7 +72,7 @@ public class LanternController : MonoBehaviour, ILantern
     
     [Header("Internal")]
     public float _currentFireflies;
-    private float _currentHealth;
+    public float _currentHealth;
     public float _healHealthCooldownTimer;
     public float _flashCooldownTimer;
     private float _damageTimer;
@@ -131,8 +131,8 @@ public class LanternController : MonoBehaviour, ILantern
     }
     void Update()
     {
-        currentFireFlyCountUI.text = _currentFireflies.ToString("0.0") + "/" + fireflyCapacity;
-        currentHealthUI.text = _currentHealth.ToString("0.0") + "/" + maxHealth;
+        currentFireFlyCountUI.text = _currentFireflies.ToString("0") + "/" + fireflyCapacity;
+        //currentHealthUI.text = _currentHealth.ToString("0") + "/" + maxHealth;
         
         // Run cooldowns
         if (_flashCooldownTimer > 0) _flashCooldownTimer -= Time.deltaTime;

@@ -16,7 +16,9 @@ public class LanternUIScript : MonoBehaviour
     void Start()
     {
         img = GetComponent<Image>();
+        max = lanternController.fireflyCapacity;
         step = max / (frames.Length - 1);
+        
     }
 
     void Update()
