@@ -172,13 +172,13 @@ public class LanternController : MonoBehaviour, ILantern
         Debug.Log("Not enough Fireflies!"); 
         return false;
     }
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, float health_amount = 1)
     {
         //Check for I-Frames or God Mode
         if (_damageTimer > 0 || GameController.I.State == PlayState.Dead) return;
 
         _currentFireflies -= Mathf.Min(_currentFireflies, amount);
-        _currentHealth--;
+        _currentHealth-= health_amount;
         
         // Visual Feedback
         if(!freezeFrame){
@@ -245,6 +245,11 @@ public class LanternController : MonoBehaviour, ILantern
         if (_flashCooldownTimer <= 0f && result)
         {
              _currentFireflies -= flashLanternCost;
+             // RatBase[] rats = FindObjectsOfType<RatBase>();
+             // foreach (RatBase rat in rats)
+             // {
+             //     rat.Freeze(3f);
+             // }
             Flash(flashBonusIntensity, flashDuration);
             if (flashSound)
             {
