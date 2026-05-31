@@ -60,7 +60,7 @@ public class BrokenLanternController : MonoBehaviour, ILantern
     { 
         // Intentionally blank. Lantern is broken.
     }
-    public void TakeDamage(float amount, float health_amount = 1)
+    public void TakeDamage(float amount)
     {
         if (GameController.I.State == PlayState.Dead) return;
 

@@ -4,12 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class VineBurnable : MonoBehaviour, IBurnable
 {
-    public enum Orientation{
-        Left,
-        Right
-    }
-
-    public Orientation burnableDirection = Orientation.Left;
     [Header("Health")]
     [SerializeField] private float maxHealth = 3f;
     private float _health;
@@ -32,12 +26,10 @@ public class VineBurnable : MonoBehaviour, IBurnable
 
     public void ApplyHeat(float amount)
     {
-        float diff = transform.position.x - GameObject.FindWithTag("Player").transform.position.x;
-        if (burnableDirection == Orientation.Left  && diff < 0) return;
-        if (burnableDirection == Orientation.Right && diff > 0) return;
         if (_dead) return;
 
         _health -= amount;
+        // You could also do a small "shake" or tint here for feedback
 
         if (_health <= 0f)
         {
@@ -48,16 +40,20 @@ public class VineBurnable : MonoBehaviour, IBurnable
     void Die()
     {
         _dead = true;
-        
+
+        // Optional: spawn VFX via PoolManager if you want
         if (burnVfxPrefab != null && PoolManager.instance != null)
         {
             PoolManager.instance.ReuseObject(burnVfxPrefab, transform.position, Quaternion.identity);
         }
-        
+
+        // Optional: play SFX
         if (burnSfx != null)
         {
             AudioSource.PlayClipAtPoint(burnSfx, transform.position, burnSfxVolume);
         }
+
+        // For now, just disable the vine (or Destroy(gameObject);)
         gameObject.SetActive(false);
     }
 }
