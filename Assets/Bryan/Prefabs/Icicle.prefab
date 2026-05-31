@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 983bb68d1751e4263838cd3e40db04c4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -153,7 +153,7 @@ MonoBehaviour:
   isFalling: 0
   platform:
     serializedVersion: 2
-    m_Bits: 1088
+    m_Bits: 1104
   startSize: {x: 0.1, y: 0.1}
   endSize: {x: 0.5, y: 0.5}
   shatterEffect: {fileID: 6716249464493105388, guid: 17fbf1b9f0fbb4c85bae7a2db53adc5f, type: 3}
