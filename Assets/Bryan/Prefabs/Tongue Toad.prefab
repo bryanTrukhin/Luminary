@@ -196,10 +196,8 @@ MonoBehaviour:
   canJump: 0
   isJumping: 0
   attackingScript: {fileID: 0}
-  ribbit: {fileID: 0}
   jumpRelease: {fileID: 3306131074140366116}
   jumpLanding: {fileID: 34116921008333825}
-  ribbitTimer: 0
 --- !u!58 &8722906203713096884
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -326,9 +324,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 20
+  MaxDistance: 15
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -422,9 +420,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 20
+  MaxDistance: 15
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -751,7 +749,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 650eb9f95d73d412bafdbb9c6916039b, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.4
   m_Pitch: 0.6
   Loop: 0
   Mute: 0
@@ -762,7 +760,7 @@ AudioSource:
   MinDistance: 1
   MaxDistance: 20
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
