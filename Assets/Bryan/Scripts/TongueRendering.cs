@@ -11,6 +11,7 @@ public class TongueRendering : MonoBehaviour
 
     public bool isSticking;
     public Transform currentTarget;
+    [SerializeField] public AudioSource tongueShootNoise;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +22,15 @@ public class TongueRendering : MonoBehaviour
     }
 
     // Update is called once per frame
+
+    void OnEnable()
+    {
+        if (tongueShootNoise != null)
+        {
+            tongueShootNoise.Play();
+        }
+    }
+
     void Update()
     {
         transform.position = toad.transform.position;

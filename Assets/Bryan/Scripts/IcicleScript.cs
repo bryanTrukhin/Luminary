@@ -18,6 +18,7 @@ public class IcicleScript : MonoBehaviour
     [SerializeField] public Vector2 endSize = new Vector2(0.5f, 0.5f);
     [SerializeField] public GameObject shatterEffect;
     public bool canShatter;
+    [SerializeField] public GameObject shatterNoise;
 
     void Awake()
     {
@@ -97,6 +98,20 @@ public class IcicleScript : MonoBehaviour
         if (shatterEffect != null && canShatter)
         {
             Instantiate(shatterEffect, transform.position, Quaternion.identity);
+            if (shatterNoise != null)
+            {
+                GameObject noiseInstance = Instantiate(shatterNoise, transform.position, Quaternion.identity);
+                AudioSource audioSource = noiseInstance.GetComponent<AudioSource>();
+
+                if (audioSource != null && audioSource.clip != null)
+                {
+                    Destroy(noiseInstance, audioSource.clip.length);
+                }
+                else
+                {
+                    Destroy(noiseInstance, 2f);
+                }
+            }
         }
         if (AntMoving.iciclePos.Contains(gameObject))
         {
