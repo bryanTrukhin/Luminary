@@ -93,7 +93,6 @@ public class LanternController : MonoBehaviour, ILantern
     {
         ResetHealth();
     }
-
     void Awake()
     {
         // Auto-setup lights and root
@@ -131,6 +130,10 @@ public class LanternController : MonoBehaviour, ILantern
     }
     void Update()
     {
+        if (_currentFireflies > 150)
+        {
+            _currentFireflies = 150;
+        }
         currentFireFlyCountUI.text = _currentFireflies.ToString("0") + "/" + fireflyCapacity;
         //currentHealthUI.text = _currentHealth.ToString("0") + "/" + maxHealth;
         
