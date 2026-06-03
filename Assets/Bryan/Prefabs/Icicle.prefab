@@ -158,6 +158,7 @@ MonoBehaviour:
   endSize: {x: 0.5, y: 0.5}
   shatterEffect: {fileID: 6716249464493105388, guid: 17fbf1b9f0fbb4c85bae7a2db53adc5f, type: 3}
   canShatter: 0
+  shatterNoise: {fileID: 3500093769581037372, guid: 848eafa81aa4744239229236af72d155, type: 3}
 --- !u!50 &8082408288939340102
 Rigidbody2D:
   serializedVersion: 4

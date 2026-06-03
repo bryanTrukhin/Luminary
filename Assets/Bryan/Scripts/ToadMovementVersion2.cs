@@ -25,6 +25,10 @@ public class ToadMovementVersion2 : EnemyController
     public ToadAttacking attackingScript;
     private Vector3 debugLandingPos;
 
+    [Header("Audio")]
+    [SerializeField] public AudioSource jumpRelease;
+    [SerializeField] public AudioSource jumpLanding;
+
     protected override void Start()
     {
         base.Start();
@@ -107,12 +111,14 @@ public class ToadMovementVersion2 : EnemyController
         debugLandingPos = new Vector3(targetPos.x, targetPos.y + tileOffset, 0);
 
         rb.velocity = CalculateLaunchVelocity(transform.position, targetPos, jumpHeightConstant);
+        jumpRelease.Play();
         yield return new WaitUntil(() => canJump);
         canFlip = true;
 
         //Standing still until attacking is finished
         yield return new WaitUntil(() => !attackingScript.canTongueGrab);
         isJumping = false;
+        jumpLanding.Play();
     }
 
     public Vector2 CalculateLaunchVelocity(Vector3 start, Vector3 target, float jumpHeight)
