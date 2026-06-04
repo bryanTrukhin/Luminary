@@ -22,6 +22,7 @@ TagManager:
   - Game Manager
   - Spike
   - deathzone
+  - Lamp
   layers:
   - Default
   - TransparentFX

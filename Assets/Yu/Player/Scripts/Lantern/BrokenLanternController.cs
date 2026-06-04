@@ -95,4 +95,10 @@ public class BrokenLanternController : MonoBehaviour, ILantern
         topChainJoint.connectedAnchor = currentAnchor;
     }
 
+    public void RegenFireflies(float rate)
+    {
+        _currentFireflies += rate * Time.deltaTime;
+        _currentFireflies = Mathf.Min(_currentFireflies, fireflyCapacity);
+    }
+
 }

@@ -594,5 +594,12 @@ public class PlayerController : MonoBehaviour, IHidable
             StartCoroutine(ApplyKnockback(knockbackDir * 1250f));
         }
     }
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Lamp"))
+        {
+            _lantern?.RegenFireflies(5f);
+        }
+    }
 
 }

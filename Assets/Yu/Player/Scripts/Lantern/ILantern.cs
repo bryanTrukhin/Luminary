@@ -19,4 +19,5 @@ public interface ILantern
     void TakeDamage(float amount, int health_amount = 1);
     // void UpdateFacingDirection(bool facingLeft);
     void ResetHealth();
+    public void RegenFireflies(float rate);
 }

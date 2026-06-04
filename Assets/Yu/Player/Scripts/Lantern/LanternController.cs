@@ -144,13 +144,6 @@ public class LanternController : MonoBehaviour, ILantern
         if (_healHealthCooldownTimer > 0) _healHealthCooldownTimer -= Time.deltaTime;
         if (_bombCdTimer > 0) _bombCdTimer -= Time.deltaTime;
         if (_damageTimer > 0f) _damageTimer -= Time.deltaTime;
-
-        //Firefly passive regeneration
-        if (_currentFireflies < fireflyCapacity && fireflyRegenRate > 0f)
-        {
-            _currentFireflies += fireflyRegenRate * Time.deltaTime;
-            _currentFireflies = Mathf.Min(_currentFireflies, fireflyCapacity);
-        }
         
         // Ability input systems
         if (InputSystem.FlashLantern())
@@ -444,4 +437,11 @@ public class LanternController : MonoBehaviour, ILantern
     {
         Time.timeScale = 1f;
     }
+    public void RegenFireflies(float rate)
+    {
+        _currentFireflies += rate * Time.deltaTime;
+        _currentFireflies = Mathf.Min(_currentFireflies, fireflyCapacity);
+    }
+
+
 }
