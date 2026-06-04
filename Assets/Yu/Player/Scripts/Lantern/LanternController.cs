@@ -46,7 +46,7 @@ public class LanternController : MonoBehaviour, ILantern
 
     [Header("Visuals")]
     public TMP_Text currentFireFlyCountUI;
-
+    private DamageFlash damageFlash;
     public TMP_Text currentHealthUI;
     public CooldownUI flashUI;
     public CooldownUI dashUI;
@@ -93,6 +93,7 @@ public class LanternController : MonoBehaviour, ILantern
     void Start()
     {
         ResetHealth();
+        damageFlash = FindObjectOfType<DamageFlash>();
     }
     void Awake()
     {
@@ -176,13 +177,13 @@ public class LanternController : MonoBehaviour, ILantern
         Debug.Log("Not enough Fireflies!"); 
         return false;
     }
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, int health_amount = 1)
     {
         //Check for I-Frames or God Mode
         if (_damageTimer > 0 || GameController.I.State == PlayState.Dead) return;
 
         _currentFireflies -= Mathf.Min(_currentFireflies, amount);
-        _currentHealth--;
+        _currentHealth -= health_amount;
         
         // Visual Feedback
         if(!freezeFrame){
@@ -191,7 +192,7 @@ public class LanternController : MonoBehaviour, ILantern
         }
         Color damageColor = Color.red;
         if (playerSprite != null) StartCoroutine(FrameFreezeSprite(damageCooldown, damageColor));
-
+        if(damageFlash != null) damageFlash.TriggerDamageFlash();
         Flicker(0.5f, 20f, 0.5f); 
         _damageTimer = damageCooldown;
 
@@ -438,5 +439,9 @@ public class LanternController : MonoBehaviour, ILantern
         proj.GetComponent<ProjectileScript>().Init(mouseWorld);
         _currentFireflies -= projectileCost;
         _bombCdTimer = projectileCooldown;
+    }
+    void OnDestroy()
+    {
+        Time.timeScale = 1f;
     }
 }

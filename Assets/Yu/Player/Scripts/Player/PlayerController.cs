@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IHidable
 {
@@ -90,7 +91,7 @@ public class PlayerController : MonoBehaviour, IHidable
     private int m_onWallSide = 0;
     private int m_playerSide = 1;
     private float m_originalDrag;
-
+    private bool isKnockedBack = false;
     // Slope internals
     private Vector2 m_groundNormal = Vector2.up;
     private float m_slopeAngle;
@@ -127,7 +128,6 @@ public class PlayerController : MonoBehaviour, IHidable
 
         audioSource.clip = walkSound;
 
-        // Subscribe here (after all Awake() calls) so GameController.I is guaranteed to be set
         if (GameController.I != null)
         {
             GameController.I.OnLanternStateChanged += SwapLantern;
@@ -537,6 +537,16 @@ public class PlayerController : MonoBehaviour, IHidable
         _lantern = useBroken ? _brokenLantern : _normalLantern;
         _lantern.ResetHealth();
     }
+    public IEnumerator ApplyKnockback(Vector2 force)
+    {
+        isKnockedBack = true;
+        m_rb.velocity = Vector2.zero;
+        m_rb.AddForce(force, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(.6f);
+        isKnockedBack = false;
+
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -545,13 +555,19 @@ public class PlayerController : MonoBehaviour, IHidable
             if (other.transform.position.y > transform.position.y)
             {
                 _lantern?.TakeDamage(40);
+                Vector2 contactPoint = other.transform.position;
+                Vector2 knockbackDir = ((Vector2)transform.position - contactPoint).normalized;
+                StartCoroutine(ApplyKnockback(knockbackDir * 2000f));
                 other.gameObject.SetActive(false);
             }
         }
 
         if (other.CompareTag("Tail"))
         {
-            _lantern?.TakeDamage(25);
+            _lantern?.TakeDamage(25, 2);
+            Vector2 contactPoint = other.transform.position;
+            Vector2 knockbackDir = ((Vector2)transform.position - contactPoint).normalized;
+            StartCoroutine(ApplyKnockback(knockbackDir * 2000f));
             other.gameObject.SetActive(false);
         }
     }
@@ -561,8 +577,17 @@ public class PlayerController : MonoBehaviour, IHidable
         if (collision.collider.CompareTag("Enemy"))
         {
             _lantern?.TakeDamage(25);
-            Vector2 knockbackDir = (transform.position - collision.transform.position).normalized;
-            m_rb.AddForce(knockbackDir * 5f, ForceMode2D.Impulse);
+            Vector2 contactPoint = collision.GetContact(0).point;
+            Vector2 knockbackDir = ((Vector2)transform.position - contactPoint).normalized;
+            StartCoroutine(ApplyKnockback(knockbackDir * 1000f));
+        }
+
+        if (collision.collider.CompareTag("Spike"))
+        {
+            _lantern?.TakeDamage(10, 5);
+            Vector2 contactPoint = collision.GetContact(0).point;
+            Vector2 knockbackDir = ((Vector2)transform.position - contactPoint).normalized;
+            StartCoroutine(ApplyKnockback(knockbackDir * 1250f));
         }
     }
 

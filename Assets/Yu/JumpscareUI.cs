@@ -12,7 +12,7 @@ public class JumpscareUI : MonoBehaviour
 
     [Header("Timing")]
     [SerializeField] private float scareHoldTime = 0.75f;
-    [SerializeField] private float fadeTime = 0.6f;
+    [SerializeField] private float fadeTime = 0.1f;
 
     private CanvasGroup _canvasGroup;
 

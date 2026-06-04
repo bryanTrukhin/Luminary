@@ -23,12 +23,33 @@ public class GameController : MonoBehaviour
     private Vector3 _currentRespawnPos;
     private bool _islanternBroken = false;
 
-    void Awake() 
+    void Awake()
     {
-        if(I != null && I != this) { Destroy(gameObject); return; }
+        if (I != null && I != this) { Destroy(gameObject); return; }
         I = this;
+        DontDestroyOnLoad(gameObject);
+
         PlayerController p = FindObjectOfType<PlayerController>();
         if (p != null) _currentRespawnPos = p.transform.position;
+    }
+    void OnEnable() => SceneManager.sceneLoaded += OnSceneReloaded;
+    void OnDisable() => SceneManager.sceneLoaded -= OnSceneReloaded;
+    private void OnSceneReloaded(Scene scene, LoadSceneMode mode)
+    {
+        OnHidingChanged = null;
+        OnLanternStateChanged = null;
+        State = PlayState.Exploring;
+        Time.timeScale = 1f;
+
+        PlayerController newPlayer = FindObjectOfType<PlayerController>();
+        if (newPlayer != null && _currentRespawnPos != Vector3.zero)
+        {
+            newPlayer.transform.position = _currentRespawnPos;
+            newPlayer.RespawnReset();
+        }
+
+        jumpscareUI = FindObjectOfType<JumpscareUI>();
+        if (jumpscareUI != null) StartCoroutine(jumpscareUI.Unfade());
     }
 
     void Update()
@@ -65,39 +86,45 @@ public class GameController : MonoBehaviour
         if (State == PlayState.Dead) return;
 
         State = PlayState.Dead;
-
         p.SetMoveable(false);
         p.SetVisible(true);
         p.Lantern.SetVisible(false);
 
-        Debug.Log("GameController: Player died.");
-
-        StartCoroutine(DeathSequence(p));
+        StartCoroutine(DeathSequence());
     }
-
-    private IEnumerator DeathSequence(PlayerController p)
+    private IEnumerator DeathSequence()
     {
-        if (jumpscareUI != null)
-            yield return jumpscareUI.PlayJumpscare();
-        
-        // if (reloadSceneAfterDeath)
-        // {
-        //     SceneManager.LoadScene(
-        //         SceneManager.GetActiveScene().buildIndex
-        //     );
-        // }
-        // else
-        // {
-            State = PlayState.Exploring; 
-            p.transform.position = _currentRespawnPos;
-            p.RespawnReset(); 
-            Debug.Log("Player Respawned at: " + _currentRespawnPos);
-            if(jumpscareUI != null)
-        {
-            yield return jumpscareUI.Unfade();
-        }
-        // }
+        if (jumpscareUI != null) yield return jumpscareUI.PlayJumpscare();
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
     }
+    //private IEnumerator DeathSequence(PlayerController p)
+    //{
+    //    if (jumpscareUI != null)
+    //        yield return jumpscareUI.PlayJumpscare();
+
+    //    AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+    //    while (!asyncLoad.isDone)
+    //    {
+    //        yield return null;
+    //    }
+
+    //    State = PlayState.Exploring;
+
+
+    //    PlayerController newPlayer = FindObjectOfType<PlayerController>();
+    //    jumpscareUI = FindObjectOfType<JumpscareUI>();
+
+    //    if (newPlayer != null)
+    //    {
+    //        newPlayer.transform.position = _currentRespawnPos;
+    //        newPlayer.RespawnReset();
+    //    }
+
+    //    if (jumpscareUI != null)
+    //    {
+    //        yield return jumpscareUI.Unfade();
+    //    }
+    //}
 
     public bool PlayerSafeFromMonster() => State == PlayState.Hiding;
 
