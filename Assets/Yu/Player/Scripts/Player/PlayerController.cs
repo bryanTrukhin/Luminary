@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IHidable
@@ -92,6 +92,7 @@ public class PlayerController : MonoBehaviour, IHidable
     private int m_playerSide = 1;
     private float m_originalDrag;
     private bool isKnockedBack = false;
+    private bool m_isNearLamp = false;
     // Slope internals
     private Vector2 m_groundNormal = Vector2.up;
     private float m_slopeAngle;
@@ -287,6 +288,7 @@ public class PlayerController : MonoBehaviour, IHidable
 
     private void Update()
     {
+
         moveInput = InputSystem.HorizontalRaw();
         
         if (isGrounded)
@@ -386,6 +388,12 @@ public class PlayerController : MonoBehaviour, IHidable
             // Instantly kill by dealing massive damage
             if (_lantern != null) _lantern.TakeDamage(9999);
         }
+
+        if (m_isNearLamp)
+        {
+            _lantern?.RegenFireflies(30f);
+        }
+
 
         if(Input.GetKeyDown(KeyCode.L))
         {
@@ -586,6 +594,11 @@ public class PlayerController : MonoBehaviour, IHidable
         {
             _lantern?.TakeDamage(9999, 9999);
         }
+        if (other.CompareTag("Lamp"))
+        {
+            m_isNearLamp = true;
+
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -606,11 +619,18 @@ public class PlayerController : MonoBehaviour, IHidable
             StartCoroutine(ApplyKnockback(knockbackDir * 1250f));
         }
     }
-    private void OnTriggerStay2D(Collider2D other)
+    //private void OnTriggerStay2D(Collider2D other)
+    //{
+    //    if (other.CompareTag("Lamp"))
+    //    {
+    //        _lantern?.RegenFireflies(5f);
+    //    }
+    //}
+    private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Lamp"))
         {
-            _lantern?.RegenFireflies(5f);
+            m_isNearLamp = false;
         }
     }
 
