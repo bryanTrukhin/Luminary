@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d174488abcfdbe449a594403f7d7ea71
+guid: a138ff7284b521e42866b8dde2e0d05d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,12 +110,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: walking three_0
+      name: NewFall_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 235.625
+        width: 143
         height: 216
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -124,19 +124,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ab3ba4052a8180948b2003694e2a8ad6
-      internalID: -709386017
+      spriteID: 4d8aa2a1bc48722438a6d4667d77ae7b
+      internalID: 783962391
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: walking three_1
+      name: NewFall_1
       rect:
         serializedVersion: 2
-        x: 235
+        x: 143
         y: 0
-        width: 235.625
+        width: 143
         height: 216
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -145,19 +145,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4e35917d803cce24a8f93f160ff30f11
-      internalID: -555417761
+      spriteID: afd991ada3945964787a86f1a94ff2f6
+      internalID: -1224837959
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: walking three_2
+      name: NewFall_2
       rect:
         serializedVersion: 2
-        x: 470
+        x: 286
         y: 0
-        width: 235.625
+        width: 143
         height: 216
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -166,19 +166,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6a138fb4ae50cb344872371b02468736
-      internalID: -475402101
+      spriteID: 32cbfc086d3dbe14cb060a2d10620924
+      internalID: -1955272340
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: walking three_3
+      name: NewFall_3
       rect:
         serializedVersion: 2
-        x: 705
+        x: 429
         y: 0
-        width: 235.625
+        width: 143
         height: 216
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -187,19 +187,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 379053bec8f319949bd58ffd06401106
-      internalID: 1491348501
+      spriteID: 4832047f67b888048acbfb98cb6d9265
+      internalID: 482410102
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: walking three_4
+      name: NewFall_4
       rect:
         serializedVersion: 2
-        x: 940
+        x: 572
         y: 0
-        width: 235.625
+        width: 143
         height: 216
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -208,71 +208,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 590524a956cd5014e9fcee203728c727
-      internalID: -1277598280
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walking three_5
-      rect:
-        serializedVersion: 2
-        x: 1175
-        y: 0
-        width: 235.625
-        height: 216
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7ba365d3ff714404daecbbb8be1c8442
-      internalID: -762151279
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walking three_6
-      rect:
-        serializedVersion: 2
-        x: 1410
-        y: 0
-        width: 235.625
-        height: 216
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1c317bca62f21184abfcf8321f00ecb2
-      internalID: -113795940
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walking three_7
-      rect:
-        serializedVersion: 2
-        x: 1645
-        y: 0
-        width: 235.625
-        height: 216
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 386ba4c95c70b304db4b768f9cb15057
-      internalID: 1406319183
+      spriteID: 64dc2e9f15cad6c418cdc1adb73ffd3b
+      internalID: -243119
       vertices: []
       indices: 
       edges: []
@@ -288,14 +225,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      walking three_0: -709386017
-      walking three_1: -555417761
-      walking three_2: -475402101
-      walking three_3: 1491348501
-      walking three_4: -1277598280
-      walking three_5: -762151279
-      walking three_6: -113795940
-      walking three_7: 1406319183
+      NewFall_0: 783962391
+      NewFall_1: -1224837959
+      NewFall_2: -1955272340
+      NewFall_3: 482410102
+      NewFall_4: -243119
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
