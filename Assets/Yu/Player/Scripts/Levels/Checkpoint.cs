@@ -8,5 +8,6 @@ public class Checkpoint : MonoBehaviour
         {
             GameController.I.SetRespawnPoint(transform.position);
         }
+        Debug.Log($"Checkpoint triggered by: {collision.gameObject.name}");
     }
 }
