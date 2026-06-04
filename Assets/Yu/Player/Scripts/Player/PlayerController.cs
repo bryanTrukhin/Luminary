@@ -386,7 +386,19 @@ public class PlayerController : MonoBehaviour, IHidable
             // Instantly kill by dealing massive damage
             if (_lantern != null) _lantern.TakeDamage(9999);
         }
-        
+
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            Debug.Log("L pressed");
+
+            RatBase[] rats = FindObjectsOfType<RatBase>();
+
+            foreach (RatBase rat in rats)
+            {
+                rat.Freeze(2f);
+                Debug.Log("RAISE YOUR YAYAYAYAYAY");
+            }
+        }
 
     }
 
