@@ -21,6 +21,7 @@ TagManager:
   - Fire
   - Game Manager
   - Spike
+  - deathzone
   layers:
   - Default
   - TransparentFX

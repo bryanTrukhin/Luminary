@@ -570,6 +570,10 @@ public class PlayerController : MonoBehaviour, IHidable
             StartCoroutine(ApplyKnockback(knockbackDir * 2000f));
             other.gameObject.SetActive(false);
         }
+        if (other.CompareTag("deathzone"))
+        {
+            _lantern?.TakeDamage(9999, 9999);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
