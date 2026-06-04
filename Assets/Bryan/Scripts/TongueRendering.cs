@@ -33,6 +33,12 @@ public class TongueRendering : MonoBehaviour
 
     void Update()
     {
+        if (!toad.activeInHierarchy)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
         transform.position = toad.transform.position;
         circleCollider.offset = transform.InverseTransformPoint(toadAttacking.tongueJoint.connectedAnchor);
         lineRenderer.SetPosition(0, toadAttacking.transform.position);
