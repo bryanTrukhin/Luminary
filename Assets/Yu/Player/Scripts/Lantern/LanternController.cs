@@ -69,7 +69,8 @@ public class LanternController : MonoBehaviour, ILantern
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip flashSound;
     [SerializeField] private AudioClip dashSound;
-    
+    [SerializeField] private AudioClip fireflyThrow;
+
     [Header("Internal")]
     public float _currentFireflies;
     public float _currentHealth;
@@ -429,8 +430,12 @@ public class LanternController : MonoBehaviour, ILantern
         mouseWorld.z = 0f;
 
         GameObject proj = Instantiate(fireflyBomb, handPosRB.position, Quaternion.identity);
+        if (fireflyThrow)
+        {
+            audioSource.clip = fireflyThrow;
+            audioSource.Play();
+        }
         proj.GetComponent<ProjectileScript>().Init(mouseWorld);
-
         _currentFireflies -= projectileCost;
         _bombCdTimer = projectileCooldown;
     }

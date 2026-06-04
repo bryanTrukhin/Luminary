@@ -165,12 +165,13 @@ public class ToadAttacking : MonoBehaviour
 
     void selfDestruct()
     {
-        //1.) Create delay timer to play for the toad to have time to be on the ground before death
-        //2.) Play animation of toad getting filled up like a balloon before popping
-
         Instantiate(lightReleaseEffect, transform.position, Quaternion.identity);
-        Destroy(gameObject);
-        //3.) Release a small batch of fireflies for player to collect
+        if (tongue != null)
+        {
+            tongue.SetActive(false);
+            ResetTongue();
+        }
+        gameObject.SetActive(false);
     }
 
     void OnDrawGizmos()
