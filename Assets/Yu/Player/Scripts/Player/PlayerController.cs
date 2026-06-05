@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IHidable
@@ -394,6 +394,19 @@ public class PlayerController : MonoBehaviour, IHidable
             _lantern?.RegenFireflies(30f);
         }
 
+
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            Debug.Log("L pressed");
+
+            RatBase[] rats = FindObjectsOfType<RatBase>();
+
+            foreach (RatBase rat in rats)
+            {
+                rat.Freeze(2f);
+                Debug.Log("RAISE YOUR YAYAYAYAYAY");
+            }
+        }
 
     }
 
