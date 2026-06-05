@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 [RequireComponent(typeof(Collider2D))]
 public class VineBurnable : MonoBehaviour, IBurnable
 {
@@ -10,25 +9,32 @@ public class VineBurnable : MonoBehaviour, IBurnable
         Right
     }
 
+    [Header("Persistence")]
+    [Tooltip("Must be unique for each vine in the scene.")]
+    [SerializeField] private string vineID;
+
     public Orientation burnableDirection = Orientation.Left;
     [Header("Health")]
     [SerializeField] private float maxHealth = 3f;
     private float _health;
 
     [Header("FX")]
-    [SerializeField] private GameObject burnVfxPrefab;   // optional
-    [SerializeField] private AudioClip burnSfx;          // optional
+    [SerializeField] private GameObject burnVfxPrefab;
+    [SerializeField] private AudioClip burnSfx;
     [SerializeField] private float burnSfxVolume = 0.7f;
 
     private bool _dead;
 
     void Awake()
     {
-        _health = maxHealth;
+        if (PlayerPrefs.GetInt(vineID + "_destroyed", 0) == 1)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
 
-        // Make sure collider is trigger so it doesn't block the player (optional)
-        var col = GetComponent<Collider2D>();
-        col.isTrigger = false;
+        _health = maxHealth;
+        GetComponent<Collider2D>().isTrigger = false;
     }
 
     public void ApplyHeat(float amount)
@@ -49,6 +55,8 @@ public class VineBurnable : MonoBehaviour, IBurnable
     void Die()
     {
         _dead = true;
+        PlayerPrefs.SetInt(vineID + "_destroyed", 1);
+        PlayerPrefs.Save();
 
         if (burnVfxPrefab != null && PoolManager.instance != null)
         {
