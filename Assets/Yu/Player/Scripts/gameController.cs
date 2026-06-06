@@ -25,6 +25,7 @@ public class GameController : MonoBehaviour
 
     void Awake()
     {
+        PlayerPrefs.DeleteAll();
         if (I != null && I != this) { Destroy(gameObject); return; }
         I = this;
         DontDestroyOnLoad(gameObject);
